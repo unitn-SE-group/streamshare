@@ -1,1 +1,1 @@
-# StreamShare
+# StreamShare streaming platform
