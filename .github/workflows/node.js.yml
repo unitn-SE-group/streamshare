@@ -44,3 +44,9 @@ jobs:
           with:
             # This part is also where you can pass other options, for example:
             prettier_options: --write **/*.{js,md}
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run JSDoc
+        run: npm run jsdoc
