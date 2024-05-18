@@ -13,17 +13,13 @@ jobs:
   test:
 
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Use Node.js 18.x
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '18.x'
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
@@ -48,5 +44,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x' 
+      - run: npm ci
       - name: Run JSDoc
         run: npm run jsdoc
