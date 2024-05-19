@@ -40,6 +40,7 @@ jobs:
           with:
             # This part is also where you can pass other options, for example:
             prettier_options: --write **/*.{js,md}
+            github_token: ${{secrets.ACTIONS_PAT}}
   docs:
     runs-on: ubuntu-latest
 
