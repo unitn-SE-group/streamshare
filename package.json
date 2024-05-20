@@ -4,8 +4,8 @@
   "description": "Streamshare is a streaming service incentivizing interaction between users.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node src/server.js",
+    "dev": "nodemon app/app.js",
+    "start": "node app/app.js",
     "test": "node tests/test.js",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
