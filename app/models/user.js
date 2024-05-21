@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 //Create a User schema
 const userSchema = new mongoose.Schema({
-    userType: String,
+    userType: ['admin', 'creator', 'consumer'],
 
     email: {
         type: String, 
@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
 
+    /*0->Femmina, 1->Maschio */
     gender: {
         type: Boolean,
         required: true,
@@ -36,7 +37,7 @@ const userSchema = new mongoose.Schema({
     },
 
     /*Still don't know hot to do this*/
-    friends: [_id],
+    friends: [{ type : ObjectId, ref: 'User' }],
 
     birthDay: {
         type: Date,
