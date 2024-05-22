@@ -2,24 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require("./User")
+const User = require("./models/User");
+const dotenv = require('dotenv');
 
-const app = express();
+router = express.router();
 /**Add a middleware in order to parse the data in a json */
-app.use(express.json())
+//app.use(express.json())
 
+dotenv.config();
 
-
-mongoose.connect(
-    "mongodb+srv://davide:StreamShare@production.vj0vnfe.mongodb.net/?retryWrites=true&w=majority&appName=Production",
-)
+mongoose.connect(process.env.DATABASE_URI)
 .then(()=> console.log("Connected to MongoDB"))
 .catch(err => console.error("Could not connect to MongoDB", err));
-
-const PORT = 3000
-app.listen(3000, () => {
-    console.log("Server running on http://localhost:3000")
-})
 
 /**Add an endpoint */
 app.post("/login", async (req, res)=>{
@@ -33,15 +27,15 @@ app.post("/login", async (req, res)=>{
 
     try{
         //search for the email in the database
-        const user = await User.find({email: `${password}`})
+        const user = await User.find({email: `${email}`})
         if(!user){
-            return res.sendStatus(404).json({error: `Account not registered`}) //Not Found
+            return res.sendStatus(401) //Not Found
         }
 
         //control if the password is correct
         const password_match = await bcrypt.compare(password, existing_user.password)
         if(!password_match){
-            return res.sendStatus(401).json({error: `Invalid password`}) //Unauthorizied
+            return res.sendStatus(401) //Unauthorizied
         }
 
         //generate JWT token
@@ -60,6 +54,7 @@ app.post("/login", async (req, res)=>{
 
     }catch(err){
         console.log(`An error occoured during authentication: ${err}`)
+        return res.sendStatus(500) //Server Error
     }
 })
 
