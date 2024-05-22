@@ -17,11 +17,11 @@ const sessionSchema = new mongoose.Schema({
         },
         updatedAt: {
             type: date,
-            required: yes,
+            required: true,
         },
         createdAt: {
             type: date,
-            required: yes,
+            required: true,
         }
 })
 
