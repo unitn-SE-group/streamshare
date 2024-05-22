@@ -11,17 +11,22 @@ const sessionSchema = new mongoose.Schema({
             type: String,
             require: true,
         },
+        
         accessToken: {
             type: String,
             required: true,
         },
+        
         updatedAt: {
-            type: date,
+            type: Date,
             required: true,
+            default: () => Date.now(),
         },
+        
         createdAt: {
-            type: date,
+            type: Date,
             required: true,
+            default: () => Date.now(),
         }
 })
 
