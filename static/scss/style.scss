@@ -1,0 +1,134 @@
+@import 'config';
+@import 'buttons';
+@import 'components';
+
+@import 'components/navigation-bar.scss';
+@import 'components/hero.scss';
+@import 'components/presentation.scss';
+@import 'components/github-section.scss';
+@import 'components/main-page-login.scss';
+@import 'components/footer.scss';
+
+
+html {
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    scroll-behavior: smooth;
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        position: relative;
+        margin: 0;
+        padding: 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ::-webkit-scrollbar {
+        // display: none;
+        width: 1.4rem;
+
+        @include respond-to('tablet-ls') {
+            display: none;
+        }
+    }
+    
+    ::-webkit-scrollbar-track {
+        background-color: $background1;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        border-radius: 2rem;
+        background-color: $background2;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+        // background-color: $background1;
+        $dot-color: rgba($text1, 0.2);
+        $dot-size: 3px;
+        $dot-space: 40px;
+        background-color: $background1;
+        background-image: radial-gradient($dot-color 5%, transparent 0);
+        background-size: 40px 40px;
+        background-repeat: repeat;
+        background-attachment: fixed;
+        color: $text1;
+
+        .animateOnScroll {
+            &.show {
+                @include transition(all 1s ease);
+                &.onScrollD0 {
+                    @include transition-delay(.25s);
+                }
+                &.onScrollD1 {
+                    @include transition-delay(.5s);
+                }
+                &.onScrollD2 {
+                    @include transition-delay(.75s);
+                }
+                &.onScrollD3 {
+                    @include transition-delay(1s);
+                }
+                &.onScrollD4 {
+                    @include transition-delay(1.25s);
+                }
+                &.onScrollD5 {
+                    @include transition-delay(1.5s);
+                }
+                &.onScrollD6 {
+                    @include transition-delay(1.75s);
+                }
+                &.onScrollD7 {
+                    @include transition-delay(2s);
+                }
+            }
+
+            &.onScrollFadeIn {
+                opacity: 0;
+
+                &.show {
+                    opacity: 1;
+                }
+            }
+
+            &.onScrollFadeUp {
+                opacity: 0;
+                translate: 0 50%;
+
+                &.show {
+                    opacity: 1;
+                    translate: 0 0;
+                }
+            }
+
+            &.onScrollFadeDown {
+                opacity: 0;
+                translate: 0 -50%;
+
+                &.show {
+                    opacity: 1;
+                    translate: 0 0;
+                }
+            }
+        }
+    }
+}
+
+::selection {
+    background-color: $accent;
+}
+

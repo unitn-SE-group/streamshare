@@ -1,0 +1,175 @@
+// FONTS
+// Manrope - body font
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+// Syne - title font
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap');
+
+
+// COLOR PALETTE
+$background1: #141414;
+$background1-transparent: rgba($background1, .5);
+$background2: #222222;
+$background2-transparent: rgba($background2, .65);
+$text1: #F4F2EF;
+
+$accent: #BE4B76;
+$accent-secondary: #FC466B;
+
+$pink-gradient: linear-gradient(to right, $accent, $accent-secondary);
+
+$shadow_color: rgba(255, 133, 0, .65);
+$def_shadow_small: 0 .5rem .7rem 0 $shadow_color;
+$def_shadow_medium: 0 1rem 1.4rem 0 $shadow_color;
+$def_shadow_large: 0 1.5rem 2.1rem 0 $shadow_color;
+
+
+// UTILITY VARIABLES
+$max-width: 1440px;
+$inner-width: min($max-width, 90vw);
+
+$breakpoints: (
+    'mobile':    (550px),
+    'tablet':    (850px),
+    'tablet-ls': (1180px)
+);
+@mixin respond-to($breakpoint) {
+    // If the key exists in the map
+    @if map-has-key($breakpoints, $breakpoint) {
+      // Prints a media query based on the value
+      @media (max-width: map-get($breakpoints, $breakpoint)) {
+        @content;
+      }
+    }
+   
+    // If the key doesn't exist in the map
+    @else {
+      @warn "Unfortunately, no value could be retrieved from `#{$breakpoint}`. "
+          + "Available breakpoints are: #{map-keys($breakpoints)}.";
+    }
+  }
+
+// FONT STYLING
+@mixin mainfont {
+    font-family: "Manrope";
+    letter-spacing: -.015ch;
+}
+@mixin titlefont {
+    text-wrap: balance;
+    font-family: "Syne";
+    letter-spacing: -.03ch;
+}
+
+.text-title {
+    @include titlefont;
+    line-height: 0.9;
+    font-size: 10rem;
+    font-weight: bold;
+
+    @include respond-to('tablet-ls') {
+        font-size: 9rem;
+    }
+
+    @include respond-to('mobile') {
+        font-size: 6.5rem;
+    }
+}
+.text-heading {
+    @include titlefont;
+    line-height: 1.1;
+    font-size: 5rem;
+    font-weight: medium;
+
+    @include respond-to('tablet-ls') {
+        font-size: 4.1rem;
+    }
+
+    @include respond-to('mobile') {
+        font-size: 3.2rem;
+    }
+}
+.text-subheading {
+    @include titlefont;
+    line-height: 1.3;
+    font-size: 3.5rem;
+
+    @include respond-to('tablet-ls') {
+        font-size: 2.8rem;
+    }
+    @include respond-to('mobile') {
+        font-size: 2.2rem;
+    }
+}
+.text-caption {
+    @include mainfont;
+    line-height: 1.5;
+    font-size: 1.3rem;
+    font-weight: medium;
+    opacity: 1;
+
+}
+.text-body {
+    @include mainfont;
+    line-height: 1.5;
+    font-size: 1.8rem;
+    font-weight: 400;
+    // opacity: .85;
+    color: rgba($text1, .65);
+
+    &.bold {
+        font-weight: 600;
+    }
+
+    &.accent {
+        color: $accent;
+
+        &::selection {
+            background-color: $background2;
+        }
+    }
+}
+
+
+// TRANSITIONS
+@mixin transition($transition1, $transition2: null, $transition3: null, $transition4: null, $transition5: null) {
+    -webkit-transition: $transition1, $transition2, $transition3, $transition4, $transition5;
+    -moz-transition:    $transition1, $transition2, $transition3, $transition4, $transition5;
+    -o-transition:      $transition1, $transition2, $transition3, $transition4, $transition5;
+    transition:         $transition1, $transition2, $transition3, $transition4, $transition5;
+}
+@mixin transition-delay($delay) {
+	-webkit-transition-delay: $delay;
+	-moz-transition-delay:    $delay;
+	-ms-transition-delay:     $delay;
+	transition-delay:         $delay;
+}
+
+// TRANSFORMATIONS
+@mixin transform($transform) {
+	-webkit-transform: $transform;
+	-moz-transform:    $transform;
+	-ms-transform:     $transform;
+	transform:         $transform;
+}
+
+// ANIMATIONS
+@mixin animation($animation) {
+	-webkit-animation: $animation;
+	-moz-animation:    $animation;
+	-ms-animation:     $animation;
+	animation:         $animation;
+}
+@mixin animation-delay($delay) {
+	-webkit-animation-delay: $delay;
+	-moz-animation-delay:    $delay;
+	-ms-animation-delay:     $delay;
+	animation-delay:         $delay;
+}
+
+// BOX SHADOW
+@mixin box-shadow($shadow1, $shadow2: null, $shadow3: null, $shadow4: null, $shadow5: null, $shadow6: null) {
+    -webkit-box-shadow: $shadow1, $shadow2, $shadow3, $shadow4, $shadow5, $shadow6;
+    -moz-box-shadow:    $shadow1, $shadow2, $shadow3, $shadow4, $shadow5, $shadow6;
+    -o-box-shadow:      $shadow1, $shadow2, $shadow3, $shadow4, $shadow5, $shadow6;
+    box-shadow:         $shadow1, $shadow2, $shadow3, $shadow4, $shadow5, $shadow6;
+}

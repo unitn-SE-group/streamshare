@@ -1,0 +1,120 @@
+@import 'config';
+@import 'buttons';
+@import 'components';
+
+@import 'components/navigation-bar.scss';
+@import 'components/footer.scss';
+
+.admin-dash-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr;
+    gap: 5rem;
+    margin: 0 auto;
+    padding: 25rem 0 13.5rem;
+    width: $inner-width;
+
+    .admin-dash-content-wrapper {
+        gap: 4rem;
+        width: 100%;
+
+        .text-heading {
+            margin-bottom: 2rem;
+        }
+
+        .admin-dash-content-inner {
+            gap: 3rem;
+            border-radius: 3.5rem;
+            padding: 7rem;
+            background-color: $background2;
+
+            .admin-dash-content-grid {
+                display: grid;
+                grid-template-rows: auto auto;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5rem;
+                width: 100%;
+
+                .admin-dash-content-item {
+                    width: 100%;
+                    height: 100%;
+                    gap: 2.5rem;
+
+                    .image {
+                        width: 100%;
+                        aspect-ratio: 9/16;
+                        border: .25rem solid $text1;
+                        border-radius: 1rem;
+                    }
+                    .text-body {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+            }
+
+            .btn-tertiary {
+                align-self: flex-end;
+                margin-top: 3rem;
+            }
+        }
+        .button-bar {
+            width: 100%;
+
+            .btn-primary,
+            .btn-secondary {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    }
+
+    .admin-dash-users-wrapper {
+        justify-content: flex-start;
+        gap: 4rem;
+        width: 100%;
+        height: 100%;
+        border: .25rem solid $background2;
+        border-radius: 2.5rem;
+        padding: 5rem 3rem;
+        background-color: $background1;
+
+        .text-subheading {
+            padding-left: 4rem;
+        }
+
+        .admin-dash-users-grid {
+            gap: 3.5rem;
+            justify-content: flex-start;
+
+            .admin-dash-user {
+                justify-content: space-between;
+                gap: 3rem;
+                height: auto;
+
+                .image {
+                    width: 11rem;
+                    aspect-ratio: 1;
+                    border: .25rem solid $text1;                    
+                    border-radius: 50%;
+                }
+
+                .text-body {
+                    width: 100%;
+                    text-align: left;
+                }
+
+                .admin-dash-user-status {
+                    width: 7rem;
+                    height: 2.5rem;
+                    border: .25rem solid $text1;
+                    border-radius: 2.5rem;
+                }
+            }
+        }
+
+        .btn-tertiary {
+            align-self: flex-end;
+        }
+    }
+}

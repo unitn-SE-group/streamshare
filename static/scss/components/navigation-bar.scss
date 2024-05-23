@@ -1,0 +1,265 @@
+// Navigation bar
+.navigation-wrapper {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 13rem;
+    padding-top: 3rem;
+    
+    color: $text1;
+
+    translate: 0 -50%;
+    opacity: 0;
+
+    animation: fadeDown 1s ease .25s forwards;
+    @include transition(all .5s ease);
+
+    &.hidden {
+        transform: translateY(calc(-100% - .5rem));
+    }
+
+    @keyframes fadeDown {
+        0% {
+            opacity: 0;
+            translate: 0 -50%;
+        }
+        100% {
+            opacity: 1;
+            translate: 0 0;
+        }
+    }
+
+    .navigation-inner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 5rem;
+        width: $inner-width;
+        border: .25rem solid $background2;
+        border-radius: 10rem;
+        padding: 1rem;
+        background-color: $background1;
+
+        .logo {
+            display: grid;
+            place-items: center;
+            min-width: 8rem;
+            height: 8rem;
+            border-radius: 8rem;
+            background-color: $background2;
+
+            img {
+                right: -.25rem;
+                width: 3.5rem;
+                aspect-ratio: 1;
+            }
+        }
+    
+        .navigation {
+            justify-content: center;
+            gap: 5rem;
+            margin-left: 2.5rem;
+            color: inherit;
+    
+            li {
+                cursor: pointer;
+                @include transition(all .25s ease);
+    
+                &:hover,
+                &:focus,
+                a:focus {
+                    border: none;
+                    outline: none;
+                    color: $accent;
+                }
+            }
+        }
+        .btn-primary {
+            margin-right: .5rem;
+        }
+    }
+
+    .mobile-menu-button {
+        display: none;
+    }
+    .popup-menu {
+        display: none;
+        width: 100dvw;
+        height: 100dvh;
+        translate: -5vw -15%;
+    }
+
+    .popup-menu {
+        $open: "false";
+    }
+
+
+    @include respond-to('tablet') {
+        height: calc(10rem + 2.5dvw);
+        padding: 2.5dvw 5dvw 0 5dvw;
+
+        .navigation-inner {
+            .logo {
+                min-width: 6rem;
+                height: 6rem;
+
+                img {
+                    width: 2.5rem;
+                }
+            }
+            .btn-primary {
+                margin: 0;
+            }
+
+            .navigation,
+            & > .li {
+                display: none;
+            }
+        }
+        .mobile-menu-button {
+            display: block;
+            position: static;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 6rem;
+            height: 6rem;
+            border-radius: 6rem;
+            padding: 2rem 1.75rem;
+            background-color: $background1;
+
+            span {
+                width: 100%;
+            }
+
+            .check {
+                cursor: pointer;
+                opacity: 0;
+                position: absolute;
+                top: 1.75rem;
+                right: 1.75rem;
+                width: 4.5rem;
+                height: 4.5rem;
+                border-radius: 6rem;
+
+                &:checked {
+                    & ~ span {
+                        width: 100%;
+                        
+                        &:nth-of-type(1) {
+                            translate: 0 .9rem;
+                            rotate: -45deg;
+
+                            @include transition(translate .25s ease, rotate .25s ease .25s);
+                        }
+
+                        &:nth-of-type(2) {
+                            width: 0;
+                            @include transition(width .25s ease .25s);
+                        }
+
+                        &:nth-of-type(3) {
+                            translate: 0 -.9rem;
+                            rotate: 45deg;
+
+                            @include transition(translate .25s ease, rotate .25s ease .25s);
+                        }
+                    }
+
+                    & ~ .popup-menu {
+                        $open: "true";
+
+                        pointer-events: all;
+                        top: calc(-2.5dvw - 1rem);
+                        width: 100dvw;
+                        height: 100dvh;
+                        opacity: 1;
+                        translate: -5vw 0;
+
+                        ul {
+                            translate: 0 -25%;
+
+                            li {
+                                opacity: 1;
+                                translate: 0 0;
+
+                                &:nth-of-type(1) {
+                                    @include transition-delay(0s);
+                                }
+                                &:nth-of-type(2) {
+                                    @include transition-delay(.1s);
+                                }
+                                &:nth-of-type(3) {
+                                    @include transition-delay(.175s);
+                                }
+                                &:nth-of-type(4) {
+                                    @include transition-delay(.25s);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            span {
+                pointer-events: none;
+                width: 100%;
+                height: .2rem;
+                border-radius: 10rem;
+                background-color: $text1;
+
+                @include transition(width .25s ease .25s, translate .25s ease .25s, rotate .25s ease);
+
+                &:nth-of-type(2) {
+                    width: 75%;
+                    margin: 0 auto;
+                }
+            }
+
+            .popup-menu {
+                z-index: -1;
+                pointer-events: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: grid;
+                place-items: center;
+                padding: 4.5rem 6rem;
+                background-color: $background2;
+                opacity: 0;
+
+                @include transition(all .25s ease);
+
+                ul {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    justify-content: center;
+                    gap: 2.5rem;
+
+                    @include transition(all .25s ease);
+
+                    li {
+                        translate: 0 -1.5rem;
+                        opacity: 0;
+
+                        @include transition(all .25s ease);
+                        @include transition-delay(0s);
+                    }
+                }
+
+                .btn-wrapper {
+                    opacity: 0;
+                    translate: 0 -1.5rem;
+                    @include transition-delay(0s);
+                }
+            }
+        }
+    }
+}
