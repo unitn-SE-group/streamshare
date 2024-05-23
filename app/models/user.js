@@ -35,9 +35,8 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true,
     },
-
-    /*Still don't know hot to do this*/
-    friends: [{ type : ObjectId, ref: 'User' }],
+    
+    friends: [mongoose.SchemaTypes.ObjectId],
 
     birthDay: {
         type: Date,
