@@ -1,8 +1,13 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 
 //Create a User schema
 const userSchema = new mongoose.Schema({
-    userType: ['admin', 'creator', 'consumer'],
+    userType: {
+        type: String,
+        enum: ['admin', 'creator', 'consumer'],
+        required: true
+    },
 
     email: {
         type: String, 
@@ -35,12 +40,12 @@ const userSchema = new mongoose.Schema({
         type: String, 
         required: true,
     },
-    
+
     friends: [mongoose.SchemaTypes.ObjectId],
 
     birthDay: {
         type: Date,
-        required: true  
+        required: true, 
     },
 
     createdAt: {
