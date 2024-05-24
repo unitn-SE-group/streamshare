@@ -2,35 +2,40 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require("./models/User");
+const User = require("./models/user");
 const dotenv = require('dotenv');
 
 const router = express.Router();
 router.use(express.json());
 dotenv.config();
 
-router.post('/', async (req, res) => {
+// connecting to database (not necessary since unified)
+// mongoose.connect(process.env.DATABASE_URI)
+// .then(()=> console.log("Connected to MongoDB"))
+// .catch(err => console.error("Could not connect to MongoDB"));
+
+router.post('/register', async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body;
 
-        // Check if user already exists in the database
-        // const existingUser = await User.findOne({ username });
-        // if (existingUser) {
-        //     return res.status(409).json({ message: "User already exists" });
-        // }
+        // Checking if user already exists in the database
+        const existingUser = await User.findOne({ email: email });
+        if (existingUser) {
+            return res.status(409).json({ message: "User already exists" });
+        }
 
-        // // Hash the password
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        const newUser = new User({
+            userType,
+            email,
+            FirstName,
+            LastName,
+            username,
+            gender,
+            password,
+            birthDay
+        });
 
-        // // Create a new user object
-        // const newUser = new User({
-        //     username,
-        //     password: hashedPassword
-        // });
-
-        // // Save the new user to the database
-        // await newUser.save();
-
+        await newUser.save();
         res.status(201).json({ message: "User created successfully" });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -39,4 +44,4 @@ router.post('/', async (req, res) => {
 
 const app = express();
 app.use('/', router);
-app.listen(3000);
+// app.listen(3000);
