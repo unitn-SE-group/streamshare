@@ -1,9 +1,10 @@
+const { ObjectId } = require("mongodb")
 const mongoose = require("mongoose")
 
 //Create a User schema
 const sessionSchema = new mongoose.Schema({
         user_id: {
-            type: User,
+            type: ObjectId,
             require: true,
         },
 
