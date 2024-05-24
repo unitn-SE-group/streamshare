@@ -19,3 +19,33 @@ const observer = new IntersectionObserver((entries) => {
 })
 
 document.querySelectorAll(".animateOnScroll").forEach((el) => observer.observe(el));
+
+const fetch_content = () => {
+    console.log("Fetching content");
+    fetch(`http://localhost:3000/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        // body: JSON.stringify({
+        //     "email": "pedale.velocedp@gmail.com",
+        //     "password": "pw123",
+        //     "username": "pedwoo",
+        //     "userType": "consumer",
+        //     "FirstName": "daniele",
+        //     "LastName": "pedwolli"
+        // }),
+        // mode: 'no-cors'
+    })
+    .then(response => {
+        console.log(response);
+        if(response.ok) {
+            console.log("Response OK");
+        } else {
+            console.log("Response not OK");
+        }
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}

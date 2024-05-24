@@ -4,7 +4,7 @@
   "description": "Streamshare is a streaming service incentivizing interaction between users.",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
+    "devStart": "nodemon app/app.js",
     "start": "node src/server.js",
     "test": "node tests/test.js",
     "jsdoc": "jsdoc -c jsdoc.json"
@@ -25,9 +25,13 @@
   },
   "homepage": "https://github.com/unitn-SE-group/StreamShare#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.6.2",
     "mongoose": "^8.4.0"
   },
   "devDependencies": {

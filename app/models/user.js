@@ -55,4 +55,9 @@ const userSchema = new mongoose.Schema({
     },
 })
 
+// Method to compare passwords
+userSchema.methods.comparePassword = function(pw_from_db) {
+    return bcrypt.compare(pw_from_db, this.password);
+};
+
 module.exports = mongoose.model("User", userSchema)
