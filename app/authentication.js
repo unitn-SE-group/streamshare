@@ -1,41 +1,38 @@
-const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require("./models/User");
 const dotenv = require('dotenv');
 
-router = express.router();
-/**Add a middleware in order to parse the data in a json */
-//app.use(express.json())
+const express = require('express');
+const router = express.Router();
 
 dotenv.config();
 
-mongoose.connect(process.env.DATABASE_URI)
-.then(()=> console.log("Connected to MongoDB"))
-.catch(err => console.error("Could not connect to MongoDB", err));
-
-/**Add an endpoint */
-app.post("/login", async (req, res)=>{
-    const {email, password} = req.body;
+/**Add /login endpoint */
+router.post(`/login`, async (req, res)=>{
+    const email = req.body.email;
+    const password = req.body.password;
     console.log(`The email is: ${email}`)
     console.log(`The password is: ${password}`)
 
     if (!email || !password){
-        return res.sendStatus(400).json({error: `Invalid name or password`}) //Bad Request
+        return res.status(400).json({error: `Invalid name or password`}); //Bad Request
     }
 
     try{
         //search for the email in the database
-        const user = await User.find({email: `${email}`})
+        const user = await User.findOne({email: email} );
         if(!user){
-            return res.sendStatus(401) //Not Found
+            return res.status(404).json({error: `Account not registered`}) //Not Found
+        }else{
+            console.log(`FOUND IT ->  ${user.username}`)
         }
 
         //control if the password is correct
-        const password_match = await bcrypt.compare(password, existing_user.password)
+        const password_match = await bcrypt.compare(password, user.password)
         if(!password_match){
-            return res.sendStatus(401) //Unauthorizied
+            return res.status(401).json({error: `Invalid password`}) //Unauthorizied
         }
 
         //generate JWT token
@@ -46,6 +43,8 @@ app.post("/login", async (req, res)=>{
         const accessToken = jwt.sign(payload, key_acc, options)
         const refreshToken = jwt.sign(payload, key_ref)
 
+        //Update the session schema in the database
+
 
         res.json({
             accessToken: accessToken,
@@ -54,10 +53,8 @@ app.post("/login", async (req, res)=>{
 
     }catch(err){
         console.log(`An error occoured during authentication: ${err}`)
-        return res.sendStatus(500) //Server Error
+        res.status(500)
     }
 })
 
-
-
-
+module.exports = router;
