@@ -60,9 +60,11 @@ const userSchema = new mongoose.Schema({
     },
 })
 
-// Method to compare passwords
-userSchema.methods.comparePassword = function(pw_from_db) {
-    return bcrypt.compare(pw_from_db, this.password);
-};
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
 
 module.exports = mongoose.model("User", userSchema)
