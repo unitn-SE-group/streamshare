@@ -97,17 +97,15 @@ router.get('/token', async (req, res) => {
       *              in a secure persistent database instead. */
     userCredential = tokens;
 
-    console.log('tokens', tokens);
-
     // get and print user
     const user = oauth2Client.credentials;
-    console.log('user', user);
+    //console.log('user', user);
     const access_token = user.access_token;
     const refresh_token = user.refresh_token;
     const id_token = user.id_token;
-    getUserData(user.access_token);
+    const user_data = await getUserData(access_token);
 
-    res.end('Tokens acquired. You can now close this tab.');
+    res.end('Tokens acquired. Your data is: ' + JSON.stringify(user_data));
 
   }
 });
@@ -146,10 +144,34 @@ router.get('/revoke', async (req, res) => {
   postReq.end();
 });
 
-async function getUserData(access_token){
-  const response = await fetch(`https://www.googleapis.com/auth/userinfo.email?access_token${access_token}`);
-  const data = await response.json();
-  console.log('data', data);
+async function getUserData(access_token) {
+  console.log('The access token is', access_token);
+  
+  const url = 'https://www.googleapis.com/oauth2/v2/userinfo';
+  const options = {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${access_token}`
+    }
+  };
+  
+  try {
+    const response = await fetch(url, options);
+    
+    if (!response.ok) {
+      // If response is not ok, log the status and status text
+      console.error('HTTP Error:', response.status, response.statusText);
+      const errorData = await response.json();
+      console.error('Error Data:', errorData);
+      return;
+    }
+    
+    const data = await response.json();
+    console.log('Data:', data);
+    return data;
+  } catch (error) {
+    console.error('Fetch Error:', error);
+  }
 }
 
 module.exports = router;
