@@ -1,8 +1,13 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const bcrypt = require('bcrypt');
 
 //Create a User schema
 const userSchema = new mongoose.Schema({
-    userType: ['admin', 'creator', 'consumer'],
+    userType: {
+        type: String,
+        enum: ['admin', 'creator', 'consumer'],
+        required: true
+    },
 
     email: {
         type: String, 
@@ -36,12 +41,11 @@ const userSchema = new mongoose.Schema({
         required: true,
     },
 
-    /*Still don't know hot to do this*/
-    friends: [{ type : ObjectId, ref: 'User' }],
+    friends: [mongoose.SchemaTypes.ObjectId],
 
     birthDay: {
         type: Date,
-        required: true  
+        required: true, 
     },
 
     createdAt: {
@@ -55,5 +59,12 @@ const userSchema = new mongoose.Schema({
         default: () => Date.now(),
     },
 })
+
+userSchema.pre('save', async function (next) {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+});
 
 module.exports = mongoose.model("User", userSchema)
