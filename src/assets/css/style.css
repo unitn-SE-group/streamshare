@@ -297,6 +297,67 @@
   scale: 0.92;
 }
 
+.btn-tertiary {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  max-width: max-content;
+  height: 7rem;
+  border: none;
+  border-radius: 3.5rem;
+  padding: 0 5rem;
+  background-color: transparent;
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 1;
+  height: auto;
+  padding: 0;
+  font-weight: bold;
+  background: transparent;
+  color: #F4F2EF;
+}
+@media (max-width: 850px) {
+  .btn-tertiary {
+    height: 5.5rem;
+    padding: 0 3rem;
+  }
+}
+@media (max-width: 550px) {
+  .btn-tertiary {
+    font-size: 1.8rem;
+  }
+}
+.btn-tertiary:focus {
+  border: none;
+  outline: none;
+}
+.btn-tertiary svg {
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.btn-tertiary:not(:disabled):hover svg {
+  translate: 1rem 0;
+}
+
 .section-wrapper {
   display: grid;
   place-items: center;
@@ -391,9 +452,6 @@
   height: 13rem;
   padding-top: 3rem;
   color: #F4F2EF;
-  translate: 0 -50%;
-  opacity: 0;
-  animation: fadeDown 1s ease 0.25s forwards;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
@@ -666,7 +724,6 @@
   width: min(80vw, 55rem);
   margin-bottom: 3rem;
   opacity: 0;
-  animation: fade-in 1s ease forwards 0.75s;
 }
 .banner-inner .text-body span {
   font-weight: bold;
@@ -674,7 +731,6 @@
 .banner-inner .button-bar {
   opacity: 0;
   translate: 0 50%;
-  animation: fade-slide-up 1s ease forwards 1.25s;
 }
 .banner-inner .lottie-animation-wrapper {
   display: flex;
@@ -684,7 +740,6 @@
   gap: 0.75rem;
   margin-top: 9rem;
   opacity: 0;
-  animation: fade-in 2s ease forwards 2.5s;
 }
 .banner-inner .lottie-animation-wrapper .lottie-arrow {
   position: absolute;
@@ -699,13 +754,13 @@
   translate: -50% 0;
 }
 .banner-inner .lottie-animation-wrapper .lottie-arrow:nth-child(1) {
-  animation: lottie-animation 3s ease-in-out infinite;
+  animation: lottie-animation 2.4s ease-in-out infinite;
 }
 .banner-inner .lottie-animation-wrapper .lottie-arrow:nth-child(2) {
-  animation: lottie-animation 3s ease-in-out infinite 1s;
+  animation: lottie-animation 2.4s ease-in-out infinite 0.8s;
 }
 .banner-inner .lottie-animation-wrapper .lottie-arrow:nth-child(3) {
-  animation: lottie-animation 3s ease-in-out infinite 2s;
+  animation: lottie-animation 2.4s ease-in-out infinite 1.6s;
 }
 .banner-inner .lottie-animation-wrapper .lottie-arrow span {
   width: 1.5rem;
@@ -1072,82 +1127,6 @@ html body {
   background-repeat: repeat;
   background-attachment: fixed;
   color: #F4F2EF;
-}
-html body .animateOnScroll.show {
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  transition: all 1s ease;
-}
-html body .animateOnScroll.show.onScrollD0 {
-  -webkit-transition-delay: 0.25s;
-  -moz-transition-delay: 0.25s;
-  -ms-transition-delay: 0.25s;
-  transition-delay: 0.25s;
-}
-html body .animateOnScroll.show.onScrollD1 {
-  -webkit-transition-delay: 0.5s;
-  -moz-transition-delay: 0.5s;
-  -ms-transition-delay: 0.5s;
-  transition-delay: 0.5s;
-}
-html body .animateOnScroll.show.onScrollD2 {
-  -webkit-transition-delay: 0.75s;
-  -moz-transition-delay: 0.75s;
-  -ms-transition-delay: 0.75s;
-  transition-delay: 0.75s;
-}
-html body .animateOnScroll.show.onScrollD3 {
-  -webkit-transition-delay: 1s;
-  -moz-transition-delay: 1s;
-  -ms-transition-delay: 1s;
-  transition-delay: 1s;
-}
-html body .animateOnScroll.show.onScrollD4 {
-  -webkit-transition-delay: 1.25s;
-  -moz-transition-delay: 1.25s;
-  -ms-transition-delay: 1.25s;
-  transition-delay: 1.25s;
-}
-html body .animateOnScroll.show.onScrollD5 {
-  -webkit-transition-delay: 1.5s;
-  -moz-transition-delay: 1.5s;
-  -ms-transition-delay: 1.5s;
-  transition-delay: 1.5s;
-}
-html body .animateOnScroll.show.onScrollD6 {
-  -webkit-transition-delay: 1.75s;
-  -moz-transition-delay: 1.75s;
-  -ms-transition-delay: 1.75s;
-  transition-delay: 1.75s;
-}
-html body .animateOnScroll.show.onScrollD7 {
-  -webkit-transition-delay: 2s;
-  -moz-transition-delay: 2s;
-  -ms-transition-delay: 2s;
-  transition-delay: 2s;
-}
-html body .animateOnScroll.onScrollFadeIn {
-  opacity: 0;
-}
-html body .animateOnScroll.onScrollFadeIn.show {
-  opacity: 1;
-}
-html body .animateOnScroll.onScrollFadeUp {
-  opacity: 0;
-  translate: 0 50%;
-}
-html body .animateOnScroll.onScrollFadeUp.show {
-  opacity: 1;
-  translate: 0 0;
-}
-html body .animateOnScroll.onScrollFadeDown {
-  opacity: 0;
-  translate: 0 -50%;
-}
-html body .animateOnScroll.onScrollFadeDown.show {
-  opacity: 1;
-  translate: 0 0;
 }
 
 ::selection {
