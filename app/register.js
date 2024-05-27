@@ -1,5 +1,4 @@
 import { Router } from 'express'
-import mongoose from 'mongoose'
 import User, { findOne } from './models/user.js'
 import { config } from 'dotenv'
 
