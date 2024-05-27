@@ -1,10 +1,10 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const User = require('./models/user.js')
-const dotenv = require('dotenv')
+import { Router } from 'express'
+import mongoose from 'mongoose'
+import User, { findOne } from './models/user.js'
+import { config } from 'dotenv'
 
-const router = express.Router()
-dotenv.config()
+const router = Router()
+config()
 
 // connecting to database (not necessary since unified)
 // mongoose
@@ -17,7 +17,7 @@ router.post('/register', async (req, res) => {
     const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
 
     // Checking if user already exists in the database
-    const existingUser = await User.findOne({ email: email })
+    const existingUser = await findOne({ email: email })
     if (existingUser) {
       return res.status(409).json({ message: 'User already exists' })
     }
@@ -40,4 +40,4 @@ router.post('/register', async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

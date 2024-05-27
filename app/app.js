@@ -1,7 +1,7 @@
-const express = require('express')
+import express, { json } from 'express'
 const app = express()
-const registration = require('./register.js')
+import registration from './register.js'
 
-app.use(express.json())
+app.use(json())
 app.use('/register', registration)
-module.exports = app
+export default app
