@@ -9,8 +9,9 @@ export default {
       UserType: 'consumer',
       FirstName: '',
       LastName: '',
+      Username: '',
       Gender: '',
-      DOB: '',
+      DOB: '00/00/0000',
       Email: '',
       Password: '',
       RepeatPassword: ''
@@ -23,6 +24,7 @@ export default {
           UserType: this.UserType,
           FirstName: this.FirstName,
           LastName: this.LastName,
+          Username: this.Username,
           Gender: this.Gender,
           DOB: this.DOB,
           Email: this.Email,
@@ -56,56 +58,77 @@ export default {
       <form @submit.prevent="handleSubmit">
         <div v-motion="animations.onScrollFadeUpD0" class="generic-row form-group">
           <div class="generic-col form-col">
-            <label class="text-body" for="FirstName">First Name</label>
+            <label class="text-body" for="firstName">First Name</label>
             <input
               class="text-body"
               v-model="FirstName"
               type="text"
-              id="FirstName"
-              name="FirstName"
+              id="firstName"
+              name="firstName"
               required
             />
           </div>
           <div class="generic-col form-col">
-            <label class="text-body" for="LastName">Last Name</label>
+            <label class="text-body" for="lastName">Last Name</label>
             <input
               class="text-body"
               v-model="LastName"
-              type="LastName"
-              id="LastName"
-              name="LastName"
+              type="text"
+              id="lastName"
+              name="lastName"
               required
             />
           </div>
         </div>
         <div class="generic-row form-group">
           <div class="generic-col form-col">
-            <label for="Gender" class="text-body">Gender</label>
-            <select name="Gender" id="Gender" class="text-body">
+            <label for="gender" class="text-body">Gender</label>
+            <select v-model="Gender" name="gender" id="gender" class="text-body">
               <option value="0">Female</option>
               <option value="1">Male</option>
             </select>
           </div>
           <div class="generic-col form-col">
             <label class="text-body" for="DOB">Date of Birth</label>
-            <input class="text-body" type="date" id="DOB" name="DOB" required />
+            <input v-model="DOB" class="text-body" type="date" id="DOB" name="DOB" required />
           </div>
         </div>
         <div v-motion="animations.onScrollFadeUpD0" class="form-group">
-          <label class="text-body" for="email">Username</label>
-          <input class="text-body" type="email" id="username" name="username" required />
+          <label class="text-body" for="username">Username</label>
+          <input
+            v-model="Username"
+            class="text-body"
+            type="text"
+            id="username"
+            name="username"
+            required
+          />
         </div>
         <div v-motion="animations.onScrollFadeUpD0" class="form-group">
           <label class="text-body" for="email">Email</label>
-          <input class="text-body" type="email" id="username" name="username" required />
+          <input v-model="Email" class="text-body" type="email" id="email" name="email" required />
         </div>
         <div v-motion="animations.onScrollFadeUpD1" class="form-group">
           <label class="text-body" for="password">New password</label>
-          <input class="text-body" type="password" id="password" name="password" required />
+          <input
+            v-model="Password"
+            class="text-body"
+            type="password"
+            id="password"
+            name="password"
+            required
+          />
         </div>
         <div v-motion="animations.onScrollFadeUpD2" class="form-group">
-          <label class="text-body" for="password">Repeat password</label>
-          <input class="text-body" type="password" id="newPassword" name="password" required />
+          <label class="text-body" for="repeatPassword">Repeat password</label>
+          <input
+            v-model="RepeatPassword"
+            class="text-body"
+            type="password"
+            id="repeatPassword"
+            name="repeatPassword"
+            required
+          />
         </div>
         <div v-motion="animations.onScrollFadeUpD3" class="form-group">
           <button class="btn-primary" type="submit">Create account</button>

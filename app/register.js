@@ -12,11 +12,12 @@ config()
 //   .catch((err) => console.error('Could not connect to MongoDB ' + err))
 
 router.post('/register', async (req, res) => {
+  console.log('registering new user')
   try {
     const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
 
     // Checking if user already exists in the database
-    const existingUser = await findOne({ email: email })
+    const existingUser = await User.findOne({ email: email })
     if (existingUser) {
       return res.status(409).json({ message: 'User already exists' })
     }

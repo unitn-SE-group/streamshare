@@ -1,10 +1,8 @@
-// const mongoose = require('mongoose')
-// const bcrypt = require('bcrypt')
-import mongoose from 'mongoose'
-import bcrypt from 'bcrypt'
+import { Schema, SchemaTypes, model } from 'mongoose'
+import { hash } from 'bcrypt'
 
 //Create a User schema
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   userType: {
     type: String,
     enum: ['admin', 'creator', 'consumer'],
@@ -43,7 +41,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-  friends: [mongoose.SchemaTypes.ObjectId],
+  friends: [SchemaTypes.ObjectId],
 
   birthDay: {
     type: Date,
@@ -64,11 +62,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', async function (next) {
   if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 10)
+    this.password = await hash(this.password, 10)
   }
   next()
 })
 
-const ex = mongoose.model('User', userSchema)
-
-export default ex
+export default model('User', userSchema)
