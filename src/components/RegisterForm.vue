@@ -11,7 +11,7 @@ export default {
       LastName: '',
       Username: '',
       Gender: '',
-      DOB: '00/00/0000',
+      DOB: '',
       Email: '',
       Password: '',
       RepeatPassword: ''
@@ -21,17 +21,17 @@ export default {
     handleSubmit() {
       if (this.Password == this.RepeatPassword) {
         const userData = {
-          UserType: this.UserType,
+          userType: this.UserType,
+          email: this.Email,
           FirstName: this.FirstName,
           LastName: this.LastName,
-          Username: this.Username,
-          Gender: this.Gender,
-          DOB: this.DOB,
-          Email: this.Email,
-          Password: this.Password
+          username: this.Username,
+          gender: this.Gender,
+          password: this.Password,
+          birthDay: this.DOB
         }
 
-        fetch(`${window.location.origin}/register`, {
+        fetch(`http://localhost:3000/api/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -43,8 +43,9 @@ export default {
             console.log(data)
           })
           .catch((error) => {
-            // Handle any errors
-            console.error(error)
+            if (error.response.status == 409) {
+              console.log('User already exists')
+            }
           })
       }
     }

@@ -12,7 +12,6 @@ config()
 //   .catch((err) => console.error('Could not connect to MongoDB ' + err))
 
 router.post('/register', async (req, res) => {
-  console.log('registering new user')
   try {
     const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
 
