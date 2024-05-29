@@ -3,82 +3,104 @@
 @import '../scss/components';
 
 .login-wrapper {
-    padding: 25rem 0 13.5rem;
+  padding: 25rem 0 13.5rem;
 
-    .login-inner {
-        align-items: center;
-        width: min(85rem, 90vw);
-        border: .25rem solid $background2;
-        border-radius: 3.5rem;
-        padding: 9rem;
-        background-color: $background1;
+  .login-inner {
+    align-items: center;
+    width: min(85rem, 90vw);
+    border: 0.25rem solid $background2;
+    border-radius: 3.5rem;
+    padding: 9rem;
+    background-color: $background1;
 
-        .text-heading {
-            margin-bottom: 3rem;
+    .text-heading {
+      margin-bottom: 3rem;
+    }
+
+    form {
+      width: 90%;
+
+      .form-group {
+        justify-content: space-between;
+        margin-bottom: 3rem;
+        width: 100%;
+
+        label {
+          display: block;
+          margin-bottom: 0.75rem;
+          padding-left: 1rem;
         }
 
-        form {
-            width: min(40rem, 100%);
+        input,
+        .form-col select {
+          border: 0.25rem solid transparent;
+          border-radius: 5rem;
+          outline: none;
+          padding: 1rem 2rem;
+          width: 100%;
+          height: 100%;
+          background-color: $background2;
+          color: $text1;
 
-            .form-group {
-                margin-bottom: 2rem;
-                width: 100%;
-    
-                label {
-                    display: block;
-                    margin-bottom: .75rem;
-                    padding-left: 1rem;
-                }
-    
-                input {
-                    border: .25rem solid transparent;
-                    border-radius: 5rem;
-                    outline: none;
-                    padding: 1rem 2rem;
-                    width: 100%;
-                    background-color: $background2;
-                    color: $text1;
+          @include transition(all 0.5s ease);
 
-                    @include transition(all .5s ease);
+          &:focus {
+            border-color: $accent-secondary;
+          }
+        }
 
-                    &:focus {
-                        border-color: $accent-secondary;
-                    }
-                }
+        a {
+          display: block;
+          width: 100%;
+          margin-right: 1rem;
+          font-size: 1.4rem;
+          text-align: right;
+          color: $accent;
+        }
 
-                a {
-                    display: block;
-                    width: 100%;
-                    margin-right: 1rem;
-                    font-size: 1.4rem;
-                    text-align: right;
-                    color: $accent;
-                }
-    
-                &:last-child {
-                    display: flex;
-                    flex-direction: column;
-                    width: 100%;
-                    margin-top: 5rem;
-                    margin-bottom: 0;
-    
-                    .btn-primary {
-                        align-self: flex-end;
-                        margin-bottom: 8rem;
-                    }
-                }
+        .form-col {
+          select {
+            width: 100%;
+            appearance: none;
+
+            option {
+              width: 100%;
+              text-align: left;
             }
-        }
-        .text-body {
-            a {
-                font-weight: bold;
+          }
+
+          #DOB {
+            &::-webkit-calendar-picker-indicator {
+              display: none;
+              filter: invert(1);
             }
+          }
         }
+
+        &:last-child {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          margin-top: 5rem;
+          margin-bottom: 0;
+
+          .btn-primary {
+            align-self: flex-end;
+            margin-bottom: 8rem;
+          }
+        }
+      }
     }
-    @include respond-to('tablet') {
-        padding: 20rem 0 9.5rem;
+    .text-body {
+      a {
+        font-weight: bold;
+      }
     }
-    @include respond-to('mobile') {
-        padding: 17rem 0 6.5rem;
-    }
+  }
+  @include respond-to('tablet') {
+    padding: 20rem 0 9.5rem;
+  }
+  @include respond-to('mobile') {
+    padding: 17rem 0 6.5rem;
+  }
 }

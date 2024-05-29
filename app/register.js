@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import User, { findOne } from './models/user.js'
+import User from './models/user.js'
 import { config } from 'dotenv'
 
 const router = Router()

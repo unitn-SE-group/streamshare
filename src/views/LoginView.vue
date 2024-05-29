@@ -1,17 +1,17 @@
 <script>
 import NavBar from '@/components/Navbar.vue'
-import IndexBanner from '@/components/IndexBanner.vue'
+import LoginForm from '@/components/LoginForm.vue'
 
 export default {
   components: {
     NavBar,
-    IndexBanner
+    LoginForm
   }
 }
 </script>
 
 <template>
   <NavBar></NavBar>
-  <IndexBanner></IndexBanner>
+  <LoginForm></LoginForm>
   <RouterView></RouterView>
 </template>

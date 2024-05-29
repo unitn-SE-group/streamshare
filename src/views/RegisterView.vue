@@ -1,17 +1,17 @@
 <script>
 import NavBar from '@/components/Navbar.vue'
-import IndexBanner from '@/components/IndexBanner.vue'
+import RegisterForm from '@/components/RegisterForm.vue'
 
 export default {
   components: {
     NavBar,
-    IndexBanner
+    RegisterForm
   }
 }
 </script>
 
 <template>
   <NavBar></NavBar>
-  <IndexBanner></IndexBanner>
+  <RegisterForm></RegisterForm>
   <RouterView></RouterView>
 </template>

@@ -26,7 +26,7 @@ export default { name: 'NavBar' }
           >
         </li>
       </ul>
-      <a href="../" class="btn-primary" role="button">Watch</a>
+      <router-link to="/login" class="btn-primary" role="button">Watch</router-link>
 
       <div class="mobile-menu-button">
         <input

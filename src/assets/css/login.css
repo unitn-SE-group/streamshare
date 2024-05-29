@@ -297,6 +297,67 @@
   scale: 0.92;
 }
 
+.btn-tertiary {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  max-width: max-content;
+  height: 7rem;
+  border: none;
+  border-radius: 3.5rem;
+  padding: 0 5rem;
+  background-color: transparent;
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 1;
+  height: auto;
+  padding: 0;
+  font-weight: bold;
+  background: transparent;
+  color: #F4F2EF;
+}
+@media (max-width: 850px) {
+  .btn-tertiary {
+    height: 5.5rem;
+    padding: 0 3rem;
+  }
+}
+@media (max-width: 550px) {
+  .btn-tertiary {
+    font-size: 1.8rem;
+  }
+}
+.btn-tertiary:focus {
+  border: none;
+  outline: none;
+}
+.btn-tertiary svg {
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.btn-tertiary:not(:disabled):hover svg {
+  translate: 1rem 0;
+}
+
 .section-wrapper {
   display: grid;
   place-items: center;
@@ -395,10 +456,11 @@
   margin-bottom: 3rem;
 }
 .login-wrapper .login-inner form {
-  width: min(40rem, 100%);
+  width: 90%;
 }
 .login-wrapper .login-inner form .form-group {
-  margin-bottom: 2rem;
+  justify-content: space-between;
+  margin-bottom: 3rem;
   width: 100%;
 }
 .login-wrapper .login-inner form .form-group label {
@@ -406,12 +468,14 @@
   margin-bottom: 0.75rem;
   padding-left: 1rem;
 }
-.login-wrapper .login-inner form .form-group input {
+.login-wrapper .login-inner form .form-group input,
+.login-wrapper .login-inner form .form-group .form-col select {
   border: 0.25rem solid transparent;
   border-radius: 5rem;
   outline: none;
   padding: 1rem 2rem;
   width: 100%;
+  height: 100%;
   background-color: #222222;
   color: #F4F2EF;
   -webkit-transition: all 0.5s ease;
@@ -419,7 +483,8 @@
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-.login-wrapper .login-inner form .form-group input:focus {
+.login-wrapper .login-inner form .form-group input:focus,
+.login-wrapper .login-inner form .form-group .form-col select:focus {
   border-color: #FC466B;
 }
 .login-wrapper .login-inner form .form-group a {
@@ -429,6 +494,18 @@
   font-size: 1.4rem;
   text-align: right;
   color: #BE4B76;
+}
+.login-wrapper .login-inner form .form-group .form-col select {
+  width: 100%;
+  appearance: none;
+}
+.login-wrapper .login-inner form .form-group .form-col select option {
+  width: 100%;
+  text-align: left;
+}
+.login-wrapper .login-inner form .form-group .form-col #DOB::-webkit-calendar-picker-indicator {
+  display: none;
+  filter: invert(1);
 }
 .login-wrapper .login-inner form .form-group:last-child {
   display: flex;

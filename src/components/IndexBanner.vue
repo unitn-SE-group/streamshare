@@ -17,13 +17,13 @@ export default { name: 'IndexBanner' }
         enjoy it with your friends.
       </p>
       <div v-motion="animations.onScrollFadeUpD3" class="button-bar">
-        <a href="#" class="btn-secondary" role="button">About</a>
-        <a
-          ref="obs"
-          href="#"
-          class="btn-primary btn-shadow animateOnScroll onScrollFadeUp onScrollD4"
+        <router-link to="/about" href="#" class="btn-secondary" role="button">About</router-link>
+        <router-link
+          to="/login"
+          v-motion="animations.onScrollFadeUpD4"
+          class="btn-primary btn-shadow"
           role="button"
-          >Stream now</a
+          >Stream now</router-link
         >
       </div>
       <div v-motion="animations.onScrollFadeInD7" class="lottie-animation-wrapper">
