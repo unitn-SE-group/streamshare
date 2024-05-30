@@ -18,6 +18,17 @@ export default {
     }
   },
   methods: {
+    togglePassword() {
+      const password_input = document.querySelector('#password')
+      const show_password = document.querySelector('#show-password-img')
+      if (password_input.type === 'password') {
+        password_input.type = 'text'
+        show_password.src = 'src/assets/images/lock.png'
+      } else {
+        password_input.type = 'password'
+        show_password.src = 'src/assets/images/unlock.png'
+      }
+    },
     handleSubmit() {
       if (this.Password == this.RepeatPassword) {
         const userData = {
@@ -130,6 +141,9 @@ export default {
             name="password"
             required
           />
+          <div id="show-password" @click="togglePassword()">
+            <img id="show-password-img" src="@/assets/images/unlock.png" alt="" />
+          </div>
         </div>
         <div v-motion="animations.onScrollFadeUpD4" class="form-group">
           <label class="text-body" for="repeatPassword">Repeat password</label>

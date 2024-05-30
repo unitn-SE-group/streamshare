@@ -2,7 +2,22 @@
 import * as animations from '@/utils/motionPluginOptions.js'
 </script>
 <script>
-export default { name: 'LoginForm' }
+export default {
+  name: 'LoginForm',
+  methods: {
+    togglePassword() {
+      const password_input = document.querySelector('#password')
+      const show_password = document.querySelector('#show-password-img')
+      if (password_input.type === 'password') {
+        password_input.type = 'text'
+        show_password.src = 'src/assets/images/lock.png'
+      } else {
+        password_input.type = 'password'
+        show_password.src = 'src/assets/images/unlock.png'
+      }
+    }
+  }
+}
 </script>
 <template>
   <div class="section-wrapper login-wrapper">
@@ -16,6 +31,9 @@ export default { name: 'LoginForm' }
         <div v-motion="animations.onScrollFadeUpD1" class="form-group">
           <label class="text-body" for="password">Password</label>
           <input class="text-body" type="password" id="password" name="password" required />
+          <div id="show-password" @click="togglePassword()">
+            <img id="show-password-img" src="@/assets/images/unlock.png" alt="" />
+          </div>
           <a class="text-body" href="#">Forgot your password?</a>
         </div>
         <div v-motion="animations.onScrollFadeUpD2" class="form-group">
@@ -28,3 +46,9 @@ export default { name: 'LoginForm' }
     </div>
   </div>
 </template>
+
+<style scoped>
+.login-wrapper .login-inner form .form-group #show-password {
+  translate: 0 -15%;
+}
+</style>
