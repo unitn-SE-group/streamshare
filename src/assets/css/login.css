@@ -496,8 +496,20 @@
   color: #BE4B76;
 }
 .login-wrapper .login-inner form .form-group .form-col select {
-  width: 100%;
   appearance: none;
+  width: 100%;
+  background-image: linear-gradient(45deg, transparent 50%, #141414 50%), linear-gradient(135deg, #141414 50%, transparent 50%), radial-gradient(#F4F2EF 70%, transparent 72%);
+  background-position: calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.login-wrapper .login-inner form .form-group .form-col select:focus {
+  background-image: linear-gradient(45deg, #141414 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #141414 50%), radial-gradient(#FC466B 70%, transparent 72%);
+  background-position: calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
 }
 .login-wrapper .login-inner form .form-group .form-col select option {
   width: 100%;

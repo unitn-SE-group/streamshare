@@ -38,15 +38,26 @@ export default {
           },
           body: JSON.stringify(userData)
         })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data)
-          })
-          .catch((error) => {
-            if (error.response.status == 409) {
-              console.log('User already exists')
+          .then((response) => {
+            if (response.ok) {
+              this.$router.push('/dashboard')
+            } else if (response.status == 409) {
+              alert('User already exists, you will be redirected to the login page')
+              this.$router.push('/login')
             }
           })
+          .catch((error) => {
+            console.log('Error: ', error)
+          })
+
+        const form = document.querySelector('form')
+        form.reset()
+      } else {
+        alert('Passwords do not match')
+        const password_inputs = document.querySelectorAll('input[type="password"]')
+        password_inputs.forEach((input) => {
+          input.value = ''
+        })
       }
     }
   }
@@ -57,7 +68,7 @@ export default {
     <div v-motion="animations.onScrollFadeIn" class="generic-col login-inner">
       <h2 v-motion="animations.onScrollFadeInD0" class="text-heading">Register</h2>
       <form @submit.prevent="handleSubmit">
-        <div v-motion="animations.onScrollFadeUpD0" class="generic-row form-group">
+        <div v-motion="animations.onScrollFadeUp" class="generic-row form-group">
           <div class="generic-col form-col">
             <label class="text-body" for="firstName">First Name</label>
             <input
@@ -81,7 +92,7 @@ export default {
             />
           </div>
         </div>
-        <div class="generic-row form-group">
+        <div v-motion="animations.onScrollFadeUpD0" class="generic-row form-group">
           <div class="generic-col form-col">
             <label for="gender" class="text-body">Gender</label>
             <select v-model="Gender" name="gender" id="gender" class="text-body">
@@ -94,7 +105,7 @@ export default {
             <input v-model="DOB" class="text-body" type="date" id="DOB" name="DOB" required />
           </div>
         </div>
-        <div v-motion="animations.onScrollFadeUpD0" class="form-group">
+        <div v-motion="animations.onScrollFadeUpD1" class="form-group">
           <label class="text-body" for="username">Username</label>
           <input
             v-model="Username"
@@ -105,11 +116,11 @@ export default {
             required
           />
         </div>
-        <div v-motion="animations.onScrollFadeUpD0" class="form-group">
+        <div v-motion="animations.onScrollFadeUpD2" class="form-group">
           <label class="text-body" for="email">Email</label>
           <input v-model="Email" class="text-body" type="email" id="email" name="email" required />
         </div>
-        <div v-motion="animations.onScrollFadeUpD1" class="form-group">
+        <div v-motion="animations.onScrollFadeUpD3" class="form-group">
           <label class="text-body" for="password">New password</label>
           <input
             v-model="Password"
@@ -120,7 +131,7 @@ export default {
             required
           />
         </div>
-        <div v-motion="animations.onScrollFadeUpD2" class="form-group">
+        <div v-motion="animations.onScrollFadeUpD4" class="form-group">
           <label class="text-body" for="repeatPassword">Repeat password</label>
           <input
             v-model="RepeatPassword"
@@ -131,11 +142,11 @@ export default {
             required
           />
         </div>
-        <div v-motion="animations.onScrollFadeUpD3" class="form-group">
+        <div v-motion="animations.onScrollFadeUpD5" class="form-group">
           <button class="btn-primary" type="submit">Create account</button>
         </div>
       </form>
-      <p v-motion="animations.onScrollFadeInD2" class="text-body">
+      <p v-motion="animations.onScrollFadeIn" class="text-body">
         Already have an account? <router-link to="/login">Login</router-link>
       </p>
     </div>

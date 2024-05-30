@@ -60,9 +60,33 @@
 
         .form-col {
           select {
-            width: 100%;
             appearance: none;
+            width: 100%;
+            background-image: linear-gradient(45deg, transparent 50%, $background1 50%),
+              linear-gradient(135deg, $background1 50%, transparent 50%),
+              radial-gradient($text1 70%, transparent 72%);
+            background-position:
+              calc(100% - 2.25rem) calc(1em + 0.2rem),
+              calc(100% - 1.75rem) calc(1em + 0.2rem),
+              calc(100% - 0.5em) 0.5em;
+            background-size:
+              5px 5px,
+              5px 5px,
+              1.5em 1.5em;
+            background-repeat: no-repeat;
 
+            &:focus {
+              background-image: linear-gradient(45deg, $background1 50%, transparent 50%),
+                linear-gradient(135deg, transparent 50%, $background1 50%),
+                radial-gradient($accent-secondary 70%, transparent 72%);
+
+              background-position:
+                calc(100% - 1.75rem) calc(1em + 0.2rem),
+                calc(100% - 2.25rem) calc(1em + 0.2rem),
+                calc(100% - 0.5em) 0.5em;
+            }
+
+            @include transition(none);
             option {
               width: 100%;
               text-align: left;
