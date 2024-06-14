@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+
 /**
  * To use OAuth2 authentication, we need access to a CLIENT_ID, CLIENT_SECRET, AND REDIRECT_URI.
  * To get these credentials for your application, visit
