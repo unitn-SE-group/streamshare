@@ -8,7 +8,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const router = express.Router();
-
+const mongoose = require('mongoose');
 /**
  * To use OAuth2 authentication, we need access to a CLIENT_ID, CLIENT_SECRET, AND REDIRECT_URI.
  * To get these credentials for your application, visit
@@ -24,7 +24,9 @@ const oauth2Client = new google.auth.OAuth2(
 // Access scopes for read-only Drive activity.
 const scopes = [
   'https://www.googleapis.com/auth/userinfo.email',
-  'https://www.googleapis.com/auth/userinfo.profile openid'
+  'https://www.googleapis.com/auth/userinfo.profile openid',
+  'https://www.googleapis.com/auth/user.birthday.read',
+  'https://www.googleapis.com/auth/user.gender.read'
 ];
 /* Global variable that stores user credential in this code example.
  * ACTION ITEM for developers:
@@ -145,9 +147,10 @@ router.get('/revoke', async (req, res) => {
 });
 
 async function getUserData(access_token) {
-  console.log('The access token is', access_token);
+  //console.log('The access token is', access_token);
   
-  const url = 'https://www.googleapis.com/oauth2/v2/userinfo';
+  const userinfo_url = 'https://www.googleapis.com/oauth2/v2/userinfo';
+  const people_url = `https://people.googleapis.com/v1/people/me?personFields=birthdays,genders`;
   const options = {
     method: 'GET',
     headers: {
@@ -156,19 +159,30 @@ async function getUserData(access_token) {
   };
   
   try {
-    const response = await fetch(url, options);
+    const userinfo_response = await fetch(userinfo_url, options);
+    const people_response = await fetch(people_url, options);
     
-    if (!response.ok) {
+    if (!userinfo_response.ok) {
       // If response is not ok, log the status and status text
-      console.error('HTTP Error:', response.status, response.statusText);
-      const errorData = await response.json();
+      console.error('HTTP Error:', userinfo_response.status, userinfo_response.statusText);
+      const errorData = await userinfo_response.json();
+      console.error('Error Data:', errorData);
+      return;
+    }
+
+    if (!people_response.ok) {
+      // If response is not ok, log the status and status text
+      console.error('HTTP Error:', people_response.status, people_response.statusText);
+      const errorData = await people_response.json();
       console.error('Error Data:', errorData);
       return;
     }
     
-    const data = await response.json();
-    console.log('Data:', data);
-    return data;
+    const userinfo_data = await userinfo_response.json();
+    const people_data = await people_response.json();
+    console.log('Userinfo Data:', userinfo_data);
+    console.log('People Data:', people_data);
+    return Object.assign(userinfo_data, people_data);
   } catch (error) {
     console.error('Fetch Error:', error);
   }
