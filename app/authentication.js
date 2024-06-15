@@ -9,13 +9,69 @@ const router = express.Router();
 
 dotenv.config();
 
+/**
+ * @fileoverview Authentication API
+ */
 
-
-/** */
+/**
+ * POST /auth/login
+ * 
+ * @description This endpoint authenticates a user and returns an Access Token that can be used for subsequent API requests and a Refresh Token.
+ * 
+ * @method POST
+ * 
+ * @endpoint_url https://api.yourservice.com/auth/login
+ * 
+ * @request_header 
+ * 
+ * @request_body The request body should be a JSON object containing the user's credentials: email and password.
+ * 
+ * @param {string} email The email of the user 
+ * 
+ * @param {string} password The password of the user
+ * 
+ * @example {json} Example Request:
+ *    {
+ *      "email": "user@example.com",
+ *      "password": "yourpassword"
+ *    }
+ * 
+ * @example {json} Example Success Response:
+ *    {
+ *      "RefreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+ *      "AccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
+ *    }
+ * 
+ * @example {json} Example Error Response (400):
+ *    {
+ *      "error": "Invalid request. Username and password are required."
+ *    }
+ * 
+ * @example {json} Example Error Response (401):
+ *    {
+ *      "error": "Invalid password."
+ *    }
+ * 
+ * @example {json} Example Error Response (404):
+ *    {
+ *      "error": "Account not registered"
+ *    }
+ * 
+ * @example {json} Example Error Response (500):
+ *    {
+ *      "error": "An unexpected error occurred. Please try again later."
+ *    }
+ * 
+ * @example {curl} Example Usage:
+ *    curl -X POST https://api.yourservice.com/api/login \
+ *         -H "Content-Type: application/json" \
+ *         -d '{"email": "user@example.com", "password": "yourpassword"}'
+ */
 router.post(`/login`, async (req, res)=>{
     const email = req.body.email;
     const password = req.body.password;
-
+    let hased = await bcrypt.hash(password, 10)
+    console.log(`${hased}`)
     if (!email || !password){
         return res.status(400).json({error: `Invalid request. Username and password are required.`}); //Bad Request
     }
@@ -69,7 +125,17 @@ router.post(`/login`, async (req, res)=>{
 
 
 
-/**LOGOUT ENDPOINT */
+/**
+ * POST /auth/logout
+ * 
+ * @description This endpoint logs out a user
+ * 
+ * @method DELETE
+ * 
+ * @endpoint_url https://api.yourservice.com/auth/logout
+ * 
+ * There is no example since the informatino needed from the logout are taken from the cookies
+ */
 router.delete('/logout', authenticateToken, async (req, res) => {
     try{
         //delete the session from the database
@@ -92,7 +158,17 @@ router.delete('/logout', authenticateToken, async (req, res) => {
 
 
 
-/**POST ENDPOINT */
+/**
+ * POST /auth/posts
+ * 
+ * @description This endpoint authenticates a user and returns a content requested from the platfotm
+ *  
+ * @method GET
+ * 
+ * @endpoint_url https://api.yourservice.com/auth/posts
+ 
+ * The endpoint will be updated when the user stories about asking for an object will be implemented
+ */
 router.get('/posts', authenticateToken, async (req, res) =>{
     try{
         //Search what the User wants
@@ -111,7 +187,18 @@ router.get('/posts', authenticateToken, async (req, res) =>{
 
 
 
-/**TOKEN ENDPOINT */
+/**
+ * POST /auth/token
+ * 
+ * @description This endpoint generates a new accessToken for the user
+ * 
+ * @method POST
+ * 
+ * @endpoint_url https://api.yourservice.com/auth/token
+ * 
+ * 
+ * There is no example since the argumenti passing is done through cookies.
+ */
 router.post('/token', async (req, res)=>{
     try{
         //take the token from the cookies and check whether it exists
