@@ -7,6 +7,7 @@ const session = require('express-session');
 const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
+const user = require('./models/user');
 const router = express.Router();
 
 /**
@@ -78,38 +79,39 @@ router.get('/', async (req, res) => {
 
 // Receive the callback from Google's OAuth 2.0 server.
 router.get('/token', async (req, res) => {
-  // 
   
   // Handle the OAuth 2.0 server response
   let q = url.parse(req.url, true).query;
+
+  let { tokens } = await oauth2Client.getToken(q.code);
+  oauth2Client.setCredentials(tokens);
+
+  /** Save credential to the global variable in case access token was refreshed.
+    * ACTION ITEM: In a production app, you likely want to save the refresh token
+    *              in a secure persistent database instead. */
+  userCredential = tokens;
+
   
-  if (q.error) { // An error response e.g. error=access_denied
-    console.log('Error:' + q.error);
-  // } else if (q.state !== req.session.state) { //check state value
-  //   console.log('State mismatch. Possible CSRF attack');
-  //   console.log('q.state', q.state);
-  //   console.log('req.session.state', req.session.state);
-  //   res.end('State mismatch. Possible CSRF attack');
-  } else { // Get access and refresh tokens (if access_type is offline)
-    let { tokens } = await oauth2Client.getToken(q.code);
-    oauth2Client.setCredentials(tokens);
 
-    /** Save credential to the global variable in case access token was refreshed.
-      * ACTION ITEM: In a production app, you likely want to save the refresh token
-      *              in a secure persistent database instead. */
-    userCredential = tokens;
+  // get and print user
+  const user = oauth2Client.credentials;
+  //console.log('user', user);
+  const access_token = user.access_token;
+  const refresh_token = user.refresh_token;
+  const id_token = user.id_token;
+  const user_data = await getUserData(access_token);
 
-    // get and print user
-    const user = oauth2Client.credentials;
-    //console.log('user', user);
-    const access_token = user.access_token;
-    const refresh_token = user.refresh_token;
-    const id_token = user.id_token;
-    const user_data = await getUserData(access_token);
+ /*  // store new user in db
+  const User = require('./models/user');
+  const newUser = new User({
+    email: user_data.email,
+    FirstName: user_data.given_name,
+    LastName: user_data.family_name,
+    username: user */
 
-    res.end('Tokens acquired. Your data is: ' + JSON.stringify(user_data));
 
-  }
+
+  res.end('Tokens acquired. Your data is: ' + JSON.stringify(user_data));
 });
 
 // Example on revoking a token
@@ -180,12 +182,39 @@ async function getUserData(access_token) {
     
     const userinfo_data = await userinfo_response.json();
     const people_data = await people_response.json();
-    console.log('Userinfo Data:', userinfo_data);
-    console.log('People Data:', people_data);
-    return Object.assign(userinfo_data, people_data);
+    const response = {
+      email: userinfo_data.email,
+      name: userinfo_data.name,
+      picture_url: userinfo_data.picture,
+      gender: people_data.genders[0].value,
+      birthday: new Date(
+        Date.UTC(
+        people_data.birthdays[0].date.year, 
+        people_data.birthdays[0].date.month - 1, 
+        people_data.birthdays[0].date.day
+       )
+      )
+    };
+    //console.log('Userinfo Data:', userinfo_data);
+    //console.log('People Data:', people_data);
+    //console.log('birthday', people_data.birthdays[0].date)
+    //return Object.assign(userinfo_data, people_data);
+    return response;
   } catch (error) {
     console.error('Fetch Error:', error);
   }
+}
+
+async function authenticateGoogleToken(req, res, next) {
+  oauth2Client.verifyIdToken({
+    idToken: req.body.id_token,
+    audience: process.env.GOOGLE_CLIENT_ID
+  }).then(ticket => {
+    const payload = ticket.getPayload();
+    const userid = payload['sub'];
+    console.log('userid', userid);
+    next();
+  }).catch(console.error);
 }
 
 module.exports = router;
