@@ -3,6 +3,11 @@ const bcrypt = require('bcrypt');
 
 //Create a User schema
 const userSchema = new mongoose.Schema({
+    googleAccount: {
+        type: Boolean,
+        required: true,
+    },
+
     userType: {
         type: String,
         enum: ['admin', 'creator', 'consumer'],
