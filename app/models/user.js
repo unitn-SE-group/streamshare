@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt');
 
 //Create a User schema
 const userSchema = new mongoose.Schema({
-    googleAccount: {
-        type: Boolean,
+    createdWith: {
+        type: String,
+        enum: ['google','local'],
         required: true,
     },
 
@@ -27,7 +28,6 @@ const userSchema = new mongoose.Schema({
 
     LastName: {
         type: String, 
-        required: true,
     },
 
     username: {
@@ -43,7 +43,6 @@ const userSchema = new mongoose.Schema({
 
     password: {
         type: String, 
-        required: true,
     },
 
     friends: [mongoose.SchemaTypes.ObjectId],
