@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node src/server.js",
-    "test": "node tests/test.js",
+    "test": "jest",
     "jsdoc": "jsdoc -c jsdoc.json"
   },
   "repository": {
