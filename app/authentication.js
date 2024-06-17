@@ -45,7 +45,8 @@ dotenv.config();
  *          @description The user has inserted the right email and username and is given back with the tokens
  *              {
  *                 "RefreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
- *                 "AccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
+ *                 "AccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua...",
+ *                 "UserType": "admin\creator\user"
  *              }
  * 
  *      @ErrorResponse
@@ -92,49 +93,52 @@ router.post(`/login`, async (req, res)=>{
     }
 
     try{
-        //search for the email in the database
+        //Search for the account in the database
         const user = await User.findOne({email: email} );
 
-        //Verify if the accout exists
-        if(!user) return res.status(404).json({error: `Account not registered`}) //Not Found
+        if(!user){
+            return res.status(404).json({error: `Account not registered`}); //Not Found
+        }
 
-        //control if the password is correct
-        const password_match = await bcrypt.compare(password, user.password)
+        //Check is the password is correct
+        const password_match = await bcrypt.compare(password, user.password);
+
         if(!password_match){
             return res.status(401).json({error: `Invalid password`}) //Unauthorizied
         }
 
-        //generate JWT token
-        const payload = {_id: user._id , username: user.username, email: user.email}
-        const key_acc = process.env.ACCESS_TOKEN_SECRET
-        const key_ref = process.env.REFRESH_TOKEN_SECRET
-        const options = {expiresIn: '2000s'}
-        const accessToken = jwt.sign(payload, key_acc, options)
-        const refreshToken = jwt.sign(payload, key_ref)
+        //Generate JWT token
+        const payload = {_id: user._id, username: user.username, email: user.email};
+        const key_acc = process.env.ACCESS_TOKEN_SECRET;
+        const key_ref = process.env.REFRESH_TOKEN_SECRET;
+        const options = {expiresIn: '2000s'};
+        const accessToken = jwt.sign(payload, key_acc, options);
+        const refreshToken = jwt.sign(payload, key_ref);
 
         //Update and save the session schema in the database
         const newSession = new Session({
             user_id: user._id,
             refreshToken: refreshToken,
             accessToken: accessToken 
-        })
+        });
         await newSession.save();
 
         //Setting the Tokens in the cookies
         res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
         res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
 
-        //Returning the tokens
-        res.json({
-            accessToken: accessToken,
-            refreshToken: refreshToken
-        })
-
         console.log(`The user -${user.username}- is succesfully logged in!`);
 
+        //Returning the tokens
+        return res.json({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            user_type: user.userType
+        });
+
     }catch(err){
-        console.log(`An error occoured during authentication: ${err}`)
-        res.status(500).json(`An error occured during login`)
+        console.log(`An error occoured during authentication: ${err}`);
+        res.status(500).json({error: `An error occured during login`});
     }
 })
 
@@ -179,19 +183,19 @@ router.post(`/login`, async (req, res)=>{
 router.delete('/logout', authenticateToken, async (req, res) => {
     try{
         //delete the session from the database
-        const session = await Session.deleteMany( {user_id: req.user._id} );
+        await Session.deleteMany( {user_id: req.user._id} );
 
         //delete the Tokens from the cookies
         res.clearCookie('accessToken');
         res.clearCookie('refreshToken');
-    
-        res.status(204)
 
-        console.log(`The user -${req.user.username}- has succesfully logged out!`)
+        console.log(`The user -${req.user.username}- has succesfully logged out!`);
+
+        return res.sendStatus(204);
 
     }catch(err){
-        console.log(`An error occoured during logout: ${err}`)
-        res.status(500).json({error: `An error occured during logout`})
+        console.log(`An error occoured during logout: ${err}`);
+        return res.status(500).json({error: `An error occured during logout`});
     }
     
 })
@@ -245,13 +249,13 @@ router.get('/posts', authenticateToken, async (req, res) =>{
         //Search what the User wants
         const user = await User.findOne( {email: req.user.email} );
     
-        res.status(200).json({data: user.username})
+        console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`);
 
-        console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`)
+        return res.status(200).json({data: user.username});
 
     }catch(err){
-        console.log(`An error occoured during requesting data: ${err}`)
-        res.status(500).json(`An error occured during requesting services to the db`)
+        console.log(`An error occoured during requesting data: ${err}`);
+        return res.status(500).json({error: `An error occured during requesting services to the db`});
     }
     
 })
@@ -300,37 +304,42 @@ router.get('/posts', authenticateToken, async (req, res) =>{
 router.post('/token', async (req, res)=>{
     try{
         //take the token from the cookies and check whether it exists
-        const refreshToken = req.cookies.refreshToken 
-        if (refreshToken == null) return res.sendStatus(401)
+        const refreshToken = req.cookies.refreshToken;
+        if (refreshToken == null){
+            return res.sendStatus(401);
+        }
     
         //Find the session the refresh Token is associated with 
-        const session = await Session.findOne({ refreshToken: { $in: [`${refreshToken}`] } })
-        if (!session) return res.sendStatus(403)
+        const session = await Session.findOne({ refreshToken: { $in: [`${refreshToken}`] } });
+        if (!session){
+            return res.sendStatus(403);
+        }
     
         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) =>{
-            if (err) return res.sendStatus(403)
+            if (err){
+                return res.sendStatus(403);
+            } 
     
             //create new accessToken and save it in the session on the DB and in the cookies
-            const payload = {_id: user._id, username: user.username, email: user.email}
-            const key_acc = process.env.ACCESS_TOKEN_SECRET
-            const key_ref = process.env.REFRESH_TOKEN_SECRET
-            const options = {expiresIn: '2000s'}
-            const accessToken = jwt.sign(payload, key_acc, options)
+            const payload = {_id: user._id, username: user.username, email: user.email};
+            const key_acc = process.env.ACCESS_TOKEN_SECRET;
+            const key_ref = process.env.REFRESH_TOKEN_SECRET;
+            const options = {expiresIn: '2000s'};
+            const accessToken = jwt.sign(payload, key_acc, options);
     
-            session.accessToken = accessToken
+            session.accessToken = accessToken;
             session.save();
     
             res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
         
-            res.status(200).json({ accessToken: accessToken})
+            console.log(`The user -${user.username}- has succesfully received a new token!`);
 
-            console.log(`The user -${user.username}- has succesfully received a new token!`)
+            return res.status(200).json({ accessToken: accessToken});
         })
     }catch(err){
-        console.log(`An error occoured during requesting new token: ${err}`)
-        res.status(500).json(`An error occured while creating a new token.`)
+        console.log(`An error occoured during requesting new token: ${err}`);
+        return res.status(500).json({error: `An error occured while creating a new token.`});
     }
-    
 })
 
 
@@ -361,11 +370,9 @@ function authenticateToken(req, res, next) {
         });
 
     }catch(err){
-        console.log(`An error occoured during token authentication: ${err}`)
-        res.status(500).json(`An error occured during Token Authetication`)
+        console.log(`An error occoured during token authentication: ${err}`);
+        return res.status(500).json({error: `An error occured during Token Authetication`});
     }
-    
 }
-
 
 module.exports = router;
