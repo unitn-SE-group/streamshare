@@ -42,7 +42,7 @@ export default {
           birthDay: this.DOB
         }
 
-        fetch(`http://localhost:3000/api/register`, {
+        fetch(`${window.location.origin}/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default {
               this.$router.push('/dashboard')
             } else if (response.status == 409) {
               alert('User already exists, you will be redirected to the login page')
-              this.$router.push('/login')
+              this.$router.push(`${response.redirect_url}`)
             }
           })
           .catch((error) => {
