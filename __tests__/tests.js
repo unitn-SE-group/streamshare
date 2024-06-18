@@ -1,13 +1,13 @@
-import router from 'app/register.js'
+import router from '../app/register.js';
 import express from 'express';
-import User from './models/user';
+import User from '../app/models/user';
 import request from 'supertest';
 
 const app = express();
 app.use(express.json());
 app.use('/',router)
 
-jest.mock('./models/user')
+jest.mock('../app/models/user')
 
 describe('POST /register', () => {
     beforeEach(() => {
@@ -38,10 +38,12 @@ describe('POST /register', () => {
         });
 
         expect(res.status).toBe(201);
-        //TODO wait for Daniele to finish this
-        expect(res.body.message).toBe()
+        expect(res.body).toStrictEqual({
+            "message": "User created successfully",
+            "redirect_url": "/login"
+        })
         expect(User.findOne).toHaveBeenCalledWith({ email: 'test@example.com'});
-        expect(User.prototype.save).not.toHaveBeenCalled();
+        expect(User.prototype.save).toHaveBeenCalled();
     });
 
     /**
