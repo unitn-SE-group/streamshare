@@ -87,59 +87,89 @@ router.get('/', async (req, res) => {
   res.redirect(authorizationUrl);
 });
 
-// Receive the callback from Google's OAuth 2.0 server.
+/**
+ * @openapi
+ * /oauth/token:
+ *   get:
+ *     description: Receives the callback from Google's OAuth 2.0 server and processes the token.
+ *     responses:
+ *       200:
+ *         description: Successfully processed the token and created user session.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                   description: The access token for the user.
+ *                 refreshToken:
+ *                   type: string
+ *                   description: The refresh token for the user.
+ *                 userType:
+ *                   type: string
+ *                   description: The type of user (e.g., consumer).
+ *                 redirect_url:
+ *                   type: string
+ *                   description: URL to redirect the user after successful token processing.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get('/token', async (req, res) => {
-  
-  // Handle the OAuth 2.0 server response
-  let q = url.parse(req.url, true).query;
+  try {
+    // Handle the OAuth 2.0 server response
+    let q = url.parse(req.url, true).query;
 
-  let { tokens } = await oauth2Client.getToken(q.code);
-  oauth2Client.setCredentials(tokens);
+    let { tokens } = await oauth2Client.getToken(q.code);
+    oauth2Client.setCredentials(tokens);
 
-  /** Save credential to the global variable in case access token was refreshed.
-    * ACTION ITEM: In a production app, you likely want to save the refresh token
-    *              in a secure persistent database instead. */
-  userCredential = tokens;
+    /** Save credential to the global variable in case access token was refreshed.
+      * ACTION ITEM: In a production app, you likely want to save the refresh token
+      *              in a secure persistent database instead. */
+    userCredential = tokens;
 
-  
+    
 
-  // get and print user
-  const user = oauth2Client.credentials;
-  //console.log('user', user);
-  const access_token = user.access_token;
-  const refresh_token = user.refresh_token;
-  const id_token = user.id_token;
-  const user_data = await getUserData(access_token);
+    // get and print user
+    const user = oauth2Client.credentials;
+    //console.log('user', user);
+    const access_token = user.access_token;
+    const refresh_token = user.refresh_token;
+    const id_token = user.id_token;
+    const user_data = await getUserData(access_token);
 
-  // store new user in db
-  const User = require('./models/user');
-  const newUser = new User({
-    createdWith: "google",
-    userType: "consumer", // temporarily, until we implement the creator user type
-    email: user_data.email,
-    FirstName: user_data.name,
-    username: user_data.name,
-    birthday: user_data.birthday,
-    gender: ((user_data.gender.toLowerCase() === 'male') ? true : false),
-    friends: [],
-  });
-  newUser.save();
+    // store new user in db
+    const User = require('./models/user');
+    const newUser = new User({
+      createdWith: "google",
+      userType: "consumer", // temporarily, until we implement the creator user type
+      email: user_data.email,
+      FirstName: user_data.name,
+      username: user_data.name,
+      birthday: user_data.birthday,
+      gender: ((user_data.gender.toLowerCase() === 'male') ? true : false),
+      friends: [],
+    });
+    newUser.save();
 
-  // store new session in db
-  const Session = require('./models/session');
-  const newSession = new Session({
-    user_id: newUser._id,
-    refreshToken: refresh_token,
-    accessToken: access_token,
-  });
-  newSession.save();
+    // store new session in db
+    const Session = require('./models/session');
+    const newSession = new Session({
+      user_id: newUser._id,
+      refreshToken: refresh_token,
+      accessToken: access_token,
+    });
+    newSession.save();
 
 
-  // set cookies
-  res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-  res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-  // send response
-  res.status(200).json({accessToken: access_token, refreshToken: refresh_token, userType: newUser.userType, redirect_url:'/dashboard'});
+    // set cookies
+    res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+    res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+    // send response
+    res.status(200).json({accessToken: access_token, refreshToken: refresh_token, userType: newUser.userType, redirect_url:'/dashboard'});
+  } catch (error) {
+    res.status(500);
+  }
 });
 
 // Example on revoking a token

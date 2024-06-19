@@ -2,7 +2,7 @@ import express from 'express';
 import router from './oauth.js';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerDocument from '../swagger.json' assert {type: "json"}
+
 const app = express();
 
 const swaggerOptions = {
