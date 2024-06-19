@@ -125,8 +125,11 @@ router.get('/token', async (req, res) => {
   newSession.save();
 
 
-
-  res.end('Tokens acquired. Your data is: ' + JSON.stringify(user_data));
+  // set cookies
+  res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+  res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+  // send response
+  res.status(200).json({accessToken: access_token, refreshToken: refresh_token, userType: newUser.userType});
 });
 
 // Example on revoking a token
