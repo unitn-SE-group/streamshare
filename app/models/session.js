@@ -1,9 +1,11 @@
 const mongoose = require("mongoose")
+const User = require("./user");
 
 //Create a User schema
 const sessionSchema = new mongoose.Schema({
         user_id: {
-            type: User,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
             require: true,
         },
 
@@ -14,7 +16,6 @@ const sessionSchema = new mongoose.Schema({
         
         accessToken: {
             type: String,
-            required: true,
         },
         
         updatedAt: {
