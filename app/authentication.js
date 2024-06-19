@@ -3,11 +3,17 @@ const jwt = require('jsonwebtoken');
 const User = require("./models/User");
 const Session = require("./models/Session");
 const dotenv = require('dotenv');
+const { google } = require('googleapis');
 
 const express = require('express');
 const router = express.Router();
 
 dotenv.config();
+
+const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+  );
 
 /**
  * @fileoverview Authentication API
@@ -351,7 +357,7 @@ router.post('/token', async (req, res)=>{
  * @param {object} res The respons object contains the status that will be returned.
  * @param {function} next The next function contains the next middleware function to call  
 */
-function authenticateToken(req, res, next) {
+async function authenticateToken(req, res, next) {
     try{
         //take the access Token from the cookies if exists
         const token = req.cookies.accessToken;
@@ -359,15 +365,33 @@ function authenticateToken(req, res, next) {
         if (!token) {
             return res.sendStatus(401);
         }
-    
-        //check whether the token is correct
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-            if (err) {
-                return res.sendStatus(403);
-            }
-            req.user = user;
-            next();
-        });
+
+        // retrieve user type from db
+        const session = await Session.findOne({accessToken: token}).populate('user_id');
+        const userType = session.user_id.userType;
+
+        // authenticate based on user type
+        if (userType === 'google') {
+            oauth2Client.verifyIdToken({
+                idToken: req.body.id_token,
+                audience: process.env.GOOGLE_CLIENT_ID
+              }).then(ticket => {
+                const payload = ticket.getPayload();
+                const userid = payload['sub'];
+                console.log('userid', userid);
+                next();
+              }).catch(console.error);
+        }
+        else {    
+            //check whether the token is correct
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+                if (err) {
+                    return res.sendStatus(403);
+                }
+                req.user = user;
+                next();
+            });
+        }
 
     }catch(err){
         console.log(`An error occoured during token authentication: ${err}`);
