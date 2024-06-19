@@ -63,7 +63,7 @@ describe('POST /register', () => {
         });
 
         const res = await request(app)
-            .post('/api/register')
+            .post('/register')
             .send({
             userType: 'consumer',
             email: 'test@example.com',
