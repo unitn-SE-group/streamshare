@@ -1,13 +1,15 @@
-const http = require('http');
-const https = require('https');
-const url = require('url');
-const { google } = require('googleapis');
-const crypto = require('crypto');
-const session = require('express-session');
-const dotenv = require('dotenv');
+import http from 'http';
+import https from 'https';
+import url from 'url';
+import { google } from 'googleapis';
+import crypto from 'crypto';
+import session from 'express-session';
+import dotenv from 'dotenv';
+import express from 'express';
+import user from './models/user.js';
+
+
 dotenv.config();
-const express = require('express');
-const user = require('./models/user');
 const router = express.Router();
 
 /**
@@ -47,7 +49,15 @@ router.use(session({
   saveUninitialized: false,
 }));
 
-// Example on redirecting user to Google's OAuth 2.0 server.
+/**
+ * @openapi
+ * /oauth:
+ *   get:
+ *     description: Initiates the OAuth 2.0 authorization process by redirecting the user to Google's OAuth 2.0 server. It sets necessary headers, generates an authorization URL with specific scopes, and redirects the user to this URL.
+ *     responses:
+ *       302:
+ *         description: Redirects the user to Google's OAuth 2.0 server for authentication.
+ */
 router.get('/', async (req, res) => {
   // test headers
   res.header('Access-Control-Allow-Origin', '*');
@@ -235,4 +245,4 @@ async function authenticateGoogleToken(req, res, next) {
   }).catch(console.error);
 }
 
-module.exports = router;
+export default router;

@@ -1,4 +1,5 @@
 {
+  "type":"module",
   "name": "streamshare",
   "version": "1.0.0",
   "description": "Streamshare is a streaming service incentivizing interaction between users.",
@@ -31,10 +32,11 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "googleapis": "^137.1.0",
-    "mongoose": "^8.4.0"
+    "mongoose": "^8.4.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "jsdoc": "^4.0.3",
     "nodemon": "^3.1.0"
   }
 }
