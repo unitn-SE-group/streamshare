@@ -1,7 +1,7 @@
 const { ObjectId } = require("mongodb")
 const mongoose = require("mongoose")
 
-//Create a User schema
+//Create the Session schema
 const sessionSchema = new mongoose.Schema({
         user_id: {
             type: ObjectId,
@@ -31,4 +31,4 @@ const sessionSchema = new mongoose.Schema({
         }
 })
 
-module.exports = mongoose.model("Session", sessionSchema)
+module.exports = mongoose.model("Session", sessionSchema);
