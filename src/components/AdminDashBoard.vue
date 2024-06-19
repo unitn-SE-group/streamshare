@@ -40,8 +40,16 @@ import * as animations from '@/utils/motionPluginOptions.js'
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
+          <div class="generic-col admin-dash-content-item">
+            <div class="image"></div>
+            <p class="text-body">Name here</p>
+          </div>
+          <div class="generic-col admin-dash-content-item">
+            <div class="image"></div>
+            <p class="text-body">Name here</p>
+          </div>
         </div>
-        <a href="#" class="btn-tertiary" role="button">
+        <!-- <a href="#" class="btn-tertiary" role="button">
           View details
           <svg
             width="23"
@@ -52,14 +60,14 @@ import * as animations from '@/utils/motionPluginOptions.js'
           >
             <path d="M0 7.5H21M21 7.5L14.28 1M21 7.5L14.28 14" stroke="#F4F2EF" stroke-width="2" />
           </svg>
-        </a>
+        </a> -->
       </div>
       <div v-motion="animations.onScrollFadeInD2" class="button-bar">
         <a href="#" class="btn-secondary" role="button">Remove content</a>
         <a href="#" class="btn-primary" role="button">Upload content</a>
       </div>
     </div>
-    <div v-motion="animations.onScrollFadeUpD3" class="generic-col admin-dash-users-wrapper">
+    <!-- <div v-motion="animations.onScrollFadeUpD3" class="generic-col admin-dash-users-wrapper">
       <h3 class="text-subheading">Active users</h3>
       <div class="generic-col admin-dash-users-grid">
         <div class="generic-row admin-dash-user">
@@ -110,6 +118,6 @@ import * as animations from '@/utils/motionPluginOptions.js'
           <path d="M0 7.5H21M21 7.5L14.28 1M21 7.5L14.28 14" stroke="#F4F2EF" stroke-width="2" />
         </svg>
       </a>
-    </div>
+    </div> -->
   </div>
 </template>
