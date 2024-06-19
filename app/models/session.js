@@ -5,7 +5,8 @@ import mongoose from 'mongoose';
 //Create a User schema
 const sessionSchema = new mongoose.Schema({
         user_id: {
-            type: ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
             require: true,
         },
 
@@ -32,4 +33,4 @@ const sessionSchema = new mongoose.Schema({
         }
 })
 
-module.exports = mongoose.model("Session", sessionSchema)
+export default mongoose.model("Session", sessionSchema)

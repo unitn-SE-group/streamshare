@@ -1,11 +1,12 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../app/models/user';
-import Session from './models/Session';
+import User from '../app/models/user.js';
+import Session from './models/session.js';
 import dotenv from 'dotenv';
-import express from 'express';
+import { Router } from 'express';
+import { google } from 'googleapis';
 
-const router = express.Router();
+const router = Router();
 dotenv.config();
 
 const oauth2Client = new google.auth.OAuth2(

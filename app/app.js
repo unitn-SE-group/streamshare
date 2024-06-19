@@ -9,4 +9,4 @@ app.use(express.json());
 
 app.use('/auth', authentication);
 
-module.exports = app;
+export default app;
