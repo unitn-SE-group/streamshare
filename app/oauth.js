@@ -129,7 +129,7 @@ router.get('/token', async (req, res) => {
   res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
   res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' });
   // send response
-  res.status(200).json({accessToken: access_token, refreshToken: refresh_token, userType: newUser.userType});
+  res.status(200).json({accessToken: access_token, refreshToken: refresh_token, userType: newUser.userType, redirect_url:'/dashboard'});
 });
 
 // Example on revoking a token
@@ -222,7 +222,7 @@ async function getUserData(access_token) {
     console.error('Fetch Error:', error);
   }
 }
-
+//TODO: Check which token is being used
 async function authenticateGoogleToken(req, res, next) {
   oauth2Client.verifyIdToken({
     idToken: req.body.id_token,
