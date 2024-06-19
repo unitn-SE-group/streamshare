@@ -173,7 +173,7 @@ router.get('/token', async (req, res) => {
 });
 
 // Example on revoking a token
-router.get('/revoke', async (req, res) => {
+/* router.get('/revoke', async (req, res) => {
   // Build the string for the POST request
   let postData = "token=" + userCredential.access_token;
 
@@ -204,7 +204,7 @@ router.get('/revoke', async (req, res) => {
   // Post the request with data
   postReq.write(postData);
   postReq.end();
-});
+}); */
 
 async function getUserData(access_token) {
   //console.log('The access token is', access_token);
@@ -261,18 +261,6 @@ async function getUserData(access_token) {
   } catch (error) {
     console.error('Fetch Error:', error);
   }
-}
-//TODO: Check which token is being used
-async function authenticateGoogleToken(req, res, next) {
-  oauth2Client.verifyIdToken({
-    idToken: req.body.id_token,
-    audience: process.env.GOOGLE_CLIENT_ID
-  }).then(ticket => {
-    const payload = ticket.getPayload();
-    const userid = payload['sub'];
-    console.log('userid', userid);
-    next();
-  }).catch(console.error);
 }
 
 export default router;
