@@ -1,5 +1,6 @@
-const { ObjectId } = require("mongodb")
-const mongoose = require("mongoose")
+import ObjectId from 'mongodb';
+import mongoose from 'mongoose';
+
 
 //Create a User schema
 const sessionSchema = new mongoose.Schema({

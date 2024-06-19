@@ -1,12 +1,11 @@
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const User = require("./models/User");
-const Session = require("./models/Session");
-const dotenv = require('dotenv');
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import User from '../app/models/user';
+import Session from './models/Session';
+import dotenv from 'dotenv';
+import express from 'express';
 
-const express = require('express');
 const router = express.Router();
-
 dotenv.config();
 
 
@@ -176,5 +175,4 @@ function authenticateToken(req, res, next) {
     
 }
 
-
-module.exports = router;
+export default router

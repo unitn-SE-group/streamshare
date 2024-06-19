@@ -1,8 +1,7 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const authentication = require('./authentication.js');
-const cookieParser = require('cookie-parser');
-
+import authentication from './authentication.js';
+import cookieParser from 'cookie-parser';
 
 app.use(cookieParser());
 /**Add a middleware in order to parse the data in a json */

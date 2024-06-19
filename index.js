@@ -1,10 +1,10 @@
-const app = require('./app/app.js');
-const mongoose = require('mongoose');
+import app from './app/app.js';
+import mongoose from 'mongoose';
 
 
 const port = process.env.PORT || 3000;
 
-app.locals.db = mongoose.connect(process.env.DATABASE_URI)
+app.locals.db = mongoose.connect(process.env.MONGODB_URI)
 .then(
     ()=> {
         console.log("Connected to MongoDB"),
