@@ -1,9 +1,0 @@
-{
-  "openapi": "3.0.0",
-  "info": {
-    "title": "Streamshare API",
-    "description": "Documentation for Streamshare's REST API.",
-    "version": "0.1.0"
-  },
-  "apis": ["./app/*.js"]
-}

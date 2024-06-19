@@ -11,25 +11,78 @@ const router = Router()
 config()
 
 /**
- * Registers a new user.
- *
- * @name POST /register
- * @function
- * @async
- * @param {Object} req - The request object.
- * @param {Object} req.body - The request body.
- * @param {string} req.body.userType - The type of user.
- * @param {string} req.body.email - The email of the user.
- * @param {string} req.body.FirstName - The first name of the user.
- * @param {string} req.body.LastName - The last name of the user.
- * @param {string} req.body.username - The username of the user.
- * @param {string} req.body.gender - The gender of the user.
- * @param {string} req.body.password - The password of the user.
- * @param {string} req.body.birthDay - The birth day of the user (dd/mm/yyyy).
- * @param {Object} res - The response object.
- * @returns {Object} The response object.
- * @throws {Error} If there is an error while registering the user.
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user.
+ *     description: Receives user registration data and creates a new user in the system.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userType:
+ *                 type: string
+ *                 description: The type of user (e.g., consumer).
+ *               email:
+ *                 type: string
+ *                 description: The email address of the user.
+ *               FirstName:
+ *                 type: string
+ *                 description: The first name of the user.
+ *               LastName:
+ *                 type: string
+ *                 description: The last name of the user.
+ *               username:
+ *                 type: string
+ *                 description: The username of the user.
+ *               gender:
+ *                 type: string
+ *                 description: The gender of the user.
+ *               password:
+ *                 type: string
+ *                 description: The password of the user.
+ *               birthDay:
+ *                 type: string
+ *                 description: The birth day of the user.
+ *     responses:
+ *       201:
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 redirect_url:
+ *                   type: string
+ *                   description: URL to redirect the user after successful registration.
+ *       409:
+ *         description: User already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message.
  */
+
 router.post('/register', async (req, res) => {
   try {
     const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
