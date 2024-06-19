@@ -101,13 +101,28 @@ router.get('/token', async (req, res) => {
   const id_token = user.id_token;
   const user_data = await getUserData(access_token);
 
- /*  // store new user in db
+  // store new user in db
   const User = require('./models/user');
   const newUser = new User({
+    createdWith: "google",
+    userType: "consumer", // temporarily, until we implement the creator user type
     email: user_data.email,
-    FirstName: user_data.given_name,
-    LastName: user_data.family_name,
-    username: user */
+    FirstName: user_data.name,
+    username: user_data.name,
+    birthday: user_data.birthday,
+    gender: ((user_data.gender.toLowerCase() === 'male') ? true : false),
+    friends: [],
+  });
+  newUser.save();
+
+  // store new session in db
+  const Session = require('./models/session');
+  const newSession = new Session({
+    user_id: newUser._id,
+    refreshToken: refresh_token,
+    accessToken: access_token,
+  });
+  newSession.save();
 
 
 
