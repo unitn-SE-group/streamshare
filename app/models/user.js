@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
       type: String, 
   },
   
-  friends: [SchemaTypes.ObjectId],
+  friends: [mongoose.SchemaTypes.ObjectId],
 
   birthDay: {
     type: Date,
