@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 //Create the user schema
 const userSchema = new mongoose.Schema({
@@ -71,4 +71,4 @@ userSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports = mongoose.model("User", userSchema);
+export default mongoose.model("User", userSchema);
