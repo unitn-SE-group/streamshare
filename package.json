@@ -1,37 +1,47 @@
 {
-  "name": "streamshare",
-  "version": "1.0.0",
-  "description": "Streamshare is a streaming service incentivizing interaction between users.",
-  "main": "index.js",
+  "name": "streamshare-vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node src/server.js",
-    "test": "node tests/test.js",
-    "jsdoc": "jsdoc -c jsdoc.json"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/",
+    "devStart": "nodemon app/app.js",
+    "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/unitn-SE-group/StreamShare.git"
-  },
-  "keywords": [
-    "streaming",
-    "sharing",
-    "mongodb"
-  ],
-  "author": "Gabriele Bazzanella Bauer, Kirk Ezo Buah, Davide Facchinelli, Daniele Pedrolli",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/unitn-SE-group/StreamShare/issues"
-  },
-  "homepage": "https://github.com/unitn-SE-group/StreamShare#readme",
   "dependencies": {
-    "cookie-parser": "^1.4.6",
+    "@vueuse/core": "^10.9.0",
+    "@vueuse/motion": "^2.1.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongoose": "^8.4.0"
+    "git-filter-repo": "^0.0.30",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.0",
+    "nodemon": "^3.1.0",
+    "primevue": "^3.52.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.2"
   },
   "devDependencies": {
-    "jsdoc": "^4.0.3",
-    "nodemon": "^3.1.0"
+    "@babel/core": "^7.24.7",
+    "@babel/preset-env": "^7.24.7",
+    "@rushstack/eslint-patch": "^1.8.0",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.23.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.2.5",
+    "supertest": "^7.0.0",
+    "unplugin-vue-router": "^0.8.8",
+    "vite": "^5.2.8"
   }
 }
