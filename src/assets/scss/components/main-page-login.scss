@@ -1,0 +1,93 @@
+.main-page-login-wrapper {
+    .main-page-login-inner {
+        width: $inner-width;
+
+        .main-page-login-mosaic {
+            display: grid;
+            grid-template-rows: 1fr;
+            grid-template-columns: 2fr 3fr;
+            gap: 3rem;
+            width: 100%;
+            aspect-ratio: 16/7;
+            margin-top: 4rem;
+
+            .card {
+                width: 100%;
+                height: 100%;
+                gap: 3rem;
+
+                .image {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 2rem;
+                    background-color: $background2;
+                }
+
+                .card-details {
+                    width: 100%;
+                    height: auto;
+                    border: .25rem solid $background2;
+                    border-radius: 100rem;
+                    padding: 2.5rem;
+                    padding-left: 4rem;
+                }
+            }
+        }
+    }
+    @include respond-to('tablet-ls') {
+        .main-page-login-inner {
+            .main-page-login-mosaic {
+                grid-template-rows: 1fr 1fr;
+                grid-template-columns: 1fr;
+                aspect-ratio: auto;
+                gap: 8rem;
+
+                .card {
+                    flex-direction: row;
+                    align-items: center;
+
+                    .image {
+                        min-height: 30rem;
+                    }
+
+                    .card-details {
+                        flex-direction: column;
+                        gap: 3rem;
+                        width: auto;
+                        border: none;
+                        padding: none;
+                    }
+                }
+            }
+        }
+    }
+    @include respond-to('tablet') {
+        .main-page-login-inner {
+            .main-page-login-mosaic {
+                gap: 10rem;
+
+                .card {
+                    flex-direction: column;
+
+                    .image {
+                        max-width: 50rem;
+                        min-height: 0;
+                        aspect-ratio: 4/3;
+                        margin: 0 auto;
+                    }
+
+                    .card-details {
+                        flex-direction: row;
+                        gap: 4rem;
+                        width: 100%;
+                        border: .25rem solid $background2;
+                        border-radius: 100rem;
+                        padding: 2.5rem;
+                        padding-left: 4rem;
+                    }
+                }
+            }
+        }
+    }
+    @include respond-to('mobile') {}
+}
