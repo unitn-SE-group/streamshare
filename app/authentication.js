@@ -1,10 +1,3 @@
-// const mongoose = require('mongoose');
-// const bcrypt = require('bcrypt');
-// const jwt = require('jsonwebtoken');
-// const User = require("./models/User");
-// const dotenv = require('dotenv');
-
-// const express = require('express');
 import express from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'

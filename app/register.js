@@ -1,3 +1,8 @@
+/**
+ * @file This file contains the registration API endpoint.
+ * @module register
+ */
+
 import { Router } from 'express'
 import User from './models/user.js'
 import { config } from 'dotenv'
@@ -5,11 +10,78 @@ import { config } from 'dotenv'
 const router = Router()
 config()
 
-// connecting to database (not necessary since unified)
-// mongoose
-//   .connect(process.env.DATABASE_URI)
-//   .then(() => console.log('Connected to MongoDB'))
-//   .catch((err) => console.error('Could not connect to MongoDB ' + err))
+/**
+ * @openapi
+ * /auth/register:
+ *   post:
+ *     summary: Register a new user.
+ *     description: Receives user registration data and creates a new user in the system.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userType:
+ *                 type: string
+ *                 description: The type of user (e.g., consumer).
+ *               email:
+ *                 type: string
+ *                 description: The email address of the user.
+ *               FirstName:
+ *                 type: string
+ *                 description: The first name of the user.
+ *               LastName:
+ *                 type: string
+ *                 description: The last name of the user.
+ *               username:
+ *                 type: string
+ *                 description: The username of the user.
+ *               gender:
+ *                 type: string
+ *                 description: The gender of the user.
+ *               password:
+ *                 type: string
+ *                 description: The password of the user.
+ *               birthDay:
+ *                 type: string
+ *                 description: The birth day of the user.
+ *     responses:
+ *       201:
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: A success message.
+ *                 redirect_url:
+ *                   type: string
+ *                   description: URL to redirect the user after successful registration.
+ *       409:
+ *         description: User already exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message.
+ *       500:
+ *         description: Internal server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   description: An error message.
+ */
 
 router.post('/register', async (req, res) => {
   try {
@@ -41,7 +113,7 @@ router.post('/register', async (req, res) => {
     })
 
     await newUser.save()
-    res.status(201).json({ message: 'User created successfully' })
+    res.status(201).json({ message: 'User created successfully', redirect_url: '/login' })
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

@@ -1,11 +1,8 @@
 <!-- App.vue -->
 <template>
-  <div>
-    <main>
-      <NavBar></NavBar>
-      <router-view></router-view>
-    </main>
-  </div>
+<main>
+    <router-view></router-view>
+</main>
 </template>
 
 <script>
