@@ -61,12 +61,12 @@ export default {
             <div
               id="g_id_onload"
               data-client_id="523950488324-k1p3hg7bq28u18pd4n2i3t5krq7jvgcl.apps.googleusercontent.com"
-              data-login_uri="https://localhost:5173/login"
-              data-auto_prompt="false"
+              data-login_uri="http://localhost:3000/oauth"
+              data-auto_prompt="true"
             ></div>
             <div
-              class="g_id_signin btn-secondary text-body"
-              data-type="standard"
+              class="g_id_signin text-body"
+              data-type="icon"
               data-size="large"
               data-text="signin"
               data-theme="outline"
