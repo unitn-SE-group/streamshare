@@ -1,15 +1,16 @@
-const mongoose = require("mongoose")
+import mongoose from 'mongoose';
 
-//Create a User schema
+//Create a Session schema
 const sessionSchema = new mongoose.Schema({
         user_id: {
-            type: User,
-            require: true,
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
         },
 
         refreshToken: {
-            type: String,
-            require: true,
+            type: [String],
+            required: true,
         },
         
         accessToken: {
@@ -30,4 +31,4 @@ const sessionSchema = new mongoose.Schema({
         }
 })
 
-module.exports = mongoose.model("Session", sessionSchema)
+export default mongoose.model("Session", sessionSchema);
