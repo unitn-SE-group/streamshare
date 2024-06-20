@@ -1,98 +1,116 @@
+import {google} from 'googleapis';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import User from '../app/models/user.js';
+import User from './models/user.js';
 import Session from './models/session.js';
 import dotenv from 'dotenv';
-import { Router } from 'express';
-import { google } from 'googleapis';
+import express from 'express';
+import cookieParser from 'cookie-parser';
 
-const router = Router();
+
 dotenv.config();
+const router = express.Router();
+
+router.use(cookieParser());
 
 const oauth2Client = new google.auth.OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-  );
+);
 
 /**
- * @fileoverview Authentication API
- */
-
-/**
- * auth/login
- * 
- * @description This endpoint authenticates a user and returns an Access Token that can be used for subsequent API requests and a Refresh Token.
- * 
- * @method POST
- * 
- * @endpoint_url https://api.yourservice.com/auth/login
- * 
- * 
- * 
- * @request
- *      @Request_Header 
- * 
- *      @Request_Body The request body should be a JSON object containing the user's credentials: email and password.
- *          @param {string} email The email of the user 
- *          @param {string} password The password of the user
- * 
- *          @example {json}:
- *              {
- *                  "email": "user@example.com",
- *                  "password": "yourpassword"
- *              }
- * 
- * 
- * 
- * @responses
- *      @SuccessResponse
- *          @example {json} (200):
- *          @description The user has inserted the right email and username and is given back with the tokens
- *              {
- *                 "RefreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
- *                 "AccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua...",
- *                 "UserType": "admin\creator\user"
- *              }
- * 
- *      @ErrorResponse
- *          @example {json} (400):
- *          @description The user has inserted an invalis request: both Username and Password are required
- *              {
- *                  "error": "Invalid request. Username and password are required."
- *              }
- * 
- *          @example {json} (401):
- *          @description The user has inserted an invalid password
- *              {
- *                  "error": "Invalid password."
- *              }
- * 
- *          @example {json} (404):
- *          @description The user has inserted an invalid email
- *              {
- *                  "error": "Account not registered."
- *              }
- * 
- *          @example {json} (500):
- *          @description The served has had some problems during login
- *              {
- *                  "error": "An error occured during login."
- *              }
- * 
- * 
- * 
- * @usage
- *      @example {curl} Example Usage:
- *          curl -X POST https://api.yourservice.com/auth/login \
- *               -H "Content-Type: application/json" \
- *               -d '{"email": "user@example.com", "password": "yourpassword"}'
- * 
- * 
+ * @openapi: 3.0.0
+ * /auth/login:
+ *   post:
+ *     summary: Authenticate user and return tokens
+ *     description: This endpoint authenticates a user and returns an Access Token that can be used for subsequent API requests and a Refresh Token.
+ *     requestBody:
+ *       description: The request body should be a JSON object containing the user's credentials which are email and password.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The email of the user
+ *                 example: user@example.com
+ *               password:
+ *                 type: string
+ *                 description: The password of the user
+ *                 example: yourpassword
+ *     responses:
+ *       '200':
+ *         description: The user has provided the correct email and password and is given tokens
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 RefreshToken:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+ *                 AccessToken:
+ *                   type: string
+ *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
+ *                 UserType:
+ *                   type: string
+ *                   enum:
+ *                     - admin
+ *                     - creator
+ *                     - user
+ *       '400':
+ *         description: The user has inserted an invalid request, both email and password are required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid request. Email and password are required."
+ *       '401':
+ *         description: The user has inserted an invalid password
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid password."
+ *       '404':
+ *         description: The user has inserted an invalid email
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Account not registered."
+ *       '500':
+ *         description: The server has had some problems during login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "An error occurred during login."
+ *     examples:
+ *       curl:
+ *         summary: Example Usage
+ *         value: |
+ *           curl -X POST https://api.yourservice.com/auth/login \
+ *                -H "Content-Type: application/json" \
+ *                -d '{"email": "user@example.com", "password": "yourpassword"}'
  */
 router.post(`/login`, async (req, res)=>{
     const email = req.body.email;
     const password = req.body.password;
-
     if (!email || !password){
         return res.status(400).json({error: `Invalid request. Username and password are required.`}); //Bad Request
     }
@@ -149,41 +167,30 @@ router.post(`/login`, async (req, res)=>{
 
 
 
-/**
- * /auth/logout
- * 
- * @description This endpoint logs out the user
- * 
- * @method DELETE
- * 
- * @endpoint_url https://api.yourservice.com/auth/logout
- * 
- * 
- * 
- * @request
- *      @Request_Header 
- * 
- *      @Request_Body The request body is empty since the AccessToken is passed through cookies
- * 
- * 
- * 
- * @responses
- *      @SuccessResponse
- *          @example (204)
- *          @description The user has sucesfully logged out
- * 
- *      @ErrorResponse
- *          @example {json} (500)
- *              {
- *                  "error": "An error occoured during logout"
- *              }
- * 
- * 
- * 
- * @usage
- *      @example {curl} Example Usage:
- *          curl -X DELETE https://api.yourservice.com/auth/LOGOUT
- * 
+/** 
+ * @openapi: 3.0.0
+ * /auth/logout:
+ *   delete:
+ *     summary: Logs out the user
+ *     description: This endpoint logs out the user.
+ *     responses:
+ *       '204':
+ *         description: The user has successfully logged out.
+ *       '500':
+ *         description: An error occurred during logout.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "An error occurred during logout."
+ *     examples:
+ *       curl:
+ *         summary: Example Usage
+ *         value: |
+ *           curl -X DELETE https://api.yourservice.com/auth/logout
  */
 router.delete('/logout', authenticateToken, async (req, res) => {
     try{
@@ -208,46 +215,29 @@ router.delete('/logout', authenticateToken, async (req, res) => {
 
 
 /**
- * /auth/posts
- * 
- * This endpoint will be updated when the user stories about asking for an object will be implemented. For now it is only a simple example
- * 
- * @description This endpoint authenticates a user and returns a content requested from the platfotm
- *  
- * @method GET
- * 
- * @endpoint_url https://api.yourservice.com/auth/post
- * 
- * 
- * 
- * @request
- *      @Request_Header 
- * 
- *      @Request_Body The request body is empty since the AccessToken is passed through cookies
- * 
- * 
- * 
- * @responses
- *      @SuccessResponse
- *          @example {json} (200)
- *          @description The data is returned from the db
- *              {
- *                  "data": "example_data"
- *              }
- * 
- *      @ErrorResponse
- *          @example {json} (500)
- *          @description An error occured during requesting data from the website
- *              {
- *                  "error": "An error occured during requesting services to the db"
- *              }
- * 
- * 
- * 
- * @usage
- *      @example {curl} Example Usage:
- *          curl -X GET https://api.yourservice.com/auth/posts
- * 
+ * @openapi: 3.0.0
+ * /auth/posts:
+ *   get:
+ *     summary: Retrieve content from the platform
+ *     description: This endpoint authenticates a user and returns content requested from the platform. This is a placeholder example and will be updated when user stories about requesting objects are implemented.
+ *     responses:
+ *       '200':
+ *         description: The data is returned from the database.
+ *         content:
+ *           application/json:
+ *             example:
+ *               data: "example_data"
+ *       '500':
+ *         description: An error occurred during requesting data from the website.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "An error occurred during requesting services to the db."
+ *     examples:
+ *       curl:
+ *         summary: Example Usage
+ *         value: |
+ *           curl -X GET https://api.yourservice.com/auth/posts
  */
 router.get('/posts', authenticateToken, async (req, res) =>{
     try{
@@ -268,43 +258,33 @@ router.get('/posts', authenticateToken, async (req, res) =>{
 
 
 /**
- * /auth/token
- * 
- * @description This endpoint generates a new AccessToken for the user
- * 
- * @method POST
- * 
- * @endpoint_url https://api.yourservice.com/auth/token
- * 
- * @request
- * 
- * @response
- *      @SuccessResponse
- *          @example {json} (200):
- *          @description The Token is sucessfully generated and given back in the response
- *              {
- *                  "AccessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
- *              }
- * 
- *      @ErrorResponse
- *          @example (403)
- *          @description You do not have the permission to access this part of the website (the Token is invalid)
- * 
- *          @example (401)
- *          @description The User does not have the AccessToken
- * 
- *          @example {json} (500):
- *          @description An error occured while crating a new token.
- *              {
- *                  "error": "An error occoured during requesting new token"
- *              }
- * 
- * 
- * 
- * @usage
- *      @example {curl} Example Usage:
- *          curl -X POST https://api.yourservice.com/auth/token
- * 
+ * @openapi: 3.0.0
+ * /auth/token:
+ *   post:
+ *     summary: Generate a new Access Token
+ *     description: This endpoint generates a new AccessToken for the user.
+ *     responses:
+ *       '200':
+ *         description: The token is successfully generated and returned in the response.
+ *         content:
+ *           application/json:
+ *             example:
+ *               AccessToken: "eyJhbGciOiJIUzI1NiIsInR5cCI7gH8Trdua..."
+ *       '403':
+ *         description: You do not have permission to access this part of the website (the token is invalid).
+ *       '401':
+ *         description: The user does not have the AccessToken.
+ *       '500':
+ *         description: An error occurred while creating a new token.
+ *         content:
+ *           application/json:
+ *             example:
+ *               error: "An error occurred during requesting new token."
+ *     examples:
+ *       curl:
+ *         summary: Example Usage
+ *         value: |
+ *           curl -X POST https://api.yourservice.com/auth/token
  */
 router.post('/token', async (req, res)=>{
     try{
@@ -348,14 +328,6 @@ router.post('/token', async (req, res)=>{
 })
 
 
-
-/**
- * @description This middleware autheticates the token.
- *
- * @param {object} req The request object contais the cookies and so the AccessToken.
- * @param {object} res The respons object contains the status that will be returned.
- * @param {function} next The next function contains the next middleware function to call  
-*/
 async function authenticateToken(req, res, next) {
     try{
         //take the access Token from the cookies if exists
@@ -398,4 +370,4 @@ async function authenticateToken(req, res, next) {
     }
 }
 
-export default router
+export default router;

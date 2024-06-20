@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 
+
 dotenv.config()
 const app = express()
 
@@ -32,6 +33,7 @@ app.use(cors())
 app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
 
 app.listen(3000, () => {
   console.log('Server running on port 3000')
