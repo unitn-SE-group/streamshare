@@ -352,6 +352,7 @@ async function authenticateToken(req, res, next) {
                 console.log('userid', userid);
                 next();
               }).catch(console.error);
+              next();
         }
         else {    
             //check whether the token is correct
