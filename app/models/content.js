@@ -17,12 +17,12 @@ const fileSchema = new mongoose.Schema({
 
     length: {
         type: Number,
-        require: true,
+        required: true,
     },
 
     chunkSize: {
         type: Number, 
-        require: true,
+        required: true,
     },
 
     uploadDate: {
