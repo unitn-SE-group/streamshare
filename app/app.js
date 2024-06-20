@@ -23,7 +23,7 @@ const swaggerOptions = {
 }
 const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
-connect(process.env.DATABASE_URI)
+connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Could not connect to MongoDB ' + err))
 
