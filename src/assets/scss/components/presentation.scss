@@ -1,0 +1,124 @@
+.presentation-wrapper {
+    padding: 6rem 3rem 0;
+
+    .presentation-shadow {
+        user-select: none;
+        position: absolute;
+        z-index: -1;
+        top: -32rem;
+        left: 50%;
+        width: 64rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        translate: -50% 0;
+        background-color: $background2;
+        filter: blur(3rem);
+    }
+
+    .presentation-inner {
+        width: $inner-width;
+        gap: 5rem;
+        
+        .presentation-header {    
+            .text-body {
+                width: 50rem;
+            }
+        }
+
+        .presentation-cards {
+            gap: 3rem;
+            margin-bottom: 38rem;
+
+            .card {
+                justify-content: center;
+                width: min(100%, 47rem);
+                height: 100%;
+                border: .25rem solid $background2;
+                border-radius: 3.5rem;
+                padding: 6rem 4rem 3.5rem;
+                background-color: $background1;
+
+                &:nth-child(2) {
+                    border: none;
+                    background: $pink-gradient;
+
+                    &::before {
+                        bottom: -13.5rem;
+                        left: 0;
+                        border: none;
+                        border-bottom-right-radius: .75rem;
+                        background: $pink-gradient;
+                        background-size: calc(100% + 17rem - .5rem) 100%;
+                    }
+                    img {
+                        bottom: -13.52rem;
+                        right: 0;
+                    }
+                }
+
+                &::before {
+                    user-select: none;
+                    content: " ";
+                    position: absolute;
+                    bottom: -13.75rem;
+                    left: -.25rem;
+                    width: calc(100% - 17rem + .75rem);
+                    height: 17rem;
+                    border-bottom: .25rem solid $background2;
+                    border-left: .25rem solid $background2;
+                    border-bottom-left-radius: 3.5rem;
+                    background-color: $background1;
+                }
+
+                img {
+                    user-select: none;
+                    position: absolute;
+                    bottom: -13.75rem;
+                    right: -.25rem;
+                    width: 17rem;
+                    height: 20.5rem;
+                }
+            }
+        }
+    }   
+    @include respond-to('tablet-ls') {
+        .presentation-inner {
+            .presentation-header {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4rem;
+                width: 60rem;
+                margin: 0 auto 5rem;
+
+                .text-heading {
+                    text-align: center;
+                }
+                .text-body {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+            .presentation-cards {
+                flex-direction: column;
+                align-items: center;
+                gap: 21rem;
+
+                .card {
+                    padding-bottom: 7rem;
+
+                    img {
+                        // scale: .9;
+                    }
+                }
+            }
+        }
+    }
+    @include respond-to('mobile') {
+        .presentation-inner {
+            .presentation-header {
+                width: 80vw;
+            }
+        }
+    }
+}

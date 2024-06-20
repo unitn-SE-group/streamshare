@@ -1,0 +1,563 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap");
+.text-title {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 0.9;
+  font-size: 10rem;
+  font-weight: bold;
+}
+@media (max-width: 1180px) {
+  .text-title {
+    font-size: 9rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-title {
+    font-size: 6.5rem;
+  }
+}
+
+.text-heading {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 1.1;
+  font-size: 5rem;
+  font-weight: medium;
+}
+@media (max-width: 1180px) {
+  .text-heading {
+    font-size: 4.1rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-heading {
+    font-size: 3.2rem;
+  }
+}
+
+.text-subheading {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 1.3;
+  font-size: 3.5rem;
+}
+@media (max-width: 1180px) {
+  .text-subheading {
+    font-size: 2.8rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-subheading {
+    font-size: 2.2rem;
+  }
+}
+
+.text-caption {
+  font-family: "Manrope";
+  letter-spacing: -0.015ch;
+  line-height: 1.5;
+  font-size: 1.3rem;
+  font-weight: medium;
+  opacity: 1;
+}
+
+.text-body {
+  font-family: "Manrope";
+  letter-spacing: -0.015ch;
+  line-height: 1.5;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: rgba(244, 242, 239, 0.65);
+}
+.text-body.bold {
+  font-weight: 600;
+}
+.text-body.accent {
+  color: #BE4B76;
+}
+.text-body.accent::selection {
+  background-color: #222222;
+}
+
+.text-title {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 0.9;
+  font-size: 10rem;
+  font-weight: bold;
+}
+@media (max-width: 1180px) {
+  .text-title {
+    font-size: 9rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-title {
+    font-size: 6.5rem;
+  }
+}
+
+.text-heading {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 1.1;
+  font-size: 5rem;
+  font-weight: medium;
+}
+@media (max-width: 1180px) {
+  .text-heading {
+    font-size: 4.1rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-heading {
+    font-size: 3.2rem;
+  }
+}
+
+.text-subheading {
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  line-height: 1.3;
+  font-size: 3.5rem;
+}
+@media (max-width: 1180px) {
+  .text-subheading {
+    font-size: 2.8rem;
+  }
+}
+@media (max-width: 550px) {
+  .text-subheading {
+    font-size: 2.2rem;
+  }
+}
+
+.text-caption {
+  font-family: "Manrope";
+  letter-spacing: -0.015ch;
+  line-height: 1.5;
+  font-size: 1.3rem;
+  font-weight: medium;
+  opacity: 1;
+}
+
+.text-body {
+  font-family: "Manrope";
+  letter-spacing: -0.015ch;
+  line-height: 1.5;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: rgba(244, 242, 239, 0.65);
+}
+.text-body.bold {
+  font-weight: 600;
+}
+.text-body.accent {
+  color: #BE4B76;
+}
+.text-body.accent::selection {
+  background-color: #222222;
+}
+
+.btn-primary {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  max-width: max-content;
+  height: 7rem;
+  border: none;
+  border-radius: 3.5rem;
+  padding: 0 5rem;
+  background-color: transparent;
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  z-index: 1;
+  font-weight: bold;
+  color: #F4F2EF;
+}
+@media (max-width: 850px) {
+  .btn-primary {
+    height: 5.5rem;
+    padding: 0 3rem;
+  }
+}
+@media (max-width: 550px) {
+  .btn-primary {
+    font-size: 1.8rem;
+  }
+}
+.btn-primary:focus {
+  border: none;
+  outline: none;
+}
+.btn-primary::before {
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to right, #BE4B76, #FC466B);
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.btn-primary.btn-shadow::before {
+  -webkit-box-shadow: 0 0 5rem 0 #BE4B76;
+  -moz-box-shadow: 0 0 5rem 0 #BE4B76;
+  -o-box-shadow: 0 0 5rem 0 #BE4B76;
+  box-shadow: 0 0 5rem 0 #BE4B76;
+}
+
+.btn-secondary {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  max-width: max-content;
+  height: 7rem;
+  border: none;
+  border-radius: 3.5rem;
+  padding: 0 5rem;
+  background-color: transparent;
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  z-index: 1;
+  font-weight: bold;
+  color: #141414;
+}
+@media (max-width: 850px) {
+  .btn-secondary {
+    height: 5.5rem;
+    padding: 0 3rem;
+  }
+}
+@media (max-width: 550px) {
+  .btn-secondary {
+    font-size: 1.8rem;
+  }
+}
+.btn-secondary:focus {
+  border: none;
+  outline: none;
+}
+.btn-secondary::before {
+  content: " ";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: #F4F2EF;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+
+.btn-primary:not(:disabled):hover::before,
+.btn-secondary:not(:disabled):hover::before {
+  scale: 1.04;
+}
+.btn-primary:not(:disabled):active::before,
+.btn-secondary:not(:disabled):active::before {
+  scale: 0.92;
+}
+
+.btn-tertiary {
+  box-sizing: border-box;
+  user-select: none;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+  max-width: max-content;
+  height: 7rem;
+  border: none;
+  border-radius: 3.5rem;
+  padding: 0 5rem;
+  background-color: transparent;
+  text-wrap: balance;
+  font-family: "Syne";
+  letter-spacing: -0.03ch;
+  font-size: 2rem;
+  font-weight: semi-bold;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 1;
+  height: auto;
+  padding: 0;
+  font-weight: bold;
+  background: transparent;
+  color: #F4F2EF;
+}
+@media (max-width: 850px) {
+  .btn-tertiary {
+    height: 5.5rem;
+    padding: 0 3rem;
+  }
+}
+@media (max-width: 550px) {
+  .btn-tertiary {
+    font-size: 1.8rem;
+  }
+}
+.btn-tertiary:focus {
+  border: none;
+  outline: none;
+}
+.btn-tertiary svg {
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.btn-tertiary:not(:disabled):hover svg {
+  translate: 1rem 0;
+}
+
+.section-wrapper {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.generic-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5rem;
+  width: 100%;
+  height: 100%;
+}
+
+.generic-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.button-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.button-bar.auto {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+.button-bar.auto .btn-primary,
+.button-bar.auto .btn-secondary {
+  max-width: 100%;
+}
+
+.consent-wrapper {
+  position: fixed;
+  z-index: 1001;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  border-top: 0.2rem solid #F4F2EF;
+  padding: 4rem;
+  background-color: #222222;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  translate: 0 0;
+}
+.consent-wrapper.hidden {
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 1.25rem;
+}
+.consent-wrapper.hidden.first-load {
+  -webkit-transition: all 0s;
+  -moz-transition: all 0s;
+  -o-transition: all 0s;
+  transition: all 0s;
+}
+@media (max-width: 850px) {
+  .consent-wrapper {
+    flex-direction: column;
+  }
+  .consent-wrapper .button-bar {
+    align-self: center;
+  }
+}
+
+.login-wrapper {
+  padding: 25rem 0 13.5rem;
+}
+.login-wrapper .login-inner {
+  align-items: center;
+  width: min(85rem, 90vw);
+  border: 0.25rem solid #222222;
+  border-radius: 3.5rem;
+  padding: 9rem;
+  background-color: #141414;
+}
+.login-wrapper .login-inner .text-heading {
+  margin-bottom: 3rem;
+}
+.login-wrapper .login-inner form {
+  width: 90%;
+}
+.login-wrapper .login-inner form .form-group {
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+.login-wrapper .login-inner form .form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  padding-left: 1rem;
+}
+.login-wrapper .login-inner form .form-group input,
+.login-wrapper .login-inner form .form-group .form-col select {
+  border: 0.25rem solid transparent;
+  border-radius: 5rem;
+  outline: none;
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 100%;
+  background-color: #222222;
+  color: #F4F2EF;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.login-wrapper .login-inner form .form-group input:focus,
+.login-wrapper .login-inner form .form-group .form-col select:focus {
+  border-color: #FC466B;
+}
+.login-wrapper .login-inner form .form-group a {
+  display: block;
+  width: 100%;
+  margin-right: 1rem;
+  font-size: 1.4rem;
+  text-align: right;
+  color: #BE4B76;
+}
+.login-wrapper .login-inner form .form-group .form-col select {
+  appearance: none;
+  width: 100%;
+  background-image: linear-gradient(45deg, transparent 50%, #141414 50%), linear-gradient(135deg, #141414 50%, transparent 50%), radial-gradient(#F4F2EF 70%, transparent 72%);
+  background-position: calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+.login-wrapper .login-inner form .form-group .form-col select:focus {
+  background-image: linear-gradient(45deg, #141414 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #141414 50%), radial-gradient(#FC466B 70%, transparent 72%);
+  background-position: calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
+}
+.login-wrapper .login-inner form .form-group .form-col select option {
+  width: 100%;
+  text-align: left;
+}
+.login-wrapper .login-inner form .form-group .form-col #DOB::-webkit-calendar-picker-indicator {
+  display: none;
+  filter: invert(1);
+}
+.login-wrapper .login-inner form .form-group:last-child {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: 0;
+}
+.login-wrapper .login-inner form .form-group:last-child .btn-primary {
+  align-self: flex-end;
+  margin-bottom: 8rem;
+}
+.login-wrapper .login-inner form .form-group #show-password {
+  position: absolute;
+  z-index: 99;
+  top: 50%;
+  right: 2rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  translate: 0 25%;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+.login-wrapper .login-inner form .form-group #show-password img {
+  width: 100%;
+  height: 100%;
+}
+.login-wrapper .login-inner .text-body a {
+  font-weight: bold;
+}
+@media (max-width: 850px) {
+  .login-wrapper {
+    padding: 20rem 0 9.5rem;
+  }
+}
+@media (max-width: 550px) {
+  .login-wrapper {
+    padding: 17rem 0 6.5rem;
+  }
+}
