@@ -1,22 +1,21 @@
-import {google} from 'googleapis';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import User from './models/user.js';
-import Session from './models/session.js';
-import dotenv from 'dotenv';
-import express from 'express';
-import cookieParser from 'cookie-parser';
+import { google } from 'googleapis'
+import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import User from './models/user.js'
+import Session from './models/session.js'
+import dotenv from 'dotenv'
+import express from 'express'
+import cookieParser from 'cookie-parser'
 
+dotenv.config()
+const router = express.Router()
 
-dotenv.config();
-const router = express.Router();
-
-router.use(cookieParser());
+router.use(cookieParser())
 
 const oauth2Client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET,
-);
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET
+)
 
 /**
  * @openapi: 3.0.0
@@ -108,66 +107,63 @@ const oauth2Client = new google.auth.OAuth2(
  *                -H "Content-Type: application/json" \
  *                -d '{"email": "user@example.com", "password": "yourpassword"}'
  */
-router.post(`/login`, async (req, res)=>{
-    const email = req.body.email;
-    const password = req.body.password;
-    if (!email || !password){
-        return res.status(400).json({error: `Invalid request. Username and password are required.`}); //Bad Request
+router.post(`/login`, async (req, res) => {
+  const email = req.body.email
+  const password = req.body.password
+  if (!email || !password) {
+    return res.status(400).json({ error: `Invalid request. Username and password are required.` }) //Bad Request
+  }
+
+  try {
+    //Search for the account in the database
+    const user = await User.findOne({ email: email })
+
+    if (!user) {
+      return res.status(404).json({ error: `Account not registered` }) //Not Found
     }
 
-    try{
-        //Search for the account in the database
-        const user = await User.findOne({email: email} );
+    //Check is the password is correct
+    const password_match = await bcrypt.compare(password, user.password)
 
-        if(!user){
-            return res.status(404).json({error: `Account not registered`}); //Not Found
-        }
-
-        //Check is the password is correct
-        const password_match = await bcrypt.compare(password, user.password);
-
-        if(!password_match){
-            return res.status(401).json({error: `Invalid password`}) //Unauthorizied
-        }
-
-        //Generate JWT token
-        const payload = {_id: user._id, username: user.username, email: user.email};
-        const key_acc = process.env.ACCESS_TOKEN_SECRET;
-        const key_ref = process.env.REFRESH_TOKEN_SECRET;
-        const options = {expiresIn: '2000s'};
-        const accessToken = jwt.sign(payload, key_acc, options);
-        const refreshToken = jwt.sign(payload, key_ref);
-
-        //Update and save the session schema in the database
-        const newSession = new Session({
-            user_id: user._id,
-            refreshToken: refreshToken,
-            accessToken: accessToken 
-        });
-        await newSession.save();
-
-        //Setting the Tokens in the cookies
-        res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
-
-        console.log(`The user -${user.username}- is succesfully logged in!`);
-
-        //Returning the tokens
-        return res.json({
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-            user_type: user.userType
-        });
-
-    }catch(err){
-        console.log(`An error occoured during authentication: ${err}`);
-        res.status(500).json({error: `An error occured during login`});
+    if (!password_match) {
+      return res.status(401).json({ error: `Invalid password` }) //Unauthorizied
     }
+
+    //Generate JWT token
+    const payload = { _id: user._id, username: user.username, email: user.email }
+    const key_acc = process.env.ACCESS_TOKEN_SECRET
+    const key_ref = process.env.REFRESH_TOKEN_SECRET
+    const options = { expiresIn: '2000s' }
+    const accessToken = jwt.sign(payload, key_acc, options)
+    const refreshToken = jwt.sign(payload, key_ref)
+
+    //Update and save the session schema in the database
+    const newSession = new Session({
+      user_id: user._id,
+      refreshToken: refreshToken,
+      accessToken: accessToken
+    })
+    await newSession.save()
+
+    //Setting the Tokens in the cookies
+    res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+
+    console.log(`The user -${user.username}- is succesfully logged in!`)
+
+    //Returning the tokens
+    return res.json({
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      user_type: user.userType
+    })
+  } catch (err) {
+    console.log(`An error occoured during authentication: ${err}`)
+    res.status(500).json({ error: `An error occured during login ${err}` })
+  }
 })
 
-
-
-/** 
+/**
  * @openapi: 3.0.0
  * /auth/logout:
  *   delete:
@@ -193,26 +189,22 @@ router.post(`/login`, async (req, res)=>{
  *           curl -X DELETE https://api.yourservice.com/auth/logout
  */
 router.delete('/logout', authenticateToken, async (req, res) => {
-    try{
-        //delete the session from the database
-        await Session.deleteMany( {user_id: req.user._id} );
+  try {
+    //delete the session from the database
+    await Session.deleteMany({ user_id: req.user._id })
 
-        //delete the Tokens from the cookies
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
+    //delete the Tokens from the cookies
+    res.clearCookie('accessToken')
+    res.clearCookie('refreshToken')
 
-        console.log(`The user -${req.user.username}- has succesfully logged out!`);
+    console.log(`The user -${req.user.username}- has succesfully logged out!`)
 
-        return res.sendStatus(204);
-
-    }catch(err){
-        console.log(`An error occoured during logout: ${err}`);
-        return res.status(500).json({error: `An error occured during logout`});
-    }
-    
+    return res.sendStatus(204)
+  } catch (err) {
+    console.log(`An error occoured during logout: ${err}`)
+    return res.status(500).json({ error: `An error occured during logout` })
+  }
 })
-
-
 
 /**
  * @openapi: 3.0.0
@@ -239,23 +231,19 @@ router.delete('/logout', authenticateToken, async (req, res) => {
  *         value: |
  *           curl -X GET https://api.yourservice.com/auth/posts
  */
-router.get('/posts', authenticateToken, async (req, res) =>{
-    try{
-        //Search what the User wants
-        const user = await User.findOne( {email: req.user.email} );
-    
-        console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`);
+router.get('/posts', authenticateToken, async (req, res) => {
+  try {
+    //Search what the User wants
+    const user = await User.findOne({ email: req.user.email })
 
-        return res.status(200).json({data: user.username});
+    console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`)
 
-    }catch(err){
-        console.log(`An error occoured during requesting data: ${err}`);
-        return res.status(500).json({error: `An error occured during requesting services to the db`});
-    }
-    
+    return res.status(200).json({ data: user.username })
+  } catch (err) {
+    console.log(`An error occoured during requesting data: ${err}`)
+    return res.status(500).json({ error: `An error occured during requesting services to the db` })
+  }
 })
-
-
 
 /**
  * @openapi: 3.0.0
@@ -286,89 +274,89 @@ router.get('/posts', authenticateToken, async (req, res) =>{
  *         value: |
  *           curl -X POST https://api.yourservice.com/auth/token
  */
-router.post('/token', async (req, res)=>{
-    try{
-        //take the token from the cookies and check whether it exists
-        const refreshToken = req.cookies.refreshToken;
-        if (refreshToken == null){
-            return res.sendStatus(401);
-        }
-    
-        //Find the session the refresh Token is associated with 
-        const session = await Session.findOne({ refreshToken: { $in: [`${refreshToken}`] } });
-        if (!session){
-            return res.sendStatus(403);
-        }
-    
-        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) =>{
-            if (err){
-                return res.sendStatus(403);
-            } 
-    
-            //create new accessToken and save it in the session on the DB and in the cookies
-            const payload = {_id: user._id, username: user.username, email: user.email};
-            const key_acc = process.env.ACCESS_TOKEN_SECRET;
-            const key_ref = process.env.REFRESH_TOKEN_SECRET;
-            const options = {expiresIn: '2000s'};
-            const accessToken = jwt.sign(payload, key_acc, options);
-    
-            session.accessToken = accessToken;
-            session.save();
-    
-            res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        
-            console.log(`The user -${user.username}- has succesfully received a new token!`);
-
-            return res.status(200).json({ accessToken: accessToken});
-        })
-    }catch(err){
-        console.log(`An error occoured during requesting new token: ${err}`);
-        return res.status(500).json({error: `An error occured while creating a new token.`});
+router.post('/token', async (req, res) => {
+  try {
+    //take the token from the cookies and check whether it exists
+    const refreshToken = req.cookies.refreshToken
+    if (refreshToken == null) {
+      return res.sendStatus(401)
     }
+
+    //Find the session the refresh Token is associated with
+    const session = await Session.findOne({ refreshToken: { $in: [`${refreshToken}`] } })
+    if (!session) {
+      return res.sendStatus(403)
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        return res.sendStatus(403)
+      }
+
+      //create new accessToken and save it in the session on the DB and in the cookies
+      const payload = { _id: user._id, username: user.username, email: user.email }
+      const key_acc = process.env.ACCESS_TOKEN_SECRET
+      const key_ref = process.env.REFRESH_TOKEN_SECRET
+      const options = { expiresIn: '2000s' }
+      const accessToken = jwt.sign(payload, key_acc, options)
+
+      session.accessToken = accessToken
+      session.save()
+
+      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+
+      console.log(`The user -${user.username}- has succesfully received a new token!`)
+
+      return res.status(200).json({ accessToken: accessToken })
+    })
+  } catch (err) {
+    console.log(`An error occoured during requesting new token: ${err}`)
+    return res.status(500).json({ error: `An error occured while creating a new token.` })
+  }
 })
 
-
 async function authenticateToken(req, res, next) {
-    try{
-        //take the access Token from the cookies if exists
-        const token = req.cookies.accessToken;
+  try {
+    //take the access Token from the cookies if exists
+    const token = req.cookies.accessToken
 
-        if (!token) {
-            return res.sendStatus(401);
-        }
-
-        // retrieve user type from db
-        const session = await Session.findOne({accessToken: token}).populate('user_id');
-        const userType = session.user_id.userType;
-
-        // authenticate based on user type
-        if (userType === 'google') {
-            oauth2Client.verifyIdToken({
-                idToken: req.body.id_token,
-                audience: process.env.GOOGLE_CLIENT_ID
-              }).then(ticket => {
-                const payload = ticket.getPayload();
-                const userid = payload['sub'];
-                console.log('userid', userid);
-                next();
-              }).catch(console.error);
-              next();
-        }
-        else {    
-            //check whether the token is correct
-            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-                if (err) {
-                    return res.sendStatus(403);
-                }
-                req.user = user;
-                next();
-            });
-        }
-
-    }catch(err){
-        console.log(`An error occoured during token authentication: ${err}`);
-        return res.status(500).json({error: `An error occured during Token Authetication`});
+    if (!token) {
+      return res.sendStatus(401)
     }
+
+    // retrieve user type from db
+    const session = await Session.findOne({ accessToken: token }).populate('user_id')
+    const userType = session.user_id.userType
+
+    // authenticate based on user type
+    if (userType === 'google') {
+      oauth2Client
+        .verifyIdToken({
+          idToken: req.body.id_token,
+          audience: process.env.GOOGLE_CLIENT_ID
+        })
+        .then((ticket) => {
+          const payload = ticket.getPayload()
+          const userid = payload['sub']
+          console.log('userid', userid)
+          next()
+        })
+        .catch(console.error)
+      next()
+    } else {
+      //check whether the token is correct
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+          return res.sendStatus(403)
+        }
+        req.user = user
+        next()
+      })
+    }
+  } catch (err) {
+    console.log(`An error occoured during token authentication: ${err}`)
+    return res.status(500).json({ error: `An error occured during Token Authetication` })
+  }
 }
 
-export default router;
+export default router

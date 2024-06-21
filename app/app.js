@@ -7,7 +7,6 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import { connect } from 'mongoose'
 
-
 dotenv.config()
 const app = express()
 
@@ -25,13 +24,9 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
 // use different uri based on the environment
-let uri;
-if (process.env.NODE_ENV !== 'test') {
-  connect(uri)
+connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Could not connect to MongoDB ' + err))
-}
-
 
 app.use(express.json())
 app.use(cors())
@@ -40,7 +35,3 @@ app.use('/auth', login)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 export default app
-
-
-
-

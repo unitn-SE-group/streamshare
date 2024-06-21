@@ -1,19 +1,19 @@
-import mongoose from 'mongoose';
-import bcrypt from 'bcrypt';
+import mongoose from 'mongoose'
+import bcrypt from 'bcrypt'
 
 //Create the user schema
 const userSchema = new mongoose.Schema({
-    createdWith: {
-        type: String,
-        enum: ['google','local'],
-        required: true,
-    },
+  createdWith: {
+    type: String,
+    enum: ['google', 'local'],
+    required: true
+  },
 
-    userType: {
-        type: String,
-        enum: ['admin', 'creator', 'consumer'],
-        required: true
-    },
+  userType: {
+    type: String,
+    enum: ['admin', 'creator', 'consumer'],
+    required: true
+  },
 
   email: {
     type: String,
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema({
   },
 
   LastName: {
-      type: String, 
+    type: String
   },
 
   username: {
@@ -41,11 +41,10 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-
   password: {
-      type: String, 
+    type: String
   },
-  
+
   friends: [mongoose.SchemaTypes.ObjectId],
 
   birthDay: {
@@ -72,5 +71,4 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-export default mongoose.model("User", userSchema);
-
+export default mongoose.model('User', userSchema)

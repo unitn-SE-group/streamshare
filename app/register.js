@@ -23,6 +23,9 @@ config()
  *           schema:
  *             type: object
  *             properties:
+ *               createdWith:
+ *                 type: string
+ *                 description: Where the user is registered from (local, google)
  *               userType:
  *                 type: string
  *                 description: The type of user (e.g., consumer).
@@ -85,10 +88,30 @@ config()
 
 router.post('/register', async (req, res) => {
   try {
-    const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
+    const {
+      createdWith,
+      userType,
+      email,
+      FirstName,
+      LastName,
+      username,
+      gender,
+      password,
+      birthDay
+    } = req.body
 
     // Check if all required fields are provided
-    const requiredFields = ['userType', 'email', 'FirstName', 'LastName', 'username', 'gender', 'password', 'birthDay']
+    const requiredFields = [
+      'createdWith',
+      'userType',
+      'email',
+      'FirstName',
+      'LastName',
+      'username',
+      'gender',
+      'password',
+      'birthDay'
+    ]
     for (const field of requiredFields) {
       if (!req.body[field]) {
         return res.status(400).json({ message: `Missing required field: ${field}` })
@@ -102,6 +125,7 @@ router.post('/register', async (req, res) => {
     }
 
     const newUser = new User({
+      createdWith,
       userType,
       email,
       FirstName,
