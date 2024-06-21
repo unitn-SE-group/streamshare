@@ -10,7 +10,7 @@ describe('POST /auth/register', () => {
     const res = await request(app).post('/auth/register').send({
       createdWith: 'local',
       userType: 'admin',
-      email: 'pedale.velocedp@gmail.com',
+      email: 'daniele.pedrolli@studenti.unitn.it',
       FirstName: 'daniele',
       LastName: 'pedrolli',
       username: 'pedwoo',
