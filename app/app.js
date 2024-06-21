@@ -1,11 +1,11 @@
 import express from 'express'
 import login from './authentication.js'
 import registration from './register.js'
-import { connect } from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import swaggerJsdoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import { connect } from 'mongoose'
 
 
 dotenv.config()
@@ -24,9 +24,14 @@ const swaggerOptions = {
 }
 const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
-connect(process.env.MONGO_URI)
+// use different uri based on the environment
+let uri;
+if (process.env.NODE_ENV !== 'test') {
+  connect(uri)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Could not connect to MongoDB ' + err))
+}
+
 
 app.use(express.json())
 app.use(cors())
@@ -34,9 +39,8 @@ app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
-
-app.listen(3000, () => {
-  console.log('Server running on port 3000')
-})
-
 export default app
+
+
+
+
