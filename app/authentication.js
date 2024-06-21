@@ -107,6 +107,7 @@ const oauth2Client = new google.auth.OAuth2(
  *                -d '{"email": "user@example.com", "password": "yourpassword"}'
  */
 router.post(`/login`, async (req, res) => {
+  console.log('Received POST request at /auth/login');
   const email = req.body.email
   const password = req.body.password
   if (!email || !password) {
@@ -115,7 +116,6 @@ router.post(`/login`, async (req, res) => {
 
   try {
     //Search for the account in the database
-    console.log(User);
     const user = await User.findOne({ email: email })
 
     if (!user) {

@@ -8,6 +8,20 @@ describe('POST /auth/login', () => {
    * This one provides the API the correct password and email
   */
   it('should respond with a 200 status and an object containing access and refresh tokens for existing user', async () => {
+    // insert user in database
+    await request(app).post('/auth/register').send({
+      createdWith: 'local',
+      userType: 'admin',
+      email: 'daniele.pedrolli@studenti.unitn.it',
+      FirstName: 'daniele',
+      LastName: 'pedrolli',
+      username: 'pedwoo',
+      gender: 'true',
+      password: 'ciaociao',
+      birthDay: '07/08/2003'
+    })
+
+
     const loginData = {
       email: 'daniele.pedrolli@studenti.unitn.it',
       password: 'ciaociao'
