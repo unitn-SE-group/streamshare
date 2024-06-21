@@ -25,11 +25,21 @@ const swaggerOptions = {
 }
 const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
-// connect to mongodb
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Could not connect to MongoDB ' + err));
-const connection = mongoose.connection;
+// connect to mongoDB databases
+
+const accounts_connection = mongoose.createConnection(process.env.MONGO_ACCOUNTS_URI)
+//.then(() => console.log('Connected to MongoDB accounts database'))
+//.catch((err) => console.error('Could not connect to MongoDB accounts database ' + err));
+
+const content_connection = mongoose.createConnection(process.env.MONGO_CONTENT_URI)
+//.then(() => console.log('Connected to MongoDB content database'))
+//.catch((err) => console.error('Could not connect to MongoDB content database ' + err));
+
+const test_connection = mongoose.createConnection(process.env.MONGO_TEST_URI)
+//.then(() => console.log('Connected to MongoDB test database'))
+//.catch((err) => console.error('Could not connect to MongoDB test database' + err));
+
+const connection = content_connection;
 
 // create gridfs-stream instance
 let gfs;
@@ -52,4 +62,4 @@ app.listen(3000, () => {
   console.log('Server running on port 3000')
 })
 
-export default {app, gfs}
+export default {app, gfs, accounts_connection, content_connection, test_connection}
