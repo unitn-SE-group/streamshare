@@ -12,7 +12,7 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-    await mongoose.connect(process.env.MONGO_URI_TEST);
+    await mongoose.connect(process.env.MONGO_TEST_URI);
 });
 
 afterEach(async () => {
