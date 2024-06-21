@@ -1,4 +1,3 @@
-import User from '../app/models/user'
 import request from 'supertest'
 import app from '../app/app'
 

@@ -1,6 +1,4 @@
-import User from '../app/models/user.js'
 import request from 'supertest'
-import bcrypt from 'bcrypt'
 import app from '../app/app.js'
 
 describe('POST /auth/login', () => {

@@ -1,8 +1,7 @@
 import { google } from 'googleapis'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import User from './connections/accounts.js'
-import Session from './connections/accounts.js'
+import {User, Session} from './connections/accounts.js'
 import dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser'
@@ -116,6 +115,7 @@ router.post(`/login`, async (req, res) => {
 
   try {
     //Search for the account in the database
+    console.log(User);
     const user = await User.findOne({ email: email })
 
     if (!user) {

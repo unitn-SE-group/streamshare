@@ -4,7 +4,7 @@
  */
 
 import { Router } from 'express'
-import User from './connections/accounts.js'
+import {User} from './connections/accounts.js'
 import { config } from 'dotenv'
 
 const router = Router()

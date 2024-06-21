@@ -6,7 +6,13 @@ import sessionSchema from '../models/session.js';
 dotenv.config();
 
 const accounts_connection = mongoose.createConnection(process.env.MONGO_ACCOUNTS_URI);
+accounts_connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
+accounts_connection.once('open', function() {
+  console.log("Connected to MongoDB!");
+});
+
+
 const User = accounts_connection.model('User', userSchema);
 const Session = accounts_connection.model('Session', sessionSchema);
 
-export default { accounts_connection, User, Session };
+export { User, Session };
