@@ -107,7 +107,6 @@ const oauth2Client = new google.auth.OAuth2(
  *                -d '{"email": "user@example.com", "password": "yourpassword"}'
  */
 router.post(`/login`, async (req, res) => {
-  console.log('Received POST request at /auth/login');
   const email = req.body.email
   const password = req.body.password
   if (!email || !password) {
