@@ -4,6 +4,11 @@ import bcrypt from 'bcrypt'
 import app from '../app/app.js'
 
 describe('POST /auth/login', () => {
+  /** 
+   * Send a POST request to the API login endpoint with an object containing the 
+   * correct email of an account already present in the mongoDB.
+   * This one provides the API the correct password.
+  */
   it('should respond with a 200 status and an object containing access and refresh tokens for existing user', async () => {
     const loginData = {
       email: 'daniele.pedrolli@studenti.unitn.it',
@@ -17,6 +22,8 @@ describe('POST /auth/login', () => {
     expect(res.body).toHaveProperty('refreshToken')
     expect(res.body).toHaveProperty('user_type')
   })
+
+  //This one provides the API the incorrect password.
 
   it('should respond with a 404 status for wrong password or non-existing user', async () => {
     const wrongLoginData = {
