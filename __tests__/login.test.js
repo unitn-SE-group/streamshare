@@ -91,7 +91,7 @@ describe('DELETE /auth/logout', () => {
     // store accessToken
     const login_data = await request(app).post('/auth/login').send(loginData);
     const accessToken = login_data.body.accessToken;
-    console.log(accessToken)
+    //console.log(accessToken)
     // send request to logout with cookie
     const res = await request(app).delete('/auth/logout').set('Cookie',[`accessToken=${accessToken}`]);
 

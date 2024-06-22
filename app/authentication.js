@@ -195,7 +195,6 @@ router.delete('/logout', authenticateToken, async (req, res) => {
     res.clearCookie('accessToken')
     res.clearCookie('refreshToken')
 
-    console.log(`The user -${req.user.username}- has succesfully logged out!`)
 
     return res.sendStatus(204)
   } catch (err) {
