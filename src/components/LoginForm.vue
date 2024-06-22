@@ -4,6 +4,12 @@ import * as animations from '@/utils/motionPluginOptions.js'
 <script>
 export default {
   name: 'LoginForm',
+  data() {
+    return {
+      Email: '',
+      Password: ''
+    }
+  },
   methods: {
     togglePassword() {
       const password_input = document.querySelector('#password')
@@ -15,20 +21,35 @@ export default {
         password_input.type = 'password'
         show_password.src = 'src/assets/images/unlock.png'
       }
-      function handleCredentialResponse(response) {
-        console.log('Encoded JWT ID token: ' + response.credential)
+    },
+    handleSubmit() {
+      const userData = {
+        email: this.Email,
+        password: this.Password
       }
-      window.onload = function () {
-        google.accounts.id.initialize({
-          client_id: process.env.GOOGLE_CLIENT_ID,
-          callback: handleCredentialResponse
-        })
-        google.accounts.id.renderButton(
-          document.getElementById('buttonDiv'),
-          { theme: 'outline', size: 'large' } // customization attributes
-        )
-        google.accounts.id.prompt() // also display the One Tap dialog
-      }
+      fetch('http://localhost:3000/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData)
+      }).then(async (response) => {
+        const { accessToken, refreshToken, user_type } = await response.json()
+        console.log(accessToken, refreshToken, user_type)
+        if (response.ok) {
+          sessionStorage.setItem('accessToken', accessToken)
+          sessionStorage.setItem('refreshToken', refreshToken)
+          if (user_type === 'admin') {
+            this.$router.push('/admin-dashobard')
+          } else {
+            this.$router.push('/dashboard')
+          }
+        } else if (response.status == 401) {
+          alert('Invalid credentials')
+        } else if (response.status == 404) {
+          alert('User does not exist, please register first')
+        }
+      })
     }
   },
   mounted() {
@@ -43,14 +64,28 @@ export default {
   <div class="section-wrapper login-wrapper">
     <div v-motion="animations.onScrollFadeIn" class="generic-col login-inner">
       <h2 v-motion="animations.onScrollFadeInD0" class="text-heading">Login</h2>
-      <form>
+      <form @submit.prevent="handleSubmit">
         <div v-motion="animations.onScrollFadeUpD0" class="form-group">
           <label class="text-body" for="email">Email</label>
-          <input class="text-body" type="email" id="username" name="username" required />
+          <input
+            class="text-body"
+            v-model="Email"
+            type="email"
+            id="username"
+            name="username"
+            required
+          />
         </div>
         <div v-motion="animations.onScrollFadeUpD1" class="form-group">
           <label class="text-body" for="password">Password</label>
-          <input class="text-body" type="password" id="password" name="password" required />
+          <input
+            class="text-body"
+            v-model="Password"
+            type="password"
+            id="password"
+            name="password"
+            required
+          />
           <div id="show-password" @click="togglePassword()">
             <img id="show-password-img" src="@/assets/images/unlock.png" alt="" />
           </div>

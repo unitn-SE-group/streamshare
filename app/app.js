@@ -25,7 +25,14 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
 app.use(express.json())
-app.use(cors())
+app.use(
+  cors({
+    origin: '*',
+    methods: '*',
+    allowedHeaders: '*'
+  })
+)
+app.use(express.urlencoded({ extended: true }))
 app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/oauth', oauth)

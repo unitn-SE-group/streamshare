@@ -49,9 +49,10 @@ export default {
           },
           body: JSON.stringify(userData)
         })
-          .then((response) => {
+          .then(async (response) => {
+            const { message, redirect_url } = await response.json()
             if (response.ok) {
-              this.$router.push(`${response.redirect_url}`)
+              this.$router.push(`${redirect_url}`)
             } else if (response.status == 409) {
               alert('User already exists, you can simply log in')
             }
