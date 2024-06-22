@@ -148,7 +148,6 @@ router.post(`/login`, async (req, res) => {
     res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
-    console.log(`The user -${user.username}- is succesfully logged in!`)
 
     //Returning the tokens
     return res.json({
