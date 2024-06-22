@@ -92,7 +92,7 @@ const config = {
   // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  // modulePathIgnorePatterns: [],
+  modulePathIgnorePatterns: ['<rootDir>/__tests__/jest.setup.js', '<rootDir>/app/connections'],
 
   // Activates notifications for test results
   // notify: false,
@@ -136,7 +136,7 @@ const config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  // setupFilesAfterEnv: [],
+  setupFilesAfterEnv: ["<rootDir>/__tests__/jest.setup.js"],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
