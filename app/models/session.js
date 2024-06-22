@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import accounts_connection from '../app.js';
 
 //Create a Session schema
 const sessionSchema = new mongoose.Schema({
@@ -32,4 +31,4 @@ const sessionSchema = new mongoose.Schema({
         }
 })
 
-export default accounts_connection.model("Session", sessionSchema);
+export default sessionSchema
