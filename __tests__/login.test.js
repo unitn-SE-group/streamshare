@@ -68,3 +68,33 @@ describe('POST /auth/login', () => {
   })
     
 })
+
+describe('DELETE /auth/logout', () => {
+  it('should respond with a 204 status for successful logout', async () => {
+    // insert user in database
+    await request(app).post('/auth/register').send({
+      createdWith: 'local',
+      userType: 'admin',
+      email: 'daniele.pedrolli@studenti.unitn.it',
+      FirstName: 'daniele',
+      LastName: 'pedrolli',
+      username: 'pedwoo',
+      gender: 'true',
+      password: 'ciaociao',
+      birthDay: '07/08/2003'
+    })
+    // login user
+    const loginData = {
+      email: 'daniele.pedrolli@studenti.unitn.it',
+      password: 'ciaociao'
+    }
+    // store accessToken
+    const login_data = await request(app).post('/auth/login').send(loginData);
+    const accessToken = login_data.body.accessToken;
+    console.log(accessToken)
+    // send request to logout with cookie
+    const res = await request(app).delete('/auth/logout').set('Cookie',[`accessToken=${accessToken}`]);
+
+    expect(res.status).toBe(204)
+  });
+});
