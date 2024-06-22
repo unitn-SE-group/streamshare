@@ -11,6 +11,11 @@ const router = express.Router()
 
 router.use(cookieParser())
 
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET
+)
+
 /**
  * @openapi: 3.0.0
  * /auth/login:
@@ -138,6 +143,9 @@ router.post(`/login`, async (req, res) => {
       accessToken: accessToken
     })
     await newSession.save()
+
+    res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
     //Returning the tokens
     return res

@@ -56,7 +56,7 @@ router.use(
  *       302:
  *         description: Redirects the user to Google's OAuth 2.0 server for authentication.
  */
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
   // test headers
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Referrer-Policy', 'no-referrer-when-downgrade')
