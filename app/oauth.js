@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import session from 'express-session'
 import dotenv from 'dotenv'
 import express from 'express'
-import user from './models/user.js'
+import {User, Session} from './connections/accounts.js'
 
 dotenv.config()
 const router = express.Router()
@@ -56,7 +56,7 @@ router.use(
  *       302:
  *         description: Redirects the user to Google's OAuth 2.0 server for authentication.
  */
-router.post('/', async (req, res) => {
+router.get('/', async (req, res) => {
   // test headers
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Referrer-Policy', 'no-referrer-when-downgrade')
@@ -135,7 +135,6 @@ router.get('/token', async (req, res) => {
     const user_data = await getUserData(access_token)
 
     // store new user in db
-    const User = require('./models/user')
     const newUser = new User({
       createdWith: 'google',
       userType: 'consumer', // temporarily, until we implement the creator user type
@@ -149,7 +148,6 @@ router.get('/token', async (req, res) => {
     newUser.save()
 
     // store new session in db
-    const Session = require('./models/session')
     const newSession = new Session({
       user_id: newUser._id,
       refreshToken: refresh_token,
