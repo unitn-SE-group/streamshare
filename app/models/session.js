@@ -30,4 +30,4 @@ const sessionSchema = new mongoose.Schema({
         }
 })
 
-export default mongoose.model("Session", sessionSchema);
+export default sessionSchema
