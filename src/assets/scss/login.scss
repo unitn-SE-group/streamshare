@@ -102,15 +102,21 @@
         }
 
         &:last-child {
+          position: static;
           display: flex;
           flex-direction: column;
+          align-items: center;
           width: 100%;
           margin-top: 5rem;
-          margin-bottom: 0;
+          margin-bottom: 8rem;
 
-          .btn-primary {
-            align-self: flex-end;
-            margin-bottom: 8rem;
+          .button-bar {
+            min-height: max-content;
+
+            .g_id_signin {
+              margin-right: 1.6rem;
+              scale: 1.61;
+            }
           }
         }
 
