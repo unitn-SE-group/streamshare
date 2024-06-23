@@ -30,6 +30,7 @@ coverage
 *.tsbuildinfo
 
 node_modules/
+__tests__/assets
 .env
 .DS_Store
 docs/
