@@ -22,6 +22,8 @@ const oauth2Client = new google.auth.OAuth2(
  *   post:
  *     summary: Authenticate user and return tokens
  *     description: This endpoint authenticates a user and returns an Access Token that can be used for subsequent API requests and a Refresh Token.
+ *     tags:
+ *      - Authentication
  *     requestBody:
  *       description: The request body should be a JSON object containing the user's credentials which are email and password.
  *       required: true
@@ -167,6 +169,8 @@ router.post(`/login`, async (req, res) => {
  *   delete:
  *     summary: Logs out the user
  *     description: This endpoint logs out the user.
+*     tags:
+ *      - Authentication
  *     responses:
  *       '204':
  *         description: The user has successfully logged out.
@@ -209,6 +213,8 @@ router.delete('/logout', authenticateToken, async (req, res) => {
  *   get:
  *     summary: Retrieve content from the platform
  *     description: This endpoint authenticates a user and returns content requested from the platform. This is a placeholder example and will be updated when user stories about requesting objects are implemented.
+*     tags:
+ *      - Authentication
  *     responses:
  *       '200':
  *         description: The data is returned from the database.
@@ -248,6 +254,8 @@ router.get('/posts', authenticateToken, async (req, res) => {
  *   post:
  *     summary: Generate a new Access Token
  *     description: This endpoint generates a new AccessToken for the user.
+ *     tags:
+ *      - Authentication
  *     responses:
  *       '200':
  *         description: The token is successfully generated and returned in the response.

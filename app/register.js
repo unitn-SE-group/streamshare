@@ -16,6 +16,8 @@ config()
  *   post:
  *     summary: Register a new user.
  *     description: Receives user registration data and creates a new user in the system.
+ *     tags:
+ *      - Authentication 
  *     requestBody:
  *       required: true
  *       content:
