@@ -1,6 +1,7 @@
 import express from 'express'
 import login from './authentication.js'
 import registration from './register.js'
+import deleteFileRouter from './remove_content.js'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import swaggerJsdoc from 'swagger-jsdoc'
@@ -27,5 +28,5 @@ app.use(cors())
 app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-
+app.use('/content/{contentId}', deleteFileRouter);
 export default app

@@ -1,82 +1,105 @@
-import express from 'express'
-import jwt from 'jsonwebtoken'
-import dotenv from 'dotenv'
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
-import { File } from './models/content.js';
+import multer from 'multer';
+import GridFsStorage from 'multer-gridfs-storage';
 
-dotenv.config()
-const router = express.Router()
+dotenv.config();
+const router = express.Router();
 
 router.use(cookieParser());
 
-router.delete('/remove_content/:id', authenticateToken, async (req, res) => {
-    const { id } = req.body;
-
-    if (req.user.userType !== 'admin') {
-        return res.status(403).json({ error: 'Unauthorized: Admins only' });
-    }
-
-    if(!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({error : 'Invalid ID format'});
-    }
-
-    try {
-        const file = await File.findByIdAndDelete(id);
-
-        if(!file) {
-            return res.status(400).json({error : 'File not found'});
-        }
-
-        res.status(200).json({message : 'File deleted successfully'});
-    } catch (error) {
-        res.status(500).json({error : 'An error occured while deleting the file', details: error.message});
-    }
-
+const storage = new GridFsStorage({
+  url: process.env.MONGO_CONTENT_URI,
+  file: (req, file) => {
+    return {
+      bucketName: 'upload',
+      filename: file.originalname,
+    };
+  },
 });
 
+const upload = multer({ storage });
 
-async function authenticateToken(req, res, next) {
-    try{
-        //take the access Token from the cookies if exists
-        const token = req.cookies.accessToken;
+mongoose.connect(process.env.MONGO_CONTENT_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}).then(() => {
+  console.log('MongoDB connected');
+}).catch(err => {
+  console.error('MongoDB connection error:', err);
+});
 
-        if (!token) {
-            return res.sendStatus(401);
-        }
+let gfs;
+mongoose.connection.once('open', () => {
+  gfs = new mongoose.mongo.GridFSBucket(mongoose.connection.db, {
+    bucketName: 'upload',
+  });
+});
 
-        // retrieve user type from db
-        const session = await Session.findOne({accessToken: token}).populate('user_id');
-        const userType = session.user_id.userType;
-
-        // authenticate based on user type
-        if (userType === 'google') {
-            oauth2Client.verifyIdToken({
-                idToken: req.body.id_token,
-                audience: process.env.GOOGLE_CLIENT_ID
-              }).then(ticket => {
-                const payload = ticket.getPayload();
-                const userid = payload['sub'];
-                console.log('userid', userid);
-                next();
-              }).catch(console.error);
-              next();
-        }
-        else {    
-            //check whether the token is correct
-            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-                if (err) {
-                    return res.sendStatus(403);
-                }
-                req.user = user;
-                next();
-            });
-        }
-
-    }catch(err){
-        console.log(`An error occoured during token authentication: ${err}`);
-        return res.status(500).json({error: `An error occured during Token Authetication`});
+const authenticateToken = async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) {
+      return res.sendStatus(401);
     }
-}
+
+    const session = await Session.findOne({ accessToken: token }).populate('user_id');
+    const userType = session.user_id.userType;
+
+    if (userType === 'google') {
+      oauth2Client.verifyIdToken({
+        idToken: req.body.id_token,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      }).then(ticket => {
+        const payload = ticket.getPayload();
+        const userid = payload['sub'];
+        console.log('userid', userid);
+        next();
+      }).catch(err => {
+        console.error(err);
+        return res.sendStatus(403);
+      });
+    } else {
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+        if (err) {
+          return res.sendStatus(403);
+        }
+        req.user = user;
+        next();
+      });
+    }
+  } catch (err) {
+    console.log(`An error occurred during token authentication: ${err}`);
+    return res.status(500).json({ error: 'An error occurred during Token Authentication' });
+  }
+};
+
+router.delete('/content/:contentId', authenticateToken, (req, res) => {
+  const { contentId } = req.params;
+
+  if (req.user.userType !== 'admin') {
+    return res.status(403).json({ error: 'Unauthorized: Admins only' });
+  }
+
+  if (!mongoose.Types.ObjectId.isValid(contentId)) {
+    return res.status(400).json({ error: 'Invalid ID format' });
+  }
+
+  try {
+    gfs.delete(new mongoose.Types.ObjectId(contentId), (err) => {
+      if (err) {
+        return res.status(500).json({ error: 'Error deleting file', details: err.message });
+      }
+
+      res.status(200).json({ message: 'File deleted successfully' });
+    });
+  } catch (error) {
+    return res.status(400).json({ error: 'Invalid file ID' });
+  }
+});
 
 export default router;
+
