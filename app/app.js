@@ -1,5 +1,5 @@
 import express from 'express'
-import login from './authentication.js'
+import {router as login} from './authentication.js'
 import registration from './register.js'
 import upload from './upload.js'
 import cors from 'cors'
