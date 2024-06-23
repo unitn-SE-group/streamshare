@@ -205,45 +205,6 @@ router.delete('/logout', authenticateToken, async (req, res) => {
 
 /**
  * @openapi: 3.0.0
- * /auth/posts:
- *   get:
- *     summary: Retrieve content from the platform
- *     description: This endpoint authenticates a user and returns content requested from the platform. This is a placeholder example and will be updated when user stories about requesting objects are implemented.
- *     responses:
- *       '200':
- *         description: The data is returned from the database.
- *         content:
- *           application/json:
- *             example:
- *               data: "example_data"
- *       '500':
- *         description: An error occurred during requesting data from the website.
- *         content:
- *           application/json:
- *             example:
- *               error: "An error occurred during requesting services to the db."
- *     examples:
- *       curl:
- *         summary: Example Usage
- *         value: |
- *           curl -X GET https://api.yourservice.com/auth/posts
- */
-router.get('/posts', authenticateToken, async (req, res) => {
-  try {
-    //Search what the User wants
-    const user = await User.findOne({ email: req.user.email })
-
-    console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`)
-
-    return res.status(200).json({ data: user.username })
-  } catch (err) {
-    console.log(`An error occoured during requesting data: ${err}`)
-    return res.status(500).json({ error: `An error occured during requesting services to the db` })
-  }
-})
-
-/**
- * @openapi: 3.0.0
  * /auth/token:
  *   post:
  *     summary: Generate a new Access Token
