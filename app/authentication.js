@@ -17,6 +17,82 @@ const oauth2Client = new google.auth.OAuth2(
 )
 
 /**
+ * Middleware to authenticate users based on access token and expected user types.
+ * 
+ * @param {...string} expectedUserTypes - The types of users expected to be authenticated ('admin', 'creator', 'consumer', 'anyone').
+ * @returns {function} Middleware function to handle the authentication.
+ * 
+ * Example usage:
+ * 
+ * const express = require('express');
+ * const app = express();
+ * const authenticateToken = require('./path/to/authenticateToken');
+ * 
+ * app.use('/admin', authenticateToken('admin'));
+ * app.use('/content', authenticateToken('creator', 'admin'));
+ * app.use('/profile', authenticateToken('consumer', 'creator', 'admin'));
+ * app.use('/public', authenticateToken('anyone'));
+ */
+const authenticateToken = (...expectedUserTypes) => {
+  return async (req, res, next) => {
+    try {
+      // check expectedUserType is valid
+      isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
+      if (!expectedUserTypes.every(isValidType)) {
+        return res.sendStatus(500);
+      }
+      
+      //take the access Token from the cookies if exists
+      const token = req.cookies.accessToken
+  
+      if (!token) {
+        return res.sendStatus(401)
+      }
+  
+      // retrieve user info from db
+      const session = await Session.findOne({ accessToken: token }).populate('user_id')
+      const createdWith = session.user_id.createdWith
+      const userType = session.user_id.userType
+
+      // check the user type is the expected one
+      if (!expectedUserTypes.includes(userType) && !expectedUserTypes.includes('anyone')) {
+        return res.sendStatus(403);
+      }
+  
+      // authenticate based on what the user was created with
+      if (createdWith === 'google') {
+        oauth2Client
+          .verifyIdToken({
+            idToken: req.body.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID
+          })
+          .then((ticket) => {
+            const payload = ticket.getPayload()
+            const userid = payload['sub']
+            console.log('userid', userid)
+            next()
+          })
+          .catch(console.error)
+        next()
+      } else {
+        //check whether the token is correct
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+          if (err) {
+            return res.sendStatus(403)
+          }
+          req.user = user
+          next()
+        })
+      }
+    } catch (err) {
+      console.log(`An error occoured during token authentication: ${err}`)
+      return res.status(500).json({ error: `An error occured during Token Authetication` })
+    }
+
+  }
+}
+
+/**
  * @openapi: 3.0.0
  * /auth/login:
  *   post:
@@ -186,7 +262,7 @@ router.post(`/login`, async (req, res) => {
  *         value: |
  *           curl -X DELETE https://api.yourservice.com/auth/logout
  */
-router.delete('/logout', authenticateToken, async (req, res) => {
+router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
   try {
     //delete the session from the database
     await Session.deleteMany({ user_id: req.user._id })
@@ -273,48 +349,6 @@ router.post('/token', async (req, res) => {
   }
 })
 
-async function authenticateToken(req, res, next) {
-  try {
-    //take the access Token from the cookies if exists
-    const token = req.cookies.accessToken
 
-    if (!token) {
-      return res.sendStatus(401)
-    }
-
-    // retrieve user type from db
-    const session = await Session.findOne({ accessToken: token }).populate('user_id')
-    const userType = session.user_id.userType
-
-    // authenticate based on user type
-    if (userType === 'google') {
-      oauth2Client
-        .verifyIdToken({
-          idToken: req.body.id_token,
-          audience: process.env.GOOGLE_CLIENT_ID
-        })
-        .then((ticket) => {
-          const payload = ticket.getPayload()
-          const userid = payload['sub']
-          console.log('userid', userid)
-          next()
-        })
-        .catch(console.error)
-      next()
-    } else {
-      //check whether the token is correct
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-          return res.sendStatus(403)
-        }
-        req.user = user
-        next()
-      })
-    }
-  } catch (err) {
-    console.log(`An error occoured during token authentication: ${err}`)
-    return res.status(500).json({ error: `An error occured during Token Authetication` })
-  }
-}
 
 export default router
