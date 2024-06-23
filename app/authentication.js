@@ -356,4 +356,4 @@ async function authenticateToken(req, res, next) {
   }
 }
 
-export default router
+export {router, authenticateToken}
