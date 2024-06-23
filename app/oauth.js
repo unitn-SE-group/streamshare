@@ -50,21 +50,19 @@ router.use(
 /**
  * @openapi
  * /oauth:
- *   get:
+ *   post:
+ *     summary: Initiates the OAuth 2.0 authorization process.
  *     description: Initiates the OAuth 2.0 authorization process by redirecting the user to Google's OAuth 2.0 server. It sets necessary headers, generates an authorization URL with specific scopes, and redirects the user to this URL.
+ *     tags:
+ *      - Authentication
  *     responses:
  *       302:
  *         description: Redirects the user to Google's OAuth 2.0 server for authentication.
  */
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
   // test headers
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Referrer-Policy', 'no-referrer-when-downgrade')
-  // Generate a secure random state value.
-  //const state = crypto.randomBytes(32).toString('hex');
-  //console.log('state', state)
-  // Store state in the session
-  //req.session.state = state;
 
   // Generate a url that asks permissions for the Drive activity scope
   const authorizationUrl = oauth2Client.generateAuthUrl({
@@ -80,8 +78,6 @@ router.get('/', async (req, res) => {
     prompt: 'consent'
   })
 
-  //   console.log('authorizationUrl', authorizationUrl)
-
   res.redirect(authorizationUrl)
 })
 
@@ -89,7 +85,10 @@ router.get('/', async (req, res) => {
  * @openapi
  * /oauth/token:
  *   get:
+ *     summary: Receives the callback from Google's OAuth 2.0 server.
  *     description: Receives the callback from Google's OAuth 2.0 server and processes the token.
+ *     tags:
+ *      - Authentication 
  *     responses:
  *       200:
  *         description: Successfully processed the token and created user session.
@@ -162,8 +161,7 @@ router.get('/token', async (req, res) => {
     res.status(200).json({
       accessToken: access_token,
       refreshToken: refresh_token,
-      userType: newUser.userType,
-      redirect_url: '/dashboard'
+      userType: newUser.userType
     })
   } catch (error) {
     res.status(500)
