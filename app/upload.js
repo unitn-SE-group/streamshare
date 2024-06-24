@@ -1,5 +1,5 @@
 import { authenticateToken } from './authentication.js'
-import storage from './connections/content.js'
+import {storage} from './connections/content.js'
 import { Router } from 'express'
 import multer from 'multer'
 import dotenv from 'dotenv'
