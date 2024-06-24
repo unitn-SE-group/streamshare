@@ -6,6 +6,7 @@ export default {
   name: 'RegisterForm',
   data() {
     return {
+      createdWith: 'local',
       UserType: 'consumer',
       FirstName: '',
       LastName: '',
@@ -32,6 +33,7 @@ export default {
     handleSubmit() {
       if (this.Password == this.RepeatPassword) {
         const userData = {
+          createdWith: this.createdWith,
           userType: this.UserType,
           email: this.Email,
           FirstName: this.FirstName,
