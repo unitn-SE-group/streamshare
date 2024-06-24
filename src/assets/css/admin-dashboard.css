@@ -747,6 +747,39 @@
   height: 100%;
   gap: 2.5rem;
 }
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item::before {
+  content: "";
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background-color: transparent;
+  transform: scaleY(1.01);
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .btn-secondary {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  max-width: 100%;
+  width: 100%;
+  translate: 0 -50%;
+  opacity: 0;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover {
+  cursor: pointer;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover::before {
+  background-color: #222222;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover .btn-secondary {
+  opacity: 1;
+}
 .admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .image {
   width: 100%;
   aspect-ratio: 3/4;
@@ -810,3 +843,5 @@
 .admin-dash-wrapper .admin-dash-users-wrapper .btn-tertiary {
   align-self: flex-end;
 }
+
+/*# sourceMappingURL=admin-dashboard.css.map */

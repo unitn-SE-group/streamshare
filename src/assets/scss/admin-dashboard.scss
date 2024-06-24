@@ -40,6 +40,39 @@
           height: 100%;
           gap: 2.5rem;
 
+          &::before {
+            content: '';
+            position: absolute;
+            z-index: 9;
+            top: 0;
+            left: 0;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: transparent;
+            transform: scaleY(1.01);
+            @include transition(all 0.25s ease);
+          }
+
+          .btn-secondary {
+            position: absolute;
+            z-index: 10;
+            top: 50%;
+            max-width: 100%;
+            width: 100%;
+            translate: 0 -50%;
+            opacity: 0;
+          }
+
+          &:hover {
+            cursor: pointer;
+            &::before {
+              background-color: $background2;
+            }
+            .btn-secondary {
+              opacity: 1;
+            }
+          }
+
           .image {
             width: 100%;
             aspect-ratio: 3/4;

@@ -1,6 +1,14 @@
 <script setup>
 import * as animations from '@/utils/motionPluginOptions.js'
 </script>
+<script>
+export default {
+  name: 'AdminDashBoard',
+  methods: {
+    remove_content() {}
+  }
+}
+</script>
 <template>
   <div class="admin-dash-wrapper">
     <div class="generic-col admin-dash-content-wrapper">
@@ -9,42 +17,52 @@ import * as animations from '@/utils/motionPluginOptions.js'
         <h3 class="text-subheading">Popular content</h3>
         <div class="admin-dash-content-grid">
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
           <div class="generic-col admin-dash-content-item">
+            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
             <div class="image"></div>
             <p class="text-body">Name here</p>
           </div>
@@ -63,7 +81,7 @@ import * as animations from '@/utils/motionPluginOptions.js'
         </a> -->
       </div>
       <div v-motion="animations.onScrollFadeInD2" class="button-bar">
-        <a href="#" class="btn-secondary" role="button">Remove content</a>
+        <!-- <a href="#" class="btn-secondary" role="button">Remove content</a> -->
         <a href="#" class="btn-primary" role="button">Upload content</a>
       </div>
     </div>
