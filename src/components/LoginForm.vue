@@ -40,7 +40,7 @@ export default {
           sessionStorage.setItem('accessToken', accessToken)
           sessionStorage.setItem('refreshToken', refreshToken)
           if (user_type === 'admin') {
-            this.$router.push('/admin-dashobard')
+            this.$router.push('/admin-dashboard')
           } else {
             this.$router.push('/dashboard')
           }
