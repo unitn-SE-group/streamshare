@@ -14,7 +14,7 @@ const contentSchema = new mongoose.Schema({
 
     image_id: {
        type: mongoose.Schema.Types.ObjectId,
-       ref: 'upload.image',
+       ref: 'cover.files',
        required: true 
     }
 })
