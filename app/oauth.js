@@ -158,11 +158,7 @@ router.get('/token', async (req, res) => {
     res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' })
     res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' })
     // send response
-    res.status(200).json({
-      accessToken: access_token,
-      refreshToken: refresh_token,
-      userType: newUser.userType
-    })
+    res.status(302).redirect('http://localhost:5173/dashboard');
   } catch (error) {
     res.status(500)
   }
