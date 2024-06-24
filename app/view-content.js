@@ -29,17 +29,23 @@ const oauth2Client = new google.auth.OAuth2(
  *           application/json:
  *             example:
  *               catalog: ["example_video_1.mp4" , "example_video_2.mp4"]
+ *       '404':
+ *         description: There is no file in the database
+ *         content:
+ *           application/json:  
+ *             example:
+ *               error: "No files found"
  *       '500':
  *         description: An error occurred during requesting data from the website.
  *         content:
  *           application/json:
  *             example:
- *               error: "An error occurred during requesting services to the db."
+ *               error: "An error occurred during requesting data to the db."
  *     examples:
  *       curl:
  *         summary: Example Usage
  *         value: |
- *           curl -X GET https://api.yourservice.com/auth/posts
+ *           curl -X GET https://api.yourservice.com/content
  */
 router.get('', authenticateToken, async (req, res) => {
   //Retriving the Content from the database
@@ -57,8 +63,6 @@ router.get('', authenticateToken, async (req, res) => {
       const filmNames = files.map(file => file.filename);
 
       console.log(`The catalog is: ${filmNames}`);
-
-      console.log(`The user -${req.user.username}- has succesfully received the catalog from the web-site!`)
   
       return res.status(200).json({ catalog: filmNames })
     } catch (err) {
