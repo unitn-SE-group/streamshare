@@ -520,15 +520,20 @@
   filter: invert(1);
 }
 .login-wrapper .login-inner form .form-group:last-child {
+  position: static;
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   margin-top: 5rem;
-  margin-bottom: 0;
-}
-.login-wrapper .login-inner form .form-group:last-child .btn-primary {
-  align-self: flex-end;
   margin-bottom: 8rem;
+}
+.login-wrapper .login-inner form .form-group:last-child .button-bar {
+  min-height: max-content;
+}
+.login-wrapper .login-inner form .form-group:last-child .button-bar .g_id_signin {
+  margin-right: 1.6rem;
+  scale: 1.61;
 }
 .login-wrapper .login-inner form .form-group #show-password {
   position: absolute;

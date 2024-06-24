@@ -747,11 +747,50 @@
   height: 100%;
   gap: 2.5rem;
 }
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .btn-secondary {
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  min-width: max-content;
+  padding: 0 2.5rem;
+  translate: -50% -50%;
+  opacity: 0;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover {
+  cursor: pointer;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover::before {
+  opacity: 1;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover .btn-secondary {
+  opacity: 1;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item:hover .image::before {
+  opacity: 1;
+}
 .admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .image {
   width: 100%;
   aspect-ratio: 3/4;
   border: 0.25rem solid #F4F2EF;
   border-radius: 1rem;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .image::before {
+  content: "";
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: rgba(0, 0, 0, 0.01);
+  backdrop-filter: blur(1rem);
+  opacity: 0;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
 }
 .admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid .admin-dash-content-item .text-body {
   width: 100%;
@@ -768,6 +807,36 @@
 .admin-dash-wrapper .admin-dash-content-wrapper .button-bar .btn-secondary {
   max-width: 100%;
   width: 100%;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .button-bar dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 0.25rem solid #BE4B76;
+  border-radius: 2.5rem;
+  padding: 10rem 5rem;
+  min-width: 65rem;
+  background-color: #141414;
+  translate: -50% -50%;
+  text-align: center;
+  color: #F4F2EF;
+  -webkit-transition: all 0.25s ease;
+  -moz-transition: all 0.25s ease;
+  -o-transition: all 0.25s ease;
+  transition: all 0.25s ease;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .button-bar dialog .generic-form .form-group label {
+  padding-left: 2.5rem;
+  width: 100%;
+  text-align: left;
+}
+.admin-dash-wrapper .admin-dash-content-wrapper .button-bar dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.01);
+  backdrop-filter: blur(1rem);
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
 }
 .admin-dash-wrapper .admin-dash-users-wrapper {
   justify-content: flex-start;
@@ -810,3 +879,135 @@
 .admin-dash-wrapper .admin-dash-users-wrapper .btn-tertiary {
   align-self: flex-end;
 }
+@media (max-width: 850px) {
+  .admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 550px) {
+  .admin-dash-wrapper .admin-dash-content-wrapper .admin-dash-content-inner .admin-dash-content-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+form,
+.generic-form {
+  width: 100%;
+}
+form .form-group,
+.generic-form .form-group {
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  width: 100%;
+}
+form .form-group label,
+.generic-form .form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  padding-left: 1rem;
+}
+form .form-group input,
+form .form-group .form-col select,
+.generic-form .form-group input,
+.generic-form .form-group .form-col select {
+  border: 0.25rem solid transparent;
+  border-radius: 5rem;
+  outline: none;
+  padding: 1rem 2rem;
+  width: 100%;
+  height: 100%;
+  background-color: #222222;
+  color: #F4F2EF;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+form .form-group input:focus,
+form .form-group .form-col select:focus,
+.generic-form .form-group input:focus,
+.generic-form .form-group .form-col select:focus {
+  border-color: #FC466B;
+}
+form .form-group a,
+.generic-form .form-group a {
+  display: block;
+  width: 100%;
+  margin-right: 1rem;
+  font-size: 1.4rem;
+  text-align: right;
+  color: #BE4B76;
+}
+form .form-group .form-col select,
+.generic-form .form-group .form-col select {
+  appearance: none;
+  width: 100%;
+  background-image: linear-gradient(45deg, transparent 50%, #141414 50%), linear-gradient(135deg, #141414 50%, transparent 50%), radial-gradient(#F4F2EF 70%, transparent 72%);
+  background-position: calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1.5em 1.5em;
+  background-repeat: no-repeat;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -o-transition: none;
+  transition: none;
+}
+form .form-group .form-col select:focus,
+.generic-form .form-group .form-col select:focus {
+  background-image: linear-gradient(45deg, #141414 50%, transparent 50%), linear-gradient(135deg, transparent 50%, #141414 50%), radial-gradient(#FC466B 70%, transparent 72%);
+  background-position: calc(100% - 1.75rem) calc(1em + 0.2rem), calc(100% - 2.25rem) calc(1em + 0.2rem), calc(100% - 0.5em) 0.5em;
+}
+form .form-group .form-col select option,
+.generic-form .form-group .form-col select option {
+  width: 100%;
+  text-align: left;
+}
+form .form-group .form-col #DOB::-webkit-calendar-picker-indicator,
+.generic-form .form-group .form-col #DOB::-webkit-calendar-picker-indicator {
+  display: none;
+  filter: invert(1);
+}
+form .form-group:last-child,
+.generic-form .form-group:last-child {
+  position: static;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 5rem;
+  margin-bottom: 8rem;
+}
+form .form-group:last-child .button-bar,
+.generic-form .form-group:last-child .button-bar {
+  min-height: max-content;
+}
+form .form-group:last-child .button-bar .g_id_signin,
+.generic-form .form-group:last-child .button-bar .g_id_signin {
+  margin-right: 1.6rem;
+  scale: 1.61;
+}
+form .form-group #show-password,
+.generic-form .form-group #show-password {
+  position: absolute;
+  z-index: 99;
+  top: 50%;
+  right: 2rem;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  translate: 0 25%;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+form .form-group #show-password img,
+.generic-form .form-group #show-password img {
+  width: 100%;
+  height: 100%;
+}
+
+.text-body a {
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=admin-dashboard.css.map */
