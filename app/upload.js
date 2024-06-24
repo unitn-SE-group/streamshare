@@ -95,7 +95,7 @@ const upload  = multer({storage})
  *         path:
  *           type: string
  */
-router.post('/', [ authenticateToken, upload.single('file') ], async (req, res) => {
+router.post('/', [ authenticateToken('admin','creator'), upload.single('file') ], async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).send('No file uploaded.');
