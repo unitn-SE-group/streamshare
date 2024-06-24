@@ -9,12 +9,86 @@ import cookieParser from 'cookie-parser'
 dotenv.config()
 const router = express.Router()
 
-router.use(cookieParser())
-
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET
 )
+
+/**
+ * Middleware to authenticate users based on access token and expected user types.
+ * 
+ * @param {...string} expectedUserTypes - The types of users expected to be authenticated ('admin', 'creator', 'consumer', 'anyone').
+ * @returns {function} Middleware function to handle the authentication.
+ * 
+ * Example usage:
+ * 
+ * const express = require('express');
+ * const app = express();
+ * const authenticateToken = require('./path/to/authenticateToken');
+ * 
+ * app.use('/admin', authenticateToken('admin'));
+ * app.use('/content', authenticateToken('creator', 'admin'));
+ * app.use('/profile', authenticateToken('consumer', 'creator', 'admin'));
+ * app.use('/public', authenticateToken('anyone'));
+ */
+const authenticateToken = (...expectedUserTypes) => {
+  return async (req, res, next) => {
+    try {
+      // check expectedUserType is valid
+      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
+      if (!expectedUserTypes.every(isValidType)) {
+        return res.sendStatus(500);
+      }
+      
+      //take the access Token from the cookies if exists
+      const token = req.cookies.accessToken
+  
+      if (!token) {
+        return res.sendStatus(401)
+      }
+  
+      // retrieve user info from db
+      const session = await Session.findOne({ accessToken: token }).populate('user_id')
+      const createdWith = session.user_id.createdWith
+      const userType = session.user_id.userType
+
+      // check the user type is the expected one
+      if (!expectedUserTypes.includes(userType) && !expectedUserTypes.includes('anyone')) {
+        return res.sendStatus(403);
+      }
+  
+      // authenticate based on what the user was created with
+      if (createdWith === 'google') {
+        oauth2Client
+          .verifyIdToken({
+            idToken: req.body.id_token,
+            audience: process.env.GOOGLE_CLIENT_ID
+          })
+          .then((ticket) => {
+            const payload = ticket.getPayload()
+            const userid = payload['sub']
+            console.log('userid', userid)
+            next()
+          })
+          .catch(console.error)
+        next()
+      } else {
+        //check whether the token is correct
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+          if (err) {
+            return res.sendStatus(403)
+          }
+          req.user = user
+          next()
+        })
+      }
+    } catch (err) {
+      console.log(`An error occoured during token authentication: ${err}`)
+      return res.status(500).json({ error: `An error occured during Token Authetication` })
+    }
+
+  }
+}
 
 /**
  * @openapi: 3.0.0
@@ -182,7 +256,7 @@ router.post(`/login`, async (req, res) => {
  *         value: |
  *           curl -X DELETE https://api.yourservice.com/auth/logout
  */
-router.delete('/logout', authenticateToken, async (req, res) => {
+router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
   try {
     //delete the session from the database
     await Session.deleteMany({ user_id: req.user._id })
@@ -195,45 +269,6 @@ router.delete('/logout', authenticateToken, async (req, res) => {
   } catch (err) {
     console.log(`An error occoured during logout: ${err}`)
     return res.status(500).json({ error: `An error occured during logout` })
-  }
-})
-
-/**
- * @openapi: 3.0.0
- * /auth/posts:
- *   get:
- *     summary: Retrieve content from the platform
- *     description: This endpoint authenticates a user and returns content requested from the platform. This is a placeholder example and will be updated when user stories about requesting objects are implemented.
- *     responses:
- *       '200':
- *         description: The data is returned from the database.
- *         content:
- *           application/json:
- *             example:
- *               data: "example_data"
- *       '500':
- *         description: An error occurred during requesting data from the website.
- *         content:
- *           application/json:
- *             example:
- *               error: "An error occurred during requesting services to the db."
- *     examples:
- *       curl:
- *         summary: Example Usage
- *         value: |
- *           curl -X GET https://api.yourservice.com/auth/posts
- */
-router.get('/posts', authenticateToken, async (req, res) => {
-  try {
-    //Search what the User wants
-    const user = await User.findOne({ email: req.user.email })
-
-    console.log(`The user -${req.user.username}- has succesfully received data from the web-site!`)
-
-    return res.status(200).json({ data: user.username })
-  } catch (err) {
-    console.log(`An error occoured during requesting data: ${err}`)
-    return res.status(500).json({ error: `An error occured during requesting services to the db` })
   }
 })
 
@@ -297,8 +332,6 @@ router.post('/token', async (req, res) => {
 
       res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
-      console.log(`The user -${user.username}- has succesfully received a new token!`)
-
       return res.status(200).json({ accessToken: accessToken })
     })
   } catch (err) {
@@ -307,48 +340,6 @@ router.post('/token', async (req, res) => {
   }
 })
 
-async function authenticateToken(req, res, next) {
-  try {
-    //take the access Token from the cookies if exists
-    const token = req.cookies.accessToken
 
-    if (!token) {
-      return res.sendStatus(401)
-    }
 
-    // retrieve user type from db
-    const session = await Session.findOne({ accessToken: token }).populate('user_id')
-    const userType = session.user_id.userType
-
-    // authenticate based on user type
-    if (userType === 'google') {
-      oauth2Client
-        .verifyIdToken({
-          idToken: req.body.id_token,
-          audience: process.env.GOOGLE_CLIENT_ID
-        })
-        .then((ticket) => {
-          const payload = ticket.getPayload()
-          const userid = payload['sub']
-          console.log('userid', userid)
-          next()
-        })
-        .catch(console.error)
-      next()
-    } else {
-      //check whether the token is correct
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-          return res.sendStatus(403)
-        }
-        req.user = user
-        next()
-      })
-    }
-  } catch (err) {
-    console.log(`An error occoured during token authentication: ${err}`)
-    return res.status(500).json({ error: `An error occured during Token Authetication` })
-  }
-}
-
-export default router
+export {router, authenticateToken}
