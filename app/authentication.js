@@ -9,8 +9,6 @@ import cookieParser from 'cookie-parser'
 dotenv.config()
 const router = express.Router()
 
-router.use(cookieParser())
-
 const oauth2Client = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET
@@ -37,7 +35,7 @@ const authenticateToken = (...expectedUserTypes) => {
   return async (req, res, next) => {
     try {
       // check expectedUserType is valid
-      isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
+      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
       if (!expectedUserTypes.every(isValidType)) {
         return res.sendStatus(500);
       }
@@ -339,8 +337,6 @@ router.post('/token', async (req, res) => {
 
       res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
-      console.log(`The user -${user.username}- has succesfully received a new token!`)
-
       return res.status(200).json({ accessToken: accessToken })
     })
   } catch (err) {
@@ -351,4 +347,4 @@ router.post('/token', async (req, res) => {
 
 
 
-export default router
+export {router, authenticateToken}
