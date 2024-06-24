@@ -357,3 +357,4 @@ async function authenticateToken(req, res, next) {
 }
 
 export default router
+export {authenticateToken}

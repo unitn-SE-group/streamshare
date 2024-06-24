@@ -1,20 +1,8 @@
-import { google } from 'googleapis';
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
 import express from 'express'
-import cookieParser from 'cookie-parser';
-import {Session} from './connections/accounts.js'
-import  content_connection from './connections/content.js';
+import content_connection from './connections/content.js';
+import authenticateToken from './authentication.js';
 
-dotenv.config()
 const router = express.Router()
-
-router.use(cookieParser())
-
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET
-)
 
 /**
  * @openapi: 3.0.0
@@ -70,49 +58,5 @@ router.get('', authenticateToken, async (req, res) => {
       return res.status(500).json({ error: `An error occured during requesting services to the db` })
     }
   })
-
-async function authenticateToken(req, res, next) {
-  try {
-    //take the access Token from the cookies if exists
-    const token = req.cookies.accessToken
-
-    if (!token) {
-      return res.sendStatus(401)
-    }
-
-    // retrieve user type from db
-    const session = await Session.findOne({ accessToken: token }).populate('user_id')
-    const userType = session.user_id.userType
-
-    // authenticate based on user type
-    if (userType === 'google') {
-      oauth2Client
-        .verifyIdToken({
-          idToken: req.body.id_token,
-          audience: process.env.GOOGLE_CLIENT_ID
-        })
-        .then((ticket) => {
-          const payload = ticket.getPayload()
-          const userid = payload['sub']
-          console.log('userid', userid)
-          next()
-        })
-        .catch(console.error)
-      next()
-    } else {
-      //check whether the token is correct
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if (err) {
-          return res.sendStatus(403)
-        }
-        req.user = user
-        next()
-      })
-    }
-  } catch (err) {
-    console.log(`An error occoured during token authentication: ${err}`)
-    return res.status(500).json({ error: `An error occured during Token Authetication` })
-  }
-}
 
 export default router
