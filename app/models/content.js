@@ -12,8 +12,9 @@ const contentSchema = new mongoose.Schema({
         required: true,
     },
 
-    cover: {
-       type: Buffer,
+    image_id: {
+       type: mongoose.Schema.Types.ObjectId,
+       ref: 'upload.image',
        required: true 
     }
 })
