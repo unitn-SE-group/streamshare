@@ -40,7 +40,7 @@ export default {
           sessionStorage.setItem('accessToken', accessToken)
           sessionStorage.setItem('refreshToken', refreshToken)
           if (user_type === 'admin') {
-            this.$router.push('/admin-dashobard')
+            this.$router.push('/admin-dashboard')
           } else {
             this.$router.push('/dashboard')
           }
@@ -67,14 +67,7 @@ export default {
       <form @submit.prevent="handleSubmit">
         <div v-motion="animations.onScrollFadeUpD0" class="form-group">
           <label class="text-body" for="email">Email</label>
-          <input
-            class="text-body"
-            v-model="Email"
-            type="email"
-            id="username"
-            name="username"
-            required
-          />
+          <input class="text-body" v-model="Email" type="email" id="email" name="email" required />
         </div>
         <div v-motion="animations.onScrollFadeUpD1" class="form-group">
           <label class="text-body" for="password">Password</label>
