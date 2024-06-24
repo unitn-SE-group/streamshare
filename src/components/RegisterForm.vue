@@ -6,7 +6,7 @@ export default {
   name: 'RegisterForm',
   data() {
     return {
-      UserType: 'consumer',
+      UserType: 'admin',
       FirstName: '',
       LastName: '',
       Username: '',
