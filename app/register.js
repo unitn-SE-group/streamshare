@@ -4,7 +4,7 @@
  */
 
 import { Router } from 'express'
-import {User} from './connections/accounts.js'
+import { User } from './connections/accounts.js'
 import { config } from 'dotenv'
 
 const router = Router()
@@ -88,21 +88,10 @@ config()
 
 router.post('/register', async (req, res) => {
   try {
-    const {
-      createdWith,
-      userType,
-      email,
-      FirstName,
-      LastName,
-      username,
-      gender,
-      password,
-      birthDay
-    } = req.body
+    const { userType, email, FirstName, LastName, username, gender, password, birthDay } = req.body
 
     // Check if all required fields are provided
     const requiredFields = [
-      'createdWith',
       'userType',
       'email',
       'FirstName',
@@ -125,7 +114,7 @@ router.post('/register', async (req, res) => {
     }
 
     const newUser = new User({
-      createdWith,
+      createdWith: 'local',
       userType,
       email,
       FirstName,
@@ -137,9 +126,9 @@ router.post('/register', async (req, res) => {
     })
 
     await newUser.save()
-    res.status(201).json({ message: 'User created successfully', redirect_url: '/login' })
+    return res.status(201).json({ message: 'User created successfully', redirect_url: '/login' })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message })
   }
 })
 

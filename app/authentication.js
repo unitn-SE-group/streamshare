@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import {User, Session} from './connections/accounts.js'
+import { User, Session } from './connections/accounts.js'
 import dotenv from 'dotenv'
 import express from 'express'
 import cookieParser from 'cookie-parser'
@@ -218,17 +218,13 @@ router.post(`/login`, async (req, res) => {
     })
     await newSession.save()
 
-    //Setting the Tokens in the cookies
     res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
     res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
-
     //Returning the tokens
-    return res.json({
-      accessToken: accessToken,
-      refreshToken: refreshToken,
-      user_type: user.userType
-    })
+    return res
+      .status(201)
+      .json({ accessToken: accessToken, refreshToken: refreshToken, user_type: user.userType })
   } catch (err) {
     console.log(`An error occoured during authentication: ${err}`)
     res.status(500).json({ error: `An error occured during login ${err}` })
@@ -268,7 +264,6 @@ router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
     //delete the Tokens from the cookies
     res.clearCookie('accessToken')
     res.clearCookie('refreshToken')
-
 
     return res.sendStatus(204)
   } catch (err) {

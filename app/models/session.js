@@ -15,7 +15,6 @@ const sessionSchema = new mongoose.Schema({
         
         accessToken: {
             type: String,
-            required: true,
         },
         
         updatedAt: {
