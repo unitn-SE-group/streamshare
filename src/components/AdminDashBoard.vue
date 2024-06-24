@@ -6,6 +6,19 @@ export default {
   name: 'AdminDashBoard',
   methods: {
     remove_content() {}
+  },
+  mounted() {
+    const dialog = document.querySelector('dialog')
+    const showButton = document.querySelector('dialog + .btn-primary')
+    const closeButton = document.querySelector('.close-modal')
+
+    showButton.addEventListener('click', () => {
+      dialog.showModal()
+    })
+
+    closeButton.addEventListener('click', () => {
+      dialog.close()
+    })
   }
 }
 </script>
@@ -80,9 +93,33 @@ export default {
           </svg>
         </a> -->
       </div>
-      <div v-motion="animations.onScrollFadeInD2" class="button-bar">
-        <!-- <a href="#" class="btn-secondary" role="button">Remove content</a> -->
+      <div v-motion="animations.onScrollFadeInD0" class="button-bar">
+        <dialog>
+          <h2 class="text-subheading">Upload content</h2>
+          <form class="generic-form">
+            <div v-motion="animations.onScrollFadeUpD0" class="form-group">
+              <label class="text-body" for="title">Title</label>
+              <input
+                class="text-body"
+                v-model="Title"
+                type="text"
+                id="title"
+                name="title"
+                required
+              />
+            </div>
+            <div v-motion="animations.onScrollFadeUpD0" class="form-group">
+              <label class="text-body" for="title">Source file</label>
+              <input class="text-body" type="file" id="file" name="file" required />
+            </div>
+          </form>
+          <div class="button-bar">
+            <button class="btn-secondary close-modal">Close</button>
+            <button type="submit" class="btn-primary">Upload</button>
+          </div>
+        </dialog>
         <a href="#" class="btn-primary" role="button">Upload content</a>
+        <!-- <a href="#" class="btn-secondary" role="button">Remove content</a> -->
       </div>
     </div>
     <!-- <div v-motion="animations.onScrollFadeUpD3" class="generic-col admin-dash-users-wrapper">

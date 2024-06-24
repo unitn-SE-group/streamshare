@@ -40,36 +40,32 @@
           height: 100%;
           gap: 2.5rem;
 
-          &::before {
-            content: '';
-            position: absolute;
-            z-index: 9;
-            top: 0;
-            left: 0;
-            width: 100%;
-            aspect-ratio: 3/4;
-            background-color: transparent;
-            transform: scaleY(1.01);
-            @include transition(all 0.25s ease);
-          }
-
           .btn-secondary {
             position: absolute;
             z-index: 10;
             top: 50%;
-            max-width: 100%;
-            width: 100%;
-            translate: 0 -50%;
+            left: 50%;
+            min-width: max-content;
+            // width: 100%;
+            padding: 0 2.5rem;
+            translate: -50% -50%;
             opacity: 0;
+            // scale: 0.5;
           }
 
           &:hover {
             cursor: pointer;
             &::before {
-              background-color: $background2;
+              opacity: 1;
             }
             .btn-secondary {
               opacity: 1;
+            }
+
+            .image {
+              &::before {
+                opacity: 1;
+              }
             }
           }
 
@@ -78,6 +74,21 @@
             aspect-ratio: 3/4;
             border: 0.25rem solid $text1;
             border-radius: 1rem;
+
+            &::before {
+              content: '';
+              position: absolute;
+              z-index: 9;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: inherit;
+              background-color: rgba(0, 0, 0, 0.01);
+              backdrop-filter: blur(1rem);
+              opacity: 0;
+              @include transition(all 0.25s ease);
+            }
           }
           .text-body {
             width: 100%;
@@ -98,6 +109,39 @@
       .btn-secondary {
         max-width: 100%;
         width: 100%;
+      }
+
+      dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        border: 0.25rem solid $accent;
+        border-radius: 2.5rem;
+        padding: 10rem 5rem;
+        min-width: 65rem;
+        background-color: $background1;
+        translate: -50% -50%;
+        text-align: center;
+        color: $text1;
+
+        .generic-form {
+          .form-group {
+            label {
+              padding-left: 2.5rem;
+              width: 100%;
+              text-align: left;
+            }
+          }
+        }
+
+        @include transition(all 0.25s ease);
+
+        &::backdrop {
+          background-color: rgba(0, 0, 0, 0.01);
+          backdrop-filter: blur(1rem);
+
+          @include transition(all 0.5s ease);
+        }
       }
     }
   }
@@ -149,5 +193,152 @@
     .btn-tertiary {
       align-self: flex-end;
     }
+  }
+
+  @include respond-to('tablet') {
+    .admin-dash-content-wrapper {
+      .admin-dash-content-inner {
+        .admin-dash-content-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    }
+  }
+  @include respond-to('mobile') {
+    .admin-dash-content-wrapper {
+      .admin-dash-content-inner {
+        .admin-dash-content-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+  }
+}
+form,
+.generic-form {
+  width: 100%;
+
+  .form-group {
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    width: 100%;
+
+    label {
+      display: block;
+      margin-bottom: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    input,
+    .form-col select {
+      border: 0.25rem solid transparent;
+      border-radius: 5rem;
+      outline: none;
+      padding: 1rem 2rem;
+      width: 100%;
+      height: 100%;
+      background-color: $background2;
+      color: $text1;
+
+      @include transition(all 0.5s ease);
+
+      &:focus {
+        border-color: $accent-secondary;
+      }
+    }
+
+    a {
+      display: block;
+      width: 100%;
+      margin-right: 1rem;
+      font-size: 1.4rem;
+      text-align: right;
+      color: $accent;
+    }
+
+    .form-col {
+      select {
+        appearance: none;
+        width: 100%;
+        background-image: linear-gradient(45deg, transparent 50%, $background1 50%),
+          linear-gradient(135deg, $background1 50%, transparent 50%),
+          radial-gradient($text1 70%, transparent 72%);
+        background-position:
+          calc(100% - 2.25rem) calc(1em + 0.2rem),
+          calc(100% - 1.75rem) calc(1em + 0.2rem),
+          calc(100% - 0.5em) 0.5em;
+        background-size:
+          5px 5px,
+          5px 5px,
+          1.5em 1.5em;
+        background-repeat: no-repeat;
+
+        &:focus {
+          background-image: linear-gradient(45deg, $background1 50%, transparent 50%),
+            linear-gradient(135deg, transparent 50%, $background1 50%),
+            radial-gradient($accent-secondary 70%, transparent 72%);
+
+          background-position:
+            calc(100% - 1.75rem) calc(1em + 0.2rem),
+            calc(100% - 2.25rem) calc(1em + 0.2rem),
+            calc(100% - 0.5em) 0.5em;
+        }
+
+        @include transition(none);
+        option {
+          width: 100%;
+          text-align: left;
+        }
+      }
+
+      #DOB {
+        &::-webkit-calendar-picker-indicator {
+          display: none;
+          filter: invert(1);
+        }
+      }
+    }
+
+    &:last-child {
+      position: static;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 5rem;
+      margin-bottom: 8rem;
+
+      .button-bar {
+        min-height: max-content;
+
+        .g_id_signin {
+          margin-right: 1.6rem;
+          scale: 1.61;
+        }
+      }
+    }
+
+    #show-password {
+      position: absolute;
+      z-index: 99;
+      top: 50%;
+      right: 2rem;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      translate: 0 25%;
+
+      @include transition(all 0.5s ease);
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+.text-body {
+  a {
+    font-weight: bold;
   }
 }
