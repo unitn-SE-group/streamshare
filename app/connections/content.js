@@ -23,7 +23,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 } else {
   // connect to the test database
-  connection = mongoose.connect(process.env.MONGO_CONTENT_URI);
+  connection = mongoose.connect(process.env.MONGO_TEST_URI);
   // create storage engine
   storage = new GridFsStorage({
     db: connection,
