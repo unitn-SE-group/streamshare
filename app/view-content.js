@@ -1,8 +1,11 @@
 import express from 'express'
-import content_connection from './connections/content.js';
+import mongoose from 'mongoose'
 import {authenticateToken} from './authentication.js';
 
 const router = express.Router()
+
+mongoose.connect(process.env.MONGO_CONTENT_URI);
+const conn = mongoose.connection;
 
 /**
  * @openapi: 3.0.0
@@ -50,7 +53,7 @@ router.get('', authenticateToken('anyone'), async (req, res) => {
   //Retriving the Content from the database
   try {
 
-    const filesCollection = content_connection.collection(`upload.files`);
+    const filesCollection = conn.collection("upload.files");
 
     const files = await filesCollection.find().toArray();
 
@@ -59,7 +62,7 @@ router.get('', authenticateToken('anyone'), async (req, res) => {
     }
 
     // Extract filenames
-     // Extract filenames and IDs
+    // Extract filenames and IDs
     const catalog = files.map(file => ({
       id: file._id.toString(), // Convert ObjectId to string
       filename: file.filename
