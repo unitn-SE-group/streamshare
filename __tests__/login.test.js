@@ -93,7 +93,7 @@ describe('DELETE /auth/logout', () => {
     // send request to logout with cookie
     const res = await request(app)
       .delete('/auth/logout')
-      .set('Cookie', [`accessToken=${accessToken}`])
+      .set('Authorization', `Bearer ${accessToken}`)
 
     expect(res.status).toBe(204)
   })
@@ -129,7 +129,7 @@ describe('GET /test1', () => {
     // send request to logout with cookie
     const res = await request(app)
       .get('/test1')
-      .set('Cookie', [`accessToken=${accessToken}`])
+      .set('Authorization', `Bearer ${accessToken}`)
     expect(res.status).toBe(403)
   })
 
@@ -158,7 +158,7 @@ describe('GET /test1', () => {
     // send request to logout with cookie
     const res = await request(app)
       .get('/test1')
-      .set('Cookie', [`accessToken=${accessToken}`])
+      .set('Authorization', `Bearer ${accessToken}`)
     expect(res.status).toBe(200)
   })
 })
@@ -190,7 +190,7 @@ describe('GET /test2', () => {
     // send request to logout with cookie
     const res = await request(app)
       .get('/test2')
-      .set('Cookie', [`accessToken=${accessToken}`])
+      .set('Authorization', `Bearer ${accessToken}`)
     expect(res.status).toBe(200)
   })
 })
