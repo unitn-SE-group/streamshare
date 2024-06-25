@@ -9,7 +9,7 @@ export default {
   },
   data() {
     return {
-      //   items: this.retrieve_content()
+      items: this.retrieve_content()
     }
   },
   methods: {
@@ -20,18 +20,15 @@ export default {
       fetch('http://localhost:3000/content', {
         method: 'GET',
         headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      }).then(async (response) => {
+        if (response.ok) {
+          const content = await response.json()
+          return content
         }
       })
-        .then(async (response) => {
-          items = await response.json()
-          return content
-        })
-        .catch((error) => {
-          console.error('Error:', error)
-          return []
-        })
     }
   },
   mounted() {
@@ -62,7 +59,7 @@ export default {
             :key="index"
           >
             <button class="btn-secondary" @click="remove_content(index)">Remove</button>
-            <div class="image"></div>
+            <div class="image" data-id="{{ index }}"></div>
             <p class="text-body">{{ item.title }} - {{ item.id }}</p>
           </div>
         </div>
@@ -96,7 +93,7 @@ export default {
             </div>
             <div v-motion="animations.onScrollFadeUpD0" class="form-group">
               <label class="text-body" for="title">Source file</label>
-              <input class="text-body" type="file" id="file" name="file" required />
+              <input class="text-body" v-on:change="" type="file" id="file" name="file" required />
             </div>
           </form>
           <div class="button-bar">

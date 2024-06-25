@@ -38,16 +38,14 @@ const authenticateToken = (...expectedUserTypes) => {
       if (!expectedUserTypes.every(isValidType)) {
         return res.sendStatus(500)
       }
+      res.setHeader('Access-Control-Allow-Credentials', 'true')
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173/admin-dashboard')
 
       //take the access Token from the cookies if exists
       if (!req.cookies.accessToken) {
-        return res.sendStatus(999)
-      }
-      const token = req.cookies.accessToken
-
-      if (!token) {
         return res.sendStatus(401)
       }
+      const token = req.cookies.accessToken
 
       // retrieve user info from db
       const session = await Session.findOne({ accessToken: token }).populate('user_id')
@@ -221,8 +219,8 @@ router.post(`/login`, async (req, res) => {
     })
     await newSession.save()
 
-    res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+    res.cookie('accessToken', accessToken, { httpOnly: false, secure: true, sameSite: 'None' })
+    res.cookie('refreshToken', refreshToken, { httpOnly: false, secure: true, sameSite: 'None' })
 
     //Returning the tokens
     return res
@@ -337,7 +335,7 @@ router.post('/token', async (req, res) => {
       session.accessToken = accessToken
       session.save()
 
-      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
+      res.cookie('accessToken', accessToken, { httpOnly: false, secure: true, sameSite: 'None' })
 
       return res.status(200).json({ accessToken: accessToken })
     })
