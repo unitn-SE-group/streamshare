@@ -24,7 +24,7 @@ const config = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -78,21 +78,25 @@ const config = {
 
   // An array of file extensions your modules use
   moduleFileExtensions: [
-     "js",
-  //   "mjs",
-  //   "cjs",
-  //   "jsx",
-  //   "ts",
-  //   "tsx",
-     "json",
-  //   "node"
+    'js',
+    //   "mjs",
+    //   "cjs",
+    //   "jsx",
+    //   "ts",
+    //   "tsx",
+    'json'
+    //   "node"
   ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   // moduleNameMapper: {},
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
-  modulePathIgnorePatterns: ['<rootDir>/__tests__/jest.setup.js', '<rootDir>/app/connections', '<rootDir>/app/test.js'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/__tests__/jest.setup.js',
+    '<rootDir>/app/connections',
+    '<rootDir>/app/test.js'
+  ],
 
   // Activates notifications for test results
   // notify: false,
@@ -136,7 +140,7 @@ const config = {
   // setupFiles: [],
 
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: ["<rootDir>/__tests__/jest.setup.js"],
+  setupFilesAfterEnv: ['<rootDir>/__tests__/jest.setup.js'],
 
   // The number of seconds after which a test is considered as slow and reported as such in the results.
   // slowTestThreshold: 5,
@@ -145,7 +149,7 @@ const config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "node",
+  testEnvironment: 'node',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},
@@ -174,9 +178,9 @@ const config = {
   // testRunner: "jest-circus/runner",
 
   // A map from regular expressions to paths to transformers
-  "transform": {
-    "^.+\\.js$": "babel-jest"
-  },
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  }
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -195,6 +199,6 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
-};
+}
 
-export default config;
+export default config

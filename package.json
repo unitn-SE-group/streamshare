@@ -10,7 +10,8 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
     "devStart": "nodemon app/server.js",
-    "test": "cross-env NODE_ENV=test jest --forceExit --detectOpenHandles --maxWorkers=1"
+    "test": "cross-env NODE_ENV=test jest --forceExit --detectOpenHandles --maxWorkers=1",
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
   },
   "dependencies": {
     "@vueuse/core": "^10.9.0",

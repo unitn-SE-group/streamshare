@@ -5,7 +5,5 @@
     "description": "Documentation for Streamshare's REST API.",
     "version": "0.1.0"
   },
-  "apis": [
-    "./app/*.js"
-  ]
+  "apis": ["./app/*.js"]
 }

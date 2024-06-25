@@ -1,16 +1,13 @@
-import {User, Session} from '../app/connections/accounts.js';
+import { User, Session } from '../app/connections/accounts.js'
 
-beforeAll(async () => {
-});
+beforeAll(async () => {})
 
 afterAll(async () => {
-    // drop the database
-    User.collection.drop();
-    Session.collection.drop();
-});
+  // drop the database
+  User.collection.drop()
+  Session.collection.drop()
+})
 
-beforeEach(async () => {
-});
+beforeEach(async () => {})
 
-afterEach(async () => {
-});
+afterEach(async () => {})
