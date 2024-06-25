@@ -26,6 +26,7 @@
     "git-filter-repo": "^0.0.30",
     "googleapis": "^140.0.0",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongodb": "^5.9.1",
     "mongoose": "^8.4.3",
     "nodemon": "^3.1.4",
@@ -49,5 +50,10 @@
     "supertest": "^7.0.0",
     "unplugin-vue-router": "^0.8.8",
     "vite": "^5.2.8"
-  }
+  },
+  "description": "",
+  "main": "vite.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
