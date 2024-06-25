@@ -40,6 +40,9 @@ const authenticateToken = (...expectedUserTypes) => {
       }
       
       //take the access Token from the cookies if exists
+      if (!req.cookies.accessToken) {
+        return res.sendStatus(401)
+      }
       const token = req.cookies.accessToken
   
       if (!token) {
