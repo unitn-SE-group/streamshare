@@ -29,6 +29,12 @@ const upload  = multer({storage})
  *     description: Receives a video file and uploads it to the database.
  *     tags:
  *      - Content
+ *     parameters:
+ *      - in: cookie
+ *        name: accessToken
+ *        description: The jwt access token for the user.
+ *        schema:
+ *          type: string
  *     requestBody:
  *       required: true
  *       content:
@@ -39,7 +45,7 @@ const upload  = multer({storage})
  *              file:
  *                  type: string
  *                  format: binary
- *                  description: The video file to upload
+ *                  description: The video file to upload.
  *
  *     responses:
  *       '201':
