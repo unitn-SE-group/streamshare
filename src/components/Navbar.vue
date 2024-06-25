@@ -2,7 +2,37 @@
 import * as animations from '@/utils/motionPluginOptions.js'
 </script>
 <script>
-export default { name: 'NavBar' }
+export default {
+  name: 'NavBar',
+  data() {
+    return {
+      loggedIn: this.checkCookie()
+    }
+  },
+  methods: {
+    checkCookie() {
+      if (sessionStorage.getItem('accessToken')) {
+        console.log('User is logged in')
+        return true
+      } else {
+        console.log('User is not logged in')
+        return false
+      }
+    },
+    logout() {
+      fetch('http://localhost:3000/auth/logout', {
+        method: 'DELETE'
+      }).then(async (response) => {
+        if (response.ok) {
+          sessionStorage.removeItem('accessToken')
+          sessionStorage.removeItem('refreshToken')
+          this.loggedIn = false
+          this.$router.push('/login')
+        }
+      })
+    }
+  }
+}
 </script>
 
 <template>
@@ -26,7 +56,12 @@ export default { name: 'NavBar' }
           >
         </li>
       </ul>
-      <router-link to="/login" class="btn-primary" role="button">Watch</router-link>
+      <router-link to="/login" v-if="!loggedIn" class="btn-primary" role="button"
+        >Watch</router-link
+      >
+      <router-link to="#" v-else class="btn-primary" role="button" @click="this.logout()"
+        >Logout</router-link
+      >
 
       <div class="mobile-menu-button">
         <input

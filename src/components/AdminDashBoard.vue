@@ -7,6 +7,33 @@ export default {
   methods: {
     remove_content() {}
   },
+  data() {
+    return {
+      //   items: this.retrieve_content()
+    }
+  },
+  methods: {
+    remove_content(index) {
+      this.items.splice(index, 1)
+    },
+    retrieve_content() {
+      fetch('http://localhost:3000/content', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+        }
+      })
+        .then(async (response) => {
+          items = await response.json()
+          return content
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+          return []
+        })
+    }
+  },
   mounted() {
     const dialog = document.querySelector('dialog')
     const showButton = document.querySelector('dialog + .btn-primary')
@@ -29,55 +56,14 @@ export default {
       <div v-motion="animations.onScrollFadeUpD1" class="generic-col admin-dash-content-inner">
         <h3 class="text-subheading">Popular content</h3>
         <div class="admin-dash-content-grid">
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
+          <div
+            class="generic-col admin-dash-content-item"
+            v-for="(item, index) in items"
+            :key="index"
+          >
+            <button class="btn-secondary" @click="remove_content(index)">Remove</button>
             <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
-          </div>
-          <div class="generic-col admin-dash-content-item">
-            <button class="btn-secondary" @click="this.remove_content()">Remove</button>
-            <div class="image"></div>
-            <p class="text-body">Name here</p>
+            <p class="text-body">{{ item.title }} - {{ item.id }}</p>
           </div>
         </div>
         <!-- <a href="#" class="btn-tertiary" role="button">

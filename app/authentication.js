@@ -15,16 +15,16 @@ const oauth2Client = new google.auth.OAuth2(
 
 /**
  * Middleware to authenticate users based on access token and expected user types.
- * 
+ *
  * @param {...string} expectedUserTypes - The types of users expected to be authenticated ('admin', 'creator', 'consumer', 'anyone').
  * @returns {function} Middleware function to handle the authentication.
- * 
+ *
  * Example usage:
- * 
+ *
  * const express = require('express');
  * const app = express();
  * const authenticateToken = require('./path/to/authenticateToken');
- * 
+ *
  * app.use('/admin', authenticateToken('admin'));
  * app.use('/content', authenticateToken('creator', 'admin'));
  * app.use('/profile', authenticateToken('consumer', 'creator', 'admin'));
@@ -34,21 +34,21 @@ const authenticateToken = (...expectedUserTypes) => {
   return async (req, res, next) => {
     try {
       // check expectedUserType is valid
-      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
+      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value)
       if (!expectedUserTypes.every(isValidType)) {
-        return res.sendStatus(500);
+        return res.sendStatus(500)
       }
-      
+
       //take the access Token from the cookies if exists
       if (!req.cookies.accessToken) {
-        return res.sendStatus(401)
+        return res.sendStatus(999)
       }
       const token = req.cookies.accessToken
-  
+
       if (!token) {
         return res.sendStatus(401)
       }
-  
+
       // retrieve user info from db
       const session = await Session.findOne({ accessToken: token }).populate('user_id')
       const createdWith = session.user_id.createdWith
@@ -56,9 +56,9 @@ const authenticateToken = (...expectedUserTypes) => {
 
       // check the user type is the expected one
       if (!expectedUserTypes.includes(userType) && !expectedUserTypes.includes('anyone')) {
-        return res.sendStatus(403);
+        return res.sendStatus(403)
       }
-  
+
       // authenticate based on what the user was created with
       if (createdWith === 'google') {
         oauth2Client
@@ -88,7 +88,6 @@ const authenticateToken = (...expectedUserTypes) => {
       console.log(`An error occoured during token authentication: ${err}`)
       return res.status(500).json({ error: `An error occured during Token Authetication` })
     }
-
   }
 }
 
@@ -241,7 +240,7 @@ router.post(`/login`, async (req, res) => {
  *   delete:
  *     summary: Logs out the user
  *     description: This endpoint logs out the user.
-*     tags:
+ *     tags:
  *      - Authentication
  *     responses:
  *       '204':
@@ -348,6 +347,4 @@ router.post('/token', async (req, res) => {
   }
 })
 
-
-
-export {router, authenticateToken}
+export { router, authenticateToken }

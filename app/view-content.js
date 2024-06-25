@@ -1,4 +1,6 @@
 import express from 'express'
+import { storage, connection } from './connections/content.js'
+import { authenticateToken } from './authentication.js'
 import mongoose from 'mongoose'
 import {authenticateToken} from './authentication.js';
 
@@ -34,7 +36,7 @@ const conn = mongoose.connection;
  *       '404':
  *         description: There is no file in the database
  *         content:
- *           application/json:  
+ *           application/json:
  *             example:
  *               error: "No files found"
  *       '500':
@@ -52,24 +54,27 @@ const conn = mongoose.connection;
 router.get('', authenticateToken('anyone'), async (req, res) => {
   //Retriving the Content from the database
   try {
+    const filesCollection = connection.collection(`upload.files`)
 
+    const files = await filesCollection.find().toArray()
     const filesCollection = conn.collection("upload.files");
 
     const files = await filesCollection.find().toArray();
 
     if (!files || files.length === 0) {
-        return res.status(404).json({ message: 'No files found' });
+      return res.status(404).json({ message: 'No files found' })
     }
 
     // Extract filenames
     // Extract filenames and IDs
+    const catalog = files.map((file) => ({
+    // Extract filenames and IDs
     const catalog = files.map(file => ({
       id: file._id.toString(), // Convert ObjectId to string
       filename: file.filename
-    }));
+    }))
 
     return res.status(200).json({ catalog: catalog })
-
   } catch (err) {
     console.log(`An error occoured during requesting data: ${err}`)
     return res.status(500).json({ error: `An error occured during requesting services to the db` })

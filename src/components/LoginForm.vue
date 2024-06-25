@@ -35,7 +35,6 @@ export default {
         body: JSON.stringify(userData)
       }).then(async (response) => {
         const { accessToken, refreshToken, user_type } = await response.json()
-        console.log(accessToken, refreshToken, user_type)
         if (response.ok) {
           sessionStorage.setItem('accessToken', accessToken)
           sessionStorage.setItem('refreshToken', refreshToken)
