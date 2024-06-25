@@ -1,6 +1,6 @@
 import express from 'express'
 import content_connection from './connections/content.js';
-import authenticateToken from './authentication.js';
+import {authenticateToken} from './authentication.js';
 
 const router = express.Router()
 
@@ -10,13 +10,24 @@ const router = express.Router()
  *   get:
  *     summary: Retrieve the catalog of films and video
  *     description: This endpoint authenticates a user and returns the catalog present on the platform.
+ *     tags:
+ *      - Content
  *     responses:
  *       '200':
  *         description: The catalog is returned from the database.
  *         content:
  *           application/json:
  *             example:
- *               catalog: ["example_video_1.mp4" , "example_video_2.mp4"]
+ *               catalog: [
+ *                          {
+ *                            "id": "66785590df892d92e1e1c9d7",
+ *                            "filename": "example_1.mp4"
+ *                          },
+ *                          {
+ *                            "id": "667a8d035b590f148012b757",
+ *                            "filename": "example_2.mp4"
+ *                          },
+ *                        ]
  *       '404':
  *         description: There is no file in the database
  *         content:
@@ -35,28 +46,31 @@ const router = express.Router()
  *         value: |
  *           curl -X GET https://api.yourservice.com/content
  */
-router.get('', authenticateToken, async (req, res) => {
+router.get('', authenticateToken('anyone'), async (req, res) => {
   //Retriving the Content from the database
-    try {
+  try {
 
-      const filesCollection = content_connection.collection(`upload.files`);
+    const filesCollection = content_connection.collection(`upload.files`);
 
-      const files = await filesCollection.find().toArray();
+    const files = await filesCollection.find().toArray();
 
-      if (!files || files.length === 0) {
-          return res.status(404).json({ message: 'No files found' });
-      }
-
-      // Extract filenames
-      const filmNames = files.map(file => file.filename);
-
-      console.log(`The catalog is: ${filmNames}`);
-  
-      return res.status(200).json({ catalog: filmNames })
-    } catch (err) {
-      console.log(`An error occoured during requesting data: ${err}`)
-      return res.status(500).json({ error: `An error occured during requesting services to the db` })
+    if (!files || files.length === 0) {
+        return res.status(404).json({ message: 'No files found' });
     }
-  })
+
+    // Extract filenames
+     // Extract filenames and IDs
+    const catalog = files.map(file => ({
+      id: file._id.toString(), // Convert ObjectId to string
+      filename: file.filename
+    }));
+
+    return res.status(200).json({ catalog: catalog })
+
+  } catch (err) {
+    console.log(`An error occoured during requesting data: ${err}`)
+    return res.status(500).json({ error: `An error occured during requesting services to the db` })
+  }
+})
 
 export default router
