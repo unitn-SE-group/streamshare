@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { Router } from 'express';
 import { GridFSBucket, ObjectId } from 'mongodb';
-import multer from 'multer';
 import dotenv from 'dotenv';
 import { authenticateToken } from './authentication.js';
 
@@ -9,10 +8,7 @@ dotenv.config();
 const router = Router();
 
 // Establish MongoDB connection using Mongoose
-mongoose.connect(process.env.MONGO_CONTENT_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(process.env.MONGO_CONTENT_URI);
 const conn = mongoose.connection;
 
 // Create GridFSBucket instance
@@ -28,17 +24,13 @@ router.delete('/:contentId', [authenticateToken('admin', 'creator')], async (req
   const { contentId } = req.params;
   console.log('Content ID:', contentId);
 
-  if (req.user.userType !== 'admin') {
-    return res.status(403).json({ error: 'Unauthorized: Admins only' });
-  }
-
   if (!mongoose.Types.ObjectId.isValid(contentId)) {
     return res.status(400).json({ error: 'Invalid ID format' });
   }
 
   try {
     // Delete file from GridFS using the file's ObjectId
-    await gfs.delete(new ObjectId(contentId));
+    await gfs.delete(new mongoose.Types.ObjectId(contentId));
     res.status(200).json({ message: 'File deleted successfully' });
   } catch (error) {
     console.error('Error deleting file:', error);
