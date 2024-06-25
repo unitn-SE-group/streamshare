@@ -113,6 +113,7 @@ router.post('/', async (req, res) => {
  *         description: Internal server error.
  */
 router.get('/token', async (req, res) => {
+  //console.log('called /token')
   try {
     // Handle the OAuth 2.0 server response
     let q = url.parse(req.url, true).query
@@ -132,6 +133,7 @@ router.get('/token', async (req, res) => {
     const refresh_token = user.refresh_token
     const id_token = user.id_token
     const user_data = await getUserData(access_token)
+    //console.log('user_data', user_data)
 
     // store new user in db
     const newUser = new User({
@@ -140,11 +142,13 @@ router.get('/token', async (req, res) => {
       email: user_data.email,
       FirstName: user_data.name,
       username: user_data.name,
-      birthday: user_data.birthday,
+      birthDay: user_data.birthDay,
       gender: user_data.gender.toLowerCase() === 'male' ? true : false,
       friends: []
     })
+    //console.log('newUser', newUser)
     newUser.save()
+    //console.log('newUser saved')
 
     // store new session in db
     const newSession = new Session({
@@ -152,7 +156,9 @@ router.get('/token', async (req, res) => {
       refreshToken: refresh_token,
       accessToken: access_token
     })
+    //console.log('newSession', newSession)
     newSession.save()
+    //console.log('newSession saved')
 
     // set cookies
     res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' })
@@ -237,7 +243,7 @@ async function getUserData(access_token) {
       name: userinfo_data.name,
       picture_url: userinfo_data.picture,
       gender: people_data.genders[0].value,
-      birthday: new Date(
+      birthDay: new Date(
         Date.UTC(
           people_data.birthdays[0].date.year,
           people_data.birthdays[0].date.month - 1,
