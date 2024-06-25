@@ -1,12 +1,9 @@
 import express from 'express'
 import {router as login} from './authentication.js'
 import registration from './register.js'
-<<<<<<< HEAD
 import deleteFileRouter from './remove_content.js'
-=======
 import oauth from './oauth.js'
 import { connect } from 'mongoose'
->>>>>>> origin/development
 import cors from 'cors'
 import dotenv from 'dotenv'
 import swaggerJsdoc from 'swagger-jsdoc'
@@ -44,14 +41,11 @@ app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/oauth', oauth)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-<<<<<<< HEAD
 app.use('/content/{contentId}', deleteFileRouter);
-=======
 
 // include test enpoint if necessary
 if (process.env.NODE_ENV === 'test') {
   app.use('/', test)
 }
 
->>>>>>> origin/development
 export default app
