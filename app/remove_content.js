@@ -23,7 +23,7 @@ conn.once('open', () => {
   });
 });
 
-router.delete('/content/:contentId', [authenticateToken('admin', 'creator')], async (req, res) => {
+router.delete('/:contentId', [authenticateToken('admin', 'creator')], async (req, res) => {
   console.log('Received DELETE request');
   const { contentId } = req.params;
   console.log('Content ID:', contentId);

@@ -41,7 +41,7 @@ app.use('/auth', registration)
 app.use('/auth', login)
 app.use('/oauth', oauth)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
-app.use('/content/{contentId}', deleteFileRouter);
+app.use('/content', deleteFileRouter);
 
 // include test enpoint if necessary
 if (process.env.NODE_ENV === 'test') {
