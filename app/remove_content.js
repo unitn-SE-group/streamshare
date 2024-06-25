@@ -18,6 +18,7 @@ const router = Router();
  *    parameters:
  *      - in: cookie
  *        name: accessToken
+ *        description: The jwt access token for the user.
  *        schema:
  *          type: string
  *    requestBody:
