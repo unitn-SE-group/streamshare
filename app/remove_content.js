@@ -13,6 +13,13 @@ const router = Router();
  *  delete:
  *    summary: delete a content from the database
  *    description: Recieves the mongoDB id and removes the content with the corrisponding id in the database (if present)
+ *    tags:
+ *      - Content
+ *    parameters:
+ *      - in: cookie
+ *        name: accessToken
+ *        schema:
+ *          type: string
  *    requestBody:
  *      required: true
  *      content:
