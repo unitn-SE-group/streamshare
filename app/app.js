@@ -32,9 +32,9 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions)
 app.use(express.json())
 app.use(
   cors({
-    origin: '*',
-    methods: '*',
-    allowedHeaders: '*'
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 )
 app.use(express.urlencoded({ extended: true }))

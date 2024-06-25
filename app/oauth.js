@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import session from 'express-session'
 import dotenv from 'dotenv'
 import express from 'express'
-import {User, Session} from './connections/accounts.js'
+import { User, Session } from './connections/accounts.js'
 
 dotenv.config()
 const router = express.Router()
@@ -88,7 +88,7 @@ router.post('/', async (req, res) => {
  *     summary: Receives the callback from Google's OAuth 2.0 server.
  *     description: Receives the callback from Google's OAuth 2.0 server and processes the token.
  *     tags:
- *      - Authentication 
+ *      - Authentication
  *     responses:
  *       200:
  *         description: Successfully processed the token and created user session.
@@ -153,12 +153,12 @@ router.get('/token', async (req, res) => {
       accessToken: access_token
     })
     newSession.save()
-
-    // set cookies
-    res.cookie('accessToken', access_token, { httpOnly: true, secure: true, sameSite: 'Strict' })
-    res.cookie('refreshToken', refresh_token, { httpOnly: true, secure: true, sameSite: 'Strict' })
     // send response
-    res.status(302).redirect('http://localhost:5173/dashboard');
+    res
+      .status(302)
+      .redirect(
+        `http://localhost:5173/dashboard?accessToken=${access_token}&refreshToken=${refresh_token}`
+      )
   } catch (error) {
     res.status(500)
   }

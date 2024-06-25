@@ -1,11 +1,11 @@
-import mongoose from 'mongoose';
-import { Router } from 'express';
-import { GridFSBucket, ObjectId } from 'mongodb';
-import dotenv from 'dotenv';
-import { authenticateToken } from './authentication.js';
+import mongoose from 'mongoose'
+import { Router } from 'express'
+import { GridFSBucket, ObjectId } from 'mongodb'
+import dotenv from 'dotenv'
+import { authenticateToken } from './authentication.js'
 
-dotenv.config();
-const router = Router();
+dotenv.config()
+const router = Router()
 
 /**
  * @openapi
@@ -35,39 +35,37 @@ const router = Router();
  *                message:
  *                  type: string
  *                  description: An error message.
- *            
- * 
+ *
+ *
  */
 
-
-
 // Establish MongoDB connection using Mongoose
-mongoose.connect(process.env.MONGO_CONTENT_URI);
-const conn = mongoose.connection;
+mongoose.connect(process.env.MONGO_CONTENT_URI)
+const conn = mongoose.connection
 
 // Create GridFSBucket instance
-let gfs;
+let gfs
 conn.once('open', () => {
   gfs = new GridFSBucket(conn.db, {
-    bucketName: 'upload', // Name of your bucket in GridFS
-  });
-});
+    bucketName: 'upload' // Name of your bucket in GridFS
+  })
+})
 
-router.delete('/:contentId', [authenticateToken('admin', 'creator')], async (req, res) => {
-  const { contentId } = req.params;
+router.delete('/:contentId', authenticateToken('admin'), async (req, res) => {
+  const { contentId } = req.params
 
   if (!mongoose.Types.ObjectId.isValid(contentId)) {
-    return res.status(400).json({ error: 'Invalid ID format.' });
+    return res.status(400).json({ error: 'Invalid ID format.' })
   }
 
   try {
     // Delete file from GridFS using the file's ObjectId
-    await gfs.delete(new mongoose.Types.ObjectId(contentId));
-    res.status(204).json({ message: 'File deleted successfully.' });
+    await gfs.delete(new mongoose.Types.ObjectId(contentId))
+    res.status(204).json({ message: 'File deleted successfully.' })
   } catch (error) {
-    console.error('Error deleting file:', error);
-    return res.status(500).json({ error: 'Error deleting file.', details: error.message });
+    console.error('Error deleting file:', error)
+    return res.status(500).json({ error: 'Error deleting file.', details: error.message })
   }
-});
+})
 
-export default router;
+export default router

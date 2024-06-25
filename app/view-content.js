@@ -50,11 +50,11 @@ const conn = mongoose.connection
  *         value: |
  *           curl -X GET https://api.yourservice.com/content
  */
-router.get('/', authenticateToken('anyone'), async (req, res) => {
+router.get('/', authenticateToken('admin'), async (req, res) => {
   //Retriving the Content from the database
   try {
-    const files = await filesCollection.find().toArray()
     const filesCollection = conn.collection('upload.files')
+    const files = await filesCollection.find().toArray()
 
     if (!files || files.length === 0) {
       return res.status(404).json({ message: 'No files found' })
@@ -66,8 +66,6 @@ router.get('/', authenticateToken('anyone'), async (req, res) => {
       id: file._id.toString(), // Convert ObjectId to string
       filename: file.filename
     }))
-    res.setHeader('Access-Control-Allow-Credentials', 'true')
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173/admin-dashboard')
     return res.status(200).json({ catalog: catalog })
   } catch (err) {
     console.log(`An error occoured during requesting data: ${err}`)

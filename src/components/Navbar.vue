@@ -12,16 +12,18 @@ export default {
   methods: {
     checkCookie() {
       if (sessionStorage.getItem('accessToken')) {
-        console.log('User is logged in')
         return true
       } else {
-        console.log('User is not logged in')
         return false
       }
     },
     logout() {
       fetch('http://localhost:3000/auth/logout', {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+        }
       }).then(async (response) => {
         if (response.ok) {
           sessionStorage.removeItem('accessToken')
@@ -46,20 +48,15 @@ export default {
           <router-link to="/" class="text-body" role="menuitem" aria-label="Home">Home</router-link>
         </li>
         <li>
-          <router-link to="/about" class="text-body" role="menuitem" aria-label="Home"
-            >About</router-link
-          >
-        </li>
-        <li>
-          <a href="../contact.html" class="text-body" role="menuitem" aria-label="Contact us"
-            >Contacts</a
+          <router-link to="/dashboard" class="text-body" role="menuitem" aria-label="Home"
+            >Dashboard</router-link
           >
         </li>
       </ul>
       <router-link to="/login" v-if="!loggedIn" class="btn-primary" role="button"
         >Watch</router-link
       >
-      <router-link to="#" v-else class="btn-primary" role="button" @click="this.logout()"
+      <router-link to="#" v-else class="btn-primary" role="button" @click="logout()"
         >Logout</router-link
       >
 
