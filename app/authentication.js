@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken'
 import { User, Session } from './connections/accounts.js'
 import dotenv from 'dotenv'
 import express from 'express'
-import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const router = express.Router()
@@ -41,6 +40,9 @@ const authenticateToken = (...expectedUserTypes) => {
       }
       
       //take the access Token from the cookies if exists
+      if (!req.cookies.accessToken) {
+        return res.sendStatus(401)
+      }
       const token = req.cookies.accessToken
   
       if (!token) {
@@ -96,6 +98,8 @@ const authenticateToken = (...expectedUserTypes) => {
  *   post:
  *     summary: Authenticate user and return tokens
  *     description: This endpoint authenticates a user and returns an Access Token that can be used for subsequent API requests and a Refresh Token.
+ *     tags:
+ *      - Authentication
  *     requestBody:
  *       description: The request body should be a JSON object containing the user's credentials which are email and password.
  *       required: true
@@ -237,6 +241,8 @@ router.post(`/login`, async (req, res) => {
  *   delete:
  *     summary: Logs out the user
  *     description: This endpoint logs out the user.
+*     tags:
+ *      - Authentication
  *     responses:
  *       '204':
  *         description: The user has successfully logged out.
@@ -278,6 +284,8 @@ router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
  *   post:
  *     summary: Generate a new Access Token
  *     description: This endpoint generates a new AccessToken for the user.
+ *     tags:
+ *      - Authentication
  *     responses:
  *       '200':
  *         description: The token is successfully generated and returned in the response.
