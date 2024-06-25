@@ -1,22 +1,40 @@
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import mongoose from 'mongoose';
+import { GridFsStorage } from 'multer-gridfs-storage'
 dotenv.config();
 
 // select db to connect to based on the environment
-let content_connection;
+let connection;
+let storage;
 if (process.env.NODE_ENV !== 'test') {
-    content_connection = mongoose.createConnection(process.env.MONGO_CONTENT_URI);
-    content_connection.on('error', console.error.bind(console, 'MongoDB content database connection error:'));
-    content_connection.once('open', function() {
-      console.log("Connected to MongoDB content database!");
-    });
+  // connect to the content database
+  connection = mongoose.connect(process.env.MONGO_CONTENT_URI);
+  // create storage engine
+  storage = new GridFsStorage({
+    db: connection,
+    file: (req, file) => {
+        return {
+            bucketName: 'upload', // the name of the bucket in gridfs
+            filename: file.originalname
+        }
+    }
+  })
+  console.log("Connected to MongoDB content database!");
+
 } else {
-    content_connection = mongoose.createConnection(process.env.MONGO_TEST_URI);
-    content_connection.on('error', console.error.bind(console, 'MongoDB test database connection error:'));
-    content_connection.once('open', function() {
-      console.log("Connected to MongoDB test database!");
-    });
+  // connect to the test database
+  connection = mongoose.connect(process.env.MONGO_TEST_URI);
+  // create storage engine
+  storage = new GridFsStorage({
+    db: connection,
+    file: (req, file) => {
+        return {
+            bucketName: 'upload', // the name of the bucket in gridfs
+            filename: file.originalname
+        }
+    }
+  })
+  console.log("Connected to MongoDB content test database!");
 }
 
-export default content_connection;
+export {storage, connection}
