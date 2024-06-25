@@ -2,7 +2,39 @@
 import * as animations from '@/utils/motionPluginOptions.js'
 </script>
 <script>
-export default { name: 'NavBar' }
+export default {
+  name: 'NavBar',
+  data() {
+    return {
+      loggedIn: this.checkCookie()
+    }
+  },
+  methods: {
+    checkCookie() {
+      if (sessionStorage.getItem('accessToken')) {
+        return true
+      } else {
+        return false
+      }
+    },
+    logout() {
+      fetch('http://localhost:3000/auth/logout', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`
+        }
+      }).then(async (response) => {
+        if (response.ok) {
+          sessionStorage.removeItem('accessToken')
+          sessionStorage.removeItem('refreshToken')
+          this.loggedIn = false
+          this.$router.push('/login')
+        }
+      })
+    }
+  }
+}
 </script>
 
 <template>
@@ -16,17 +48,17 @@ export default { name: 'NavBar' }
           <router-link to="/" class="text-body" role="menuitem" aria-label="Home">Home</router-link>
         </li>
         <li>
-          <router-link to="/about" class="text-body" role="menuitem" aria-label="Home"
-            >About</router-link
-          >
-        </li>
-        <li>
-          <a href="../contact.html" class="text-body" role="menuitem" aria-label="Contact us"
-            >Contacts</a
+          <router-link to="/dashboard" class="text-body" role="menuitem" aria-label="Home"
+            >Dashboard</router-link
           >
         </li>
       </ul>
-      <router-link to="/login" class="btn-primary" role="button">Watch</router-link>
+      <router-link to="/login" v-if="!loggedIn" class="btn-primary" role="button"
+        >Watch</router-link
+      >
+      <router-link to="#" v-else class="btn-primary" role="button" @click="logout()"
+        >Logout</router-link
+      >
 
       <div class="mobile-menu-button">
         <input

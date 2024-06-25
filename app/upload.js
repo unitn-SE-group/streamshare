@@ -4,22 +4,21 @@ import dotenv from 'dotenv'
 import { GridFsStorage } from 'multer-gridfs-storage'
 import { authenticateToken } from './authentication.js'
 
-dotenv.config();
-const router = Router();
+dotenv.config()
+const router = Router()
 
 // create storage engine
 const storage = new GridFsStorage({
-    url: process.env.MONGO_CONTENT_URI,
-    file: (req, file) => {
-        return {
-            bucketName: 'upload', // the name of the bucket in gridfs
-            filename: file.originalname
-        }
+  url: process.env.MONGO_CONTENT_URI,
+  file: (req, file) => {
+    return {
+      bucketName: 'upload', // the name of the bucket in gridfs
+      filename: file.originalname
     }
+  }
 })
 
-const upload  = multer({storage})
-
+const upload = multer({ storage })
 
 /**
  * @openapi
@@ -73,7 +72,7 @@ const upload  = multer({storage})
  *                     metadata:
  *                       type: object
  *                     bucketName:
- *                       type: string  
+ *                       type: string
  *                     chunkSize:
  *                       type: integer
  *                     size:
@@ -111,16 +110,21 @@ const upload  = multer({storage})
  *               type: string
  *               example: 'Internal Server Error'
  * */
-router.post('/', [ authenticateToken('admin','creator'), upload.single('file') ], async (req, res) => {
+router.post(
+  '/',
+  [authenticateToken('admin', 'creator'), upload.single('file')],
+  async (req, res) => {
+    res.set('Access-Control-Allow-Origin', 'http://localhost:5173')
     try {
-        if (!req.file) {
-            return res.status(400).send('No file uploaded.');
-        }
-        res.status(201).send({
-            file: req.file,
-        });
+      if (!req.file) {
+        return res.status(400).send('No file uploaded.')
+      }
+      res.status(201).send({
+        file: req.file
+      })
     } catch (error) {
-        res.status(500).send('Internal Server Error');
+      res.status(500).send('Internal Server Error')
     }
-})
-export default router;
+  }
+)
+export default router

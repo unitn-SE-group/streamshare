@@ -15,16 +15,16 @@ const oauth2Client = new google.auth.OAuth2(
 
 /**
  * Middleware to authenticate users based on access token and expected user types.
- * 
+ *
  * @param {...string} expectedUserTypes - The types of users expected to be authenticated ('admin', 'creator', 'consumer', 'anyone').
  * @returns {function} Middleware function to handle the authentication.
- * 
+ *
  * Example usage:
- * 
+ *
  * const express = require('express');
  * const app = express();
  * const authenticateToken = require('./path/to/authenticateToken');
- * 
+ *
  * app.use('/admin', authenticateToken('admin'));
  * app.use('/content', authenticateToken('creator', 'admin'));
  * app.use('/profile', authenticateToken('consumer', 'creator', 'admin'));
@@ -34,21 +34,16 @@ const authenticateToken = (...expectedUserTypes) => {
   return async (req, res, next) => {
     try {
       // check expectedUserType is valid
-      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value);
+      const isValidType = (value) => ['admin', 'creator', 'consumer', 'anyone'].includes(value)
       if (!expectedUserTypes.every(isValidType)) {
-        return res.sendStatus(500);
+        return res.sendStatus(500)
       }
-      
-      //take the access Token from the cookies if exists
-      if (!req.cookies.accessToken) {
-        return res.sendStatus(401)
-      }
-      const token = req.cookies.accessToken
-  
+
+      const token = req.header('Authorization')?.replace('Bearer ', '')
       if (!token) {
         return res.sendStatus(401)
       }
-  
+
       // retrieve user info from db
       const session = await Session.findOne({ accessToken: token }).populate('user_id')
       const createdWith = session.user_id.createdWith
@@ -56,9 +51,9 @@ const authenticateToken = (...expectedUserTypes) => {
 
       // check the user type is the expected one
       if (!expectedUserTypes.includes(userType) && !expectedUserTypes.includes('anyone')) {
-        return res.sendStatus(403);
+        return res.sendStatus(403)
       }
-  
+
       // authenticate based on what the user was created with
       if (createdWith === 'google') {
         oauth2Client
@@ -69,7 +64,6 @@ const authenticateToken = (...expectedUserTypes) => {
           .then((ticket) => {
             const payload = ticket.getPayload()
             const userid = payload['sub']
-            console.log('userid', userid)
             next()
           })
           .catch(console.error)
@@ -88,7 +82,6 @@ const authenticateToken = (...expectedUserTypes) => {
       console.log(`An error occoured during token authentication: ${err}`)
       return res.status(500).json({ error: `An error occured during Token Authetication` })
     }
-
   }
 }
 
@@ -207,7 +200,12 @@ router.post(`/login`, async (req, res) => {
     }
 
     //Generate JWT token
-    const payload = { _id: user._id, username: user.username, email: user.email }
+    const payload = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      usertype: user.userType
+    }
     const key_acc = process.env.ACCESS_TOKEN_SECRET
     const key_ref = process.env.REFRESH_TOKEN_SECRET
     const options = { expiresIn: '2000s' }
@@ -221,9 +219,6 @@ router.post(`/login`, async (req, res) => {
       accessToken: accessToken
     })
     await newSession.save()
-
-    res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
     //Returning the tokens
     return res
@@ -241,7 +236,7 @@ router.post(`/login`, async (req, res) => {
  *   delete:
  *     summary: Logs out the user
  *     description: This endpoint logs out the user.
-*     tags:
+ *     tags:
  *      - Authentication
  *     responses:
  *       '204':
@@ -266,11 +261,6 @@ router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
   try {
     //delete the session from the database
     await Session.deleteMany({ user_id: req.user._id })
-
-    //delete the Tokens from the cookies
-    res.clearCookie('accessToken')
-    res.clearCookie('refreshToken')
-
     return res.sendStatus(204)
   } catch (err) {
     console.log(`An error occoured during logout: ${err}`)
@@ -311,8 +301,8 @@ router.delete('/logout', authenticateToken('anyone'), async (req, res) => {
  */
 router.post('/token', async (req, res) => {
   try {
-    //take the token from the cookies and check whether it exists
-    const refreshToken = req.cookies.refreshToken
+    //take the token from the user and check whether it exists
+    const refreshToken = req.user.refreshToken
     if (refreshToken == null) {
       return res.sendStatus(401)
     }
@@ -328,8 +318,12 @@ router.post('/token', async (req, res) => {
         return res.sendStatus(403)
       }
 
-      //create new accessToken and save it in the session on the DB and in the cookies
-      const payload = { _id: user._id, username: user.username, email: user.email }
+      //create new accessToken and save it in the session on the DB
+      const payload = {
+        _id: user._id,
+        username: user.username,
+        email: user.email
+      }
       const key_acc = process.env.ACCESS_TOKEN_SECRET
       const key_ref = process.env.REFRESH_TOKEN_SECRET
       const options = { expiresIn: '2000s' }
@@ -337,8 +331,6 @@ router.post('/token', async (req, res) => {
 
       session.accessToken = accessToken
       session.save()
-
-      res.cookie('accessToken', accessToken, { httpOnly: true, secure: true, sameSite: 'Strict' })
 
       return res.status(200).json({ accessToken: accessToken })
     })
@@ -348,6 +340,4 @@ router.post('/token', async (req, res) => {
   }
 })
 
-
-
-export {router, authenticateToken}
+export { router, authenticateToken }

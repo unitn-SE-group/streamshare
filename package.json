@@ -38,6 +38,7 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "vue": "^3.4.21",
+    "vue-jwt-decode": "^0.1.0",
     "vue-router": "^4.3.2"
   },
   "devDependencies": {
